@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UserTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">UserTest.java</span></div><h1>UserTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe UserTest
+ * 
+ *	@file		UserTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import static org.junit.Assert.*;
+
+import org.json.JSONObject;
+import org.junit.Test;
+
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe User.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L39">public class UserTest {</span>
+
+	/**
+	 * Test del costruttore User(JSONObject).
+	 */
+	@Test
+	public void testUser(){
+<span class="fc" id="L46">		JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L47">		jsonObject.put(&quot;IdUser&quot;, 1);</span>
+<span class="fc" id="L48">		jsonObject.put(&quot;Username&quot;, &quot;testUsername&quot;);</span>
+<span class="fc" id="L49">		jsonObject.put(&quot;Password&quot;, &quot;testPassword&quot;);</span>
+<span class="fc" id="L50">		jsonObject.put(&quot;Name&quot;, &quot;testName&quot;);</span>
+<span class="fc" id="L51">		jsonObject.put(&quot;Surname&quot;, &quot;testSurname&quot;);</span>
+<span class="fc" id="L52">		jsonObject.put(&quot;Email&quot;, &quot;testEmail&quot;);</span>
+<span class="fc" id="L53">		jsonObject.put(&quot;City&quot;, &quot;testCity&quot;);</span>
+<span class="fc" id="L54">		jsonObject.put(&quot;District&quot;, &quot;TD&quot;);</span>
+<span class="fc" id="L55">		jsonObject.put(&quot;IsAdmin&quot;, true);</span>
+		
+<span class="fc" id="L57">		User userObject = new User(jsonObject);</span>
+<span class="fc" id="L58">		assertEquals(jsonObject.get(&quot;Name&quot;), userObject.getName());</span>
+<span class="fc" id="L59">	}</span>
+	
+	/**
+	 * Test del metodo toJSONObject().
+	 */
+	@Test
+	public void testToJSONObject(){
+<span class="fc" id="L66">		User userObject = new User();</span>
+<span class="fc" id="L67">		userObject.setIdUser(1);</span>
+<span class="fc" id="L68">		userObject.setUsername(&quot;testUsername&quot;);</span>
+<span class="fc" id="L69">		userObject.setName(&quot;testName&quot;);</span>
+<span class="fc" id="L70">		userObject.setSurname(&quot;testSurname&quot;);</span>
+<span class="fc" id="L71">		userObject.setEmail(&quot;testEmail&quot;);</span>
+<span class="fc" id="L72">		userObject.setCity(&quot;testCity&quot;);</span>
+<span class="fc" id="L73">		userObject.setDistrict(&quot;TD&quot;);</span>
+<span class="fc" id="L74">		userObject.setIsAdmin(true);</span>
+		
+<span class="fc" id="L76">		JSONObject jsonObject = userObject.toJSONObject();</span>
+		
+<span class="fc" id="L78">		assertEquals(userObject.getUsername(), jsonObject.get(&quot;Username&quot;));</span>
+<span class="fc" id="L79">	}</span>
+	
+	/**
+	 * Test del metodo hashAndSetPassword().
+	 */
+	@Test
+	public void testHashAndSetPassword(){
+<span class="fc" id="L86">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L87">		User userObject = new User();</span>
+<span class="fc" id="L88"> 		userObject.hashAndSetPassword(startValue);</span>
+<span class="fc" id="L89"> 		String endValue = userObject.getPassword();</span>
+<span class="fc" id="L90"> 		assertNotSame(startValue, endValue);</span>
+<span class="fc" id="L91">	}</span>
+	
+	/**
+	 *	Test dei metodi getIdUser() e setIdUser().
+	 */
+	@Test
+	public void testGetAndSetIdUser(){
+<span class="fc" id="L98">		int startValue = 10;</span>
+<span class="fc" id="L99">		User userObject = new User();</span>
+<span class="fc" id="L100"> 		userObject.setIdUser(startValue);</span>
+<span class="fc" id="L101"> 		int endValue = userObject.getIdUser();</span>
+<span class="fc" id="L102"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L103"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getUsername() e setUsername().
+	 */
+	@Test
+	public void testGetAndSetUsername(){
+<span class="fc" id="L110">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L111">		User userObject = new User();</span>
+<span class="fc" id="L112"> 		userObject.setUsername(startValue);</span>
+<span class="fc" id="L113"> 		String endValue = userObject.getUsername();</span>
+<span class="fc" id="L114"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L115"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getPassword() e setPassword().
+	 */
+	@Test
+	public void testGetAndSetPassword(){
+<span class="fc" id="L122">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L123">		User userObject = new User();</span>
+<span class="fc" id="L124"> 		userObject.setPassword(startValue);</span>
+<span class="fc" id="L125"> 		String endValue = userObject.getPassword();</span>
+<span class="fc" id="L126"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L127"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getName() e setName().
+	 */
+	@Test
+	public void testGetAndSetName(){
+<span class="fc" id="L134">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L135">		User userObject = new User();</span>
+<span class="fc" id="L136"> 		userObject.setName(startValue);</span>
+<span class="fc" id="L137"> 		String endValue = userObject.getName();</span>
+<span class="fc" id="L138"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L139"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getSurname() e setSurname().
+	 */
+	@Test
+	public void testGetAndSetSurname(){
+<span class="fc" id="L146">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L147">		User userObject = new User();</span>
+<span class="fc" id="L148"> 		userObject.setSurname(startValue);</span>
+<span class="fc" id="L149"> 		String endValue = userObject.getSurname();</span>
+<span class="fc" id="L150"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L151"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getEmail() e setEmail().
+	 */
+	@Test
+	public void testGetAndSetEmail(){
+<span class="fc" id="L158">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L159">		User userObject = new User();</span>
+<span class="fc" id="L160"> 		userObject.setEmail(startValue);</span>
+<span class="fc" id="L161"> 		String endValue = userObject.getEmail();</span>
+<span class="fc" id="L162"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L163"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getCity() e setCity().
+	 */
+	@Test
+	public void testGetAndSetCity(){
+<span class="fc" id="L170">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L171">		User userObject = new User();</span>
+<span class="fc" id="L172"> 		userObject.setCity(startValue);</span>
+<span class="fc" id="L173"> 		String endValue = userObject.getCity();</span>
+<span class="fc" id="L174"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L175"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getDistrict() e setDistrict().
+	 */
+	@Test
+	public void testGetAndSetDistrict(){
+<span class="fc" id="L182">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L183">		User userObject = new User();</span>
+<span class="fc" id="L184"> 		userObject.setDistrict(startValue);</span>
+<span class="fc" id="L185"> 		String endValue = userObject.getDistrict();</span>
+<span class="fc" id="L186"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L187"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIsAdmin() e setIsAdmin().
+	 */
+	@Test
+	public void testGetAndSetIsAdmin(){
+<span class="fc" id="L194">		boolean startValue = true;</span>
+<span class="fc" id="L195">		User userObject = new User();</span>
+<span class="fc" id="L196"> 		userObject.setIsAdmin(startValue);</span>
+<span class="fc" id="L197"> 		boolean endValue = userObject.getIsAdmin();</span>
+<span class="fc" id="L198"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L199"> 	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

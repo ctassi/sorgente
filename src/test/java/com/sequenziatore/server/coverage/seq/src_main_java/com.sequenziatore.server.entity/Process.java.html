@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Process.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">Process.java</span></div><h1>Process.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe Process
+ * 
+ *	@file		Process.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.json.JSONObject;
+
+/**
+ *	La classe Process rappresenta logicamente un processo nell'applicazione.
+ *
+ *	@author 	DeSQ
+ */
+@Entity
+@Table(name = &quot;Processes&quot;)
+public class Process implements Serializable, IEntity{
+	
+	private static final long serialVersionUID = 1L;
+
+	/** Id del processo. */
+	@Id
+	@GeneratedValue
+	@Column(name = &quot;IdProcess&quot;, nullable=false)
+	private Integer idProcess;
+	
+	/** Nome del processo. */
+	@Column(name = &quot;Name&quot;, nullable=false, length=50)
+	private String name;
+
+	/** Descrizione del processo. */
+	@Column(name = &quot;Description&quot;, nullable=false, length=400)
+	private String description;
+
+	/** Numero totale di passi del processo. */
+	@Column(name = &quot;TotalLevels&quot;, nullable=false)
+	private Integer totalLevel;
+
+	/** Data di pubblicazione del processo. */
+	@Column(name = &quot;PublicationDate&quot;, nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Calendar publicationDate;
+
+	/** Data di chiusura del processo. */
+	@Column(name = &quot;ClosingDate&quot;, nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Calendar closingDate;
+
+	/** Disponibilità del processo. */
+	@Column(name = &quot;Available&quot;, nullable=false)
+	private Boolean available;
+
+	/** Data di chiusura delle iscrizioni al processo. */
+	@Column(name = &quot;EndSubscriptionDate&quot;)
+	@Temporal(TemporalType.DATE)
+	private Calendar endSubscriptionDate;
+
+	/** Id dell'amministratore del processo. */
+	@ManyToOne  
+ 	@JoinColumn(name = &quot;Admin&quot;)
+	private User admin;
+
+	/** Lista dei passi che compongono il processo. */
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL,CascadeType.PERSIST,CascadeType.MERGE }, mappedBy = &quot;idProcess&quot;)
+	private List&lt;Step&gt; steps;
+
+	/**
+	 * Costruttore di default.
+	 */
+<span class="fc" id="L108">	public Process(){}</span>
+
+	/**
+ 	 * Costruttore che imposta l'entità con i dati contenuti nel JSONObject.
+ 	 * 
+ 	 * @param json il valore che permette di impostare gli attributi dell'entità
+ 	 */
+<span class="fc" id="L115">	public Process(JSONObject json) {</span>
+<span class="fc" id="L116">		admin=new User();</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">		if(json.has(&quot;IdProcess&quot;))</span>
+<span class="fc" id="L118">			idProcess = (Integer)json.get(&quot;IdProcess&quot;);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		if(json.has(&quot;Name&quot;))</span>
+<span class="fc" id="L120">			name = (String)json.get(&quot;Name&quot;);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">		if(json.has(&quot;Description&quot;))</span>
+<span class="fc" id="L122">			description = (String)json.get(&quot;Description&quot;);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">		if(json.has(&quot;TotalLevel&quot;))</span>
+<span class="fc" id="L124">			totalLevel = (Integer)json.get(&quot;TotalLevel&quot;);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">		if(json.has(&quot;PublicationDate&quot;)){</span>
+<span class="fc" id="L126">			JSONObject jsonDate= (JSONObject)json.get(&quot;PublicationDate&quot;);</span>
+<span class="fc" id="L127">			publicationDate = new GregorianCalendar((Integer)jsonDate.get(&quot;Year&quot;),(Integer)jsonDate.get(&quot;Month&quot;)-1,(Integer)jsonDate.get(&quot;Day&quot;));</span>
+		}
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		if(json.has(&quot;ClosingDate&quot;)){</span>
+<span class="fc" id="L130">			JSONObject jsonDate= (JSONObject)json.get(&quot;ClosingDate&quot;);</span>
+<span class="fc" id="L131">			closingDate = new GregorianCalendar((Integer)jsonDate.get(&quot;Year&quot;),(Integer)jsonDate.get(&quot;Month&quot;)-1,(Integer)jsonDate.get(&quot;Day&quot;));</span>
+		}
+<span class="fc bfc" id="L133" title="All 2 branches covered.">		if(json.has(&quot;EndSubscriptionDate&quot;)){</span>
+<span class="fc" id="L134">			JSONObject jsonDate= (JSONObject)json.get(&quot;EndSubscriptionDate&quot;);</span>
+<span class="fc" id="L135">			endSubscriptionDate = new GregorianCalendar((Integer)jsonDate.get(&quot;Year&quot;),(Integer)jsonDate.get(&quot;Month&quot;)-1,(Integer)jsonDate.get(&quot;Day&quot;));</span>
+		}
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		if(json.has(&quot;Available&quot;))</span>
+<span class="fc" id="L138">			available = (Boolean)json.get(&quot;Available&quot;);</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">		if(json.has(&quot;IdUser&quot;))</span>
+<span class="fc" id="L140">			admin.setIdUser((Integer)json.get(&quot;IdUser&quot;));</span>
+<span class="fc" id="L141">	}</span>
+	
+	/**
+	 * Ritorna l'id del processo.
+	 * 
+	 * @return l'id del processo
+	 */
+	public Integer getIdProcess(){ 
+<span class="fc" id="L149">		return idProcess; </span>
+	}
+	
+	/**
+	 * Imposta l'id del processo al valore passato.
+	 * 
+	 * @param idProcess il valore da impostare come id del processo
+	 */
+	public void setIdProcess(Integer idProcess){
+<span class="fc" id="L158">		this.idProcess = idProcess; </span>
+<span class="fc" id="L159">	}</span>
+	
+	/**
+	 * Ritorna il nome del processo.
+	 * 
+	 * @return il nome del processo
+	 */
+	public String getName(){ 
+<span class="fc" id="L167">		return name; </span>
+	}
+	
+	/**
+	 * Imposta il nome del processo al valore passato.
+	 * 
+	 * @param name il valore da impostare come nome del processo
+	 */
+	public void setName(String name){ 
+<span class="fc" id="L176">		this.name = name; </span>
+<span class="fc" id="L177">	}</span>
+	
+	/**
+	 * Ritorna la descrizione del processo.
+	 * 
+	 * @return la descrizione del processo
+	 */
+	public String getDescription(){ 
+<span class="fc" id="L185">		return description; </span>
+	}
+	
+	/**
+	 * Imposta la descrizione del processo al valore passato.
+	 * 
+	 * @param description il valore da impostare come descrizione del processo
+	 */
+	public void setDescription(String description){ 
+<span class="fc" id="L194">		this.description = description;</span>
+<span class="fc" id="L195">	}</span>
+	
+	/**
+	 * Ritorna il numero totale di passi del processo.
+	 * 
+	 * @return il numero totale di passi del processo
+	 */
+	public Integer getTotalLevel(){ 
+<span class="fc" id="L203">		return totalLevel; </span>
+	}
+	
+	/**
+	 * Imposta il numero totale di passi del processo al valore passato.
+	 * 
+	 * @param totalLevel il valore da impostare come numero totale di passi del processo
+	 */
+	public void setTotalLevel(Integer totalLevel){ 
+<span class="fc" id="L212">		this.totalLevel = totalLevel; </span>
+<span class="fc" id="L213">	}</span>
+	
+	/**
+	 * Ritorna la data di pubblicazione del processo.
+	 * 
+	 * @return la data di pubblicazione del processo
+	 */
+	public Calendar getPublicationDate(){ 
+<span class="fc" id="L221">		return publicationDate; </span>
+	}
+	
+	/**
+	 * Imposta la data di pubblicazione del processo al valore passato.
+	 * 
+	 * @param publicationDate il valore da impostare come data di pubblicazione del processo
+	 */
+	public void setPublicationDate(Calendar publicationDate){ 
+<span class="fc" id="L230">		this.publicationDate = publicationDate; </span>
+<span class="fc" id="L231">	}</span>
+	
+	/**
+	 * Ritorna la data di chiusura del processo.
+	 * 
+	 * @return la data di chiusura del processo
+	 */
+	public Calendar getClosingDate(){ 
+<span class="fc" id="L239">		return closingDate; </span>
+	}
+	
+	/**
+	 * Imposta la data di chiusura del processo al valore passato.
+	 * 
+	 * @param closingDate il valore da impostare come data di chiusura del processo
+	 */
+	public void setClosingDate(Calendar closingDate){ 
+<span class="fc" id="L248">		this.closingDate = closingDate; </span>
+<span class="fc" id="L249">	}</span>
+	
+	/**
+	 * Ritorna la disponibilità del processo.
+	 * 
+	 * @return la disponibilità del processo
+	 */
+	public Boolean getAvailable(){ 
+<span class="fc" id="L257">		return available; </span>
+	}
+	
+	/**
+	 * Imposta la disponibilità del processo al valore passato.
+	 * 
+	 * @param available il valore da impostare come disponibilità del processo
+	 */
+	public void setAvailable(Boolean available){ 
+<span class="fc" id="L266">		this.available = available;</span>
+<span class="fc" id="L267">	}</span>
+	
+	/**
+	 * Ritorna la data di chiusura delle iscrizioni al processo.
+	 * 
+	 * @return la data di chiusura delle iscrizioni al processo
+	 */
+	public Calendar getEndSubscriptionDate(){ 
+<span class="fc" id="L275">		return endSubscriptionDate; </span>
+	}
+	
+	/**
+	 * Imposta la data di chiusura delle iscrizioni al processo al valore passato.
+	 * 
+	 * @param closingDate il valore da impostare come data di chiusura delle iscrizioni al processo
+	 */
+	public void setEndSubscriptionDate(Calendar endSubscriptionDate){ 
+<span class="fc" id="L284">		this.endSubscriptionDate = endSubscriptionDate; </span>
+<span class="fc" id="L285">	}</span>
+	
+	/**
+	 * Ritorna l'id dell'amministratore del processo.
+	 * 
+	 * @return l'id dell'amministratore del processo
+	 */
+	public User getAdmin(){ 
+<span class="fc" id="L293">		return admin; </span>
+	}
+	
+	/**
+	 * Imposta l'id dell'amministratore del processo al valore passato.
+	 * 
+	 * @param admin il valore da impostare come id dell'amministratore del processo
+	 */
+	public void setAdmin(User admin){ 
+<span class="fc" id="L302">		this.admin = admin; </span>
+<span class="fc" id="L303">	}</span>
+	
+	/**
+	 * Ritorna la lista dei passi che compongono il processo.
+	 * 
+	 * @return la lista dei passi che compongono il processo
+	 */
+	public List&lt;Step&gt; getSteps(){ 
+<span class="fc" id="L311">		return steps; </span>
+	}
+	
+	/**
+	 * Imposta la lista di passi che compongono il processo al valore passato.
+	 * 
+	 * @param steps il valore da impostare come lista di passi che compongono il processo
+	 */
+	public void setSteps(List&lt;Step&gt; steps){ 
+<span class="fc" id="L320">		this.steps = steps; </span>
+<span class="fc" id="L321">	}</span>
+	
+	/**
+ 	 * Ritorna un JSONObject con i dati dell'entità.
+ 	 * 
+ 	 * @return un JSONObject con i dati dell'entità
+ 	 */
+	@Override
+	public JSONObject toJSONObject() {
+<span class="fc" id="L330">		JSONObject json = new JSONObject();</span>
+<span class="fc" id="L331">		int publicationDateM =  publicationDate.get(Calendar.MONTH)+1;</span>
+<span class="fc" id="L332">		int closingDateM = closingDate.get(Calendar.MONTH)+1;</span>
+<span class="fc" id="L333">		int endSubscriptionDateM = endSubscriptionDate.get(Calendar.MONTH)+1;</span>
+<span class="fc" id="L334">		json.put(&quot;IdProcess&quot; , idProcess);</span>
+<span class="fc" id="L335">		json.put(&quot;Name&quot; , name);</span>
+<span class="fc" id="L336">		json.put(&quot;Description&quot; , description);</span>
+<span class="fc" id="L337">		json.put(&quot;TotalLevel&quot; , totalLevel);</span>
+<span class="fc" id="L338">		json.put(&quot;PublicationDate&quot; , publicationDate.get(Calendar.DAY_OF_MONTH)+ &quot;-&quot; + publicationDateM + &quot;-&quot; + publicationDate.get(Calendar.YEAR));</span>
+<span class="fc" id="L339">		json.put(&quot;ClosingDate&quot; ,  closingDate.get(Calendar.DAY_OF_MONTH) + &quot;-&quot; + closingDateM + &quot;-&quot; + closingDate.get(Calendar.YEAR));</span>
+<span class="fc" id="L340">		json.put(&quot;EndSubscriptionDate&quot; , endSubscriptionDate.get(Calendar.DAY_OF_MONTH)+ &quot;-&quot; + endSubscriptionDateM + &quot;-&quot; + endSubscriptionDate.get(Calendar.YEAR));</span>
+<span class="fc" id="L341">		json.put(&quot;Available&quot; , available);</span>
+<span class="fc" id="L342">		return json;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

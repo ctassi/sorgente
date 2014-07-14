@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceModifyAccount.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.shared</a> &gt; <span class="el_source">ServiceModifyAccount.java</span></div><h1>ServiceModifyAccount.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceModifyAccount
+ * 
+ *	@file		ServiceModifyAccount.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.shared;
+
+import java.util.List;
+
+import com.sequenziatore.server.databaseutil.dao.DAOFactory;
+import com.sequenziatore.server.databaseutil.dao.IDAOFactory;
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.User;
+
+import org.json.JSONObject;
+
+import com.sequenziatore.server.service.interfaceservice.IService;
+
+/**
+ *	La classe ServiceModifyAccount offre il servizio di modifica dell'account di un utente.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L45">public class ServiceModifyAccount implements IService {</span>
+ 
+	/** Rappresenta l'interfaccia che garantisce l'accesso alle classi DAO per accedere al database. */
+	private IDAOFactory iDAOFactory;
+	
+	/**
+	 * Permette la modifica dell'account di un utente grazie alle informazioni acquisite dal front-end.
+	 * 
+	 * @param entity contiene le informazioni che serviranno per aggiornare l'account
+	 * @return l'esito dell'operazione di modifica
+	 */
+	@Override
+	public JSONObject serviceOperation(List&lt;IEntity&gt; entity) {
+<span class="fc" id="L58">		JSONObject objectJson=new JSONObject();</span>
+<span class="fc" id="L59">		iDAOFactory = new DAOFactory();</span>
+<span class="fc" id="L60">		User user=(User)entity.get(0);</span>
+<span class="fc" id="L61">		User userSearchUsername = null;</span>
+<span class="fc" id="L62">		User userSearchEmail=null;</span>
+<span class="fc" id="L63">		User userPassword = null;</span>
+<span class="fc" id="L64">		User userPasswordControll = null;</span>
+	    
+	    try {
+<span class="fc" id="L67">	    	HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L68">			userSearchUsername = iDAOFactory.createDAOUserData().findUserByUsername(user);</span>
+<span class="fc" id="L69">			userSearchEmail = iDAOFactory.createDAOUserData().findUserByEmail(user);</span>
+<span class="fc" id="L70">		    userPasswordControll = iDAOFactory.createDAOUserData().findUserById(user);</span>
+<span class="fc" id="L71">		    HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L72">		} catch (Exception e) {</span>
+<span class="nc" id="L73">			return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+		}
+	    
+	    // se userSearchUsername e userSearchEmail non sono null e non sono chi fa la richiesta
+<span class="pc bpc" id="L77" title="2 of 8 branches missed.">	    if((userSearchUsername != null &amp;&amp; userSearchUsername.getIdUser().compareTo(user.getIdUser()) != 0) &amp;&amp; (userSearchEmail != null &amp;&amp; userSearchEmail.getIdUser().compareTo(user.getIdUser()) != 0))</span>
+<span class="fc" id="L78">	    	 return objectJson.put(&quot;Confirmation&quot;, &quot;userAndMailNotAvailable&quot;);</span>
+<span class="pc bpc" id="L79" title="1 of 4 branches missed.">	    else if(userSearchUsername != null &amp;&amp; userSearchUsername.getIdUser().compareTo(user.getIdUser()) != 0)</span>
+<span class="nc" id="L80">	    	return objectJson.put(&quot;Confirmation&quot;, &quot;usernameNotAvailable&quot;);</span>
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">	    else if(userSearchEmail != null &amp;&amp; userSearchEmail.getIdUser().compareTo(user.getIdUser()) != 0)</span>
+<span class="fc" id="L82">	    	return objectJson.put(&quot;Confirmation&quot;, &quot;emailNotAvailable&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">	    if(user.getPassword() == null){</span>
+<span class="fc" id="L84">	    	user.setPassword(userPasswordControll.getPassword());</span>
+	    	try {
+<span class="fc" id="L86">	    	HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L87">		    iDAOFactory.createDAOUserData().insertUser(user);</span>
+<span class="fc" id="L88">		    HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L89">		    } catch (Exception e) {</span>
+<span class="nc" id="L90">				return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+			}
+<span class="fc" id="L92">		    objectJson.put(&quot;Confirmation&quot;, &quot;registrationOK&quot;);</span>
+<span class="fc" id="L93">	    } else{</span>
+<span class="fc" id="L94">	    	userPassword=(User)entity.get(1);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">	    	if(userPasswordControll.getPassword().equals(userPassword.getPassword())){</span>
+	    		try {
+<span class="fc" id="L97">	    		HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L98">		    	iDAOFactory.createDAOUserData().insertUser(user);</span>
+<span class="fc" id="L99">		    	HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L100">	    		} catch (Exception e) {</span>
+<span class="nc" id="L101">	    			return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+	    		}
+<span class="fc" id="L103">		    	objectJson.put(&quot;Confirmation&quot;, &quot;registrationOK&quot;);</span>
+<span class="fc" id="L104">	    	} else{</span>
+<span class="fc" id="L105">	    		objectJson.put(&quot;Confirmation&quot;, &quot;wrongPassword&quot;);</span>
+	    	}
+	    }
+<span class="fc" id="L108">	    return objectJson;</span>
+	}
+	 
+}
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

@@ -1,0 +1,1435 @@
+body{
+	background-color:#589FC9;
+	height: 100%
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -50px;
+  /* Pad bottom by footer height */
+  padding: 0 0 50px;
+}
+
+#footer {
+  height: 50px;
+  background-color: #ededed;
+  text-align: right;
+  padding-top: 14px;
+  border-radius:5px;
+  margin-top:10px;
+}
+
+.headerTop{
+    margin-top: 10px;
+}
+
+#recoveryPassword{
+    margin-top: 5px;
+}
+
+.dl-horizontal{
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.listUserProcess{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: auto;
+}
+
+.map{
+    display: block;
+    height: 300px;
+    width: 100%;
+    float: left;
+}
+
+#content-middle{
+	width:100%;
+	height:100%;
+}
+
+.myhome{
+	width:50%;
+	margin:0 auto;
+	font-size:1.5em;
+}
+
+.accordionBox{
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.marginTop {
+    margin-top: 10px;
+}
+
+.marginBottom{
+    margin-bottom: 10px;
+}
+
+.panelContent{
+    border-radius:6px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    width:55%;
+    margin:0 auto;
+    background-color: skyblue;
+}
+
+.labelHeading{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.labelContent{
+    font-size: 21px;
+}
+
+.panel-title{
+	color:#0C1E53;
+	font-size:1.5em;
+	text-align:center;
+}
+
+.imageBox{
+    width: 98%;
+    height: 400px;
+}
+
+.icon{
+    vertical-align: middle;
+    margin-bottom: 5px;
+}
+
+.navbar-inverse {
+  background-color:#EDEDED;
+}
+
+.navbar-inverse .navbar-nav > .active > a {
+ background-color:#EDEDED;
+}
+
+#miniBrand{
+	list-style:none;
+}
+
+.modAccount{
+	padding-bottom:10px;
+}
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.navbar-inverse {
+  background-color: #EDEDED;
+  border-color: #DCDCDC;
+  color:#555555;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #555555;
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: #555555;
+  background-color: transparent;
+}
+
+.navbar-inverse .navbar-text {
+  color: #555555;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #555555;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #555555;
+  background-color: #dcdcdc;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #000000;
+}
+
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: #555555;
+  background-color: #dcdcdc;
+}
+
+.myAccount{
+	font-size:1.1em;
+	width:100%;
+	margin:0 auto;
+}
+
+div.myAccount{
+	width:60%;
+}
+
+.nav-stacked > li + li {
+  margin-top: 10px;
+  margin-left: 0;
+}
+
+.modAccount{
+	width:190px;
+	margin:0 auto;
+}
+
+#forgotPassword{
+	margin: 10px 5px;
+	text-decoration:underline;
+}
+
+fieldset.scheduler-border {
+	margin: 5% auto;
+	width:60%;
+	border-radius:6px;
+    border: 2px solid #ededed !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+
+label.control-label{
+    font-size: 15px;
+	padding:3px;
+	background-color: #eeeeee;
+	border-radius:3px;
+}
+
+legend{
+	text-align:center;
+}
+
+legend.scheduler-border {
+	border-radius:6px;
+	border: 2px solid #ececec !important;
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: center !important;
+}
+
+/* BOTTONI */
+
+.btn-info{
+	float:right;
+	background-color:#0C1E53;
+}
+
+.btn-default{
+	float:right;
+	background-color:#ededed;
+	margin: 0 0 5px 0 ;
+	width:20%;
+    text-shadow: none;
+}
+
+.allButtons > a:hover,
+.allButtons > a:focus{
+	color: #7FB7D0;
+  	background-color: #dcdcdc;
+}
+
+.availableProcessButton{
+	width:50%;
+	margin: 5% 30% ;
+}
+
+.allButtons .buttonStep{
+	float:left;
+	width:70%;
+	margin-left:15%;
+}
+
+a.buttonStep:hover,
+a.buttonStep:focus{
+	color: #fff;
+  	background-color: #008B8B;
+}
+
+a.availableProcessButton:hover,
+a.availableProcessButton:focus{
+    color: #7FB7D0;
+    background-color: #dcdcdc;
+}
+
+a.modify:hover,
+a.modify:focus{
+	color:#fff;
+	background-color:#FFA500;
+}
+
+a.cancel:hover,
+a.cancel:focus{
+	color:#fff;
+	background-color:#FF0000;
+}
+
+.adminProcessList{
+	float:left;
+}
+
+ a.adminProcessList:hover,
+ a.adminProcessList:focus{
+	color:#fff;
+	background-color:#1E90FF;
+}
+
+/* LOGIN */
+
+a.green.btn.btn-primary{
+	width:40%;
+}
+
+#benvenuto{
+	text-align:center;
+	color: #0C1E53;
+}
+
+.loginbox{
+	margin: 30px auto;
+	width: 50%;
+	height: 30%;
+		
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+}
+
+.accessBox{
+    float: right;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    width: 100%;
+}
+
+.form-group-registration{
+    float: right;
+    margin-top: 10px;
+}
+
+.loginbox > .acapo{
+	display: none;
+}
+
+.loginbox > .form-group{
+	margin: 10px 0;
+}
+
+.loginbox > a > .btn-primary{
+	background-color: #0C1E53;
+	border-color: #0C1E53;
+	float:right;
+	margin: 0 2px;
+}
+
+.loginbox > .checkbox{
+	width: 20%;
+	float:left;
+}
+
+.btn-primary{
+	background-color: #0C1E53;
+	border-color: #0C1E53;
+	float:right;
+	width:20%;
+}
+
+.formLogin{
+	margin-bottom:50px;
+}
+
+.loginbox > .logintip{
+	margin: 5px 5px;
+}
+
+.loginbox > .logintip > .btn-primary{
+	margin-right: 10px;
+}
+
+.loginsocial{
+	width: 162px;
+	margin: 0 15px;
+}
+
+.mieiProcessi{
+	width:80%;
+	margin:0 auto;
+}
+
+.newProcesso{
+	width:70%;
+	margin:0 auto;
+}
+
+.list-group-item{
+	padding:20px;
+}
+
+#seq-login{
+	display:none;
+	text-align:center;
+}
+
+.panel-default{
+	margin: 10px auto;
+}
+
+.alert{
+	width:50%;
+	margin-left:25%;
+}
+
+/* REGISTRATION */
+
+.registrationBox{
+	margin: 30px auto;
+	width: 50%;
+	height: 20%;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+}
+
+.form-control{
+	display:inline;
+}
+
+.containerTileAndMessage{
+	margin-left:auto;
+	margin-right:auto;
+	width:80%;
+
+}
+
+.accedi{
+	width:100%;
+	float:right;
+}
+
+/* WELCOME */
+
+.listWelcome li{
+	list-style:none;
+}
+
+.myhome h3{
+	background-color:#fff;
+	border-radius: 3px;
+	text-align:center;
+	padding:10px;
+}
+
+.list-group-item{
+	padding:10px;
+	text-align:center;
+}
+
+.panel-heading{
+	text-align:center;
+}
+
+.panel{
+	border:0;
+}
+
+/* TITLE PAGES */
+.titlePage{
+	text-align:center;
+}
+
+/* REPORT */
+.reportBox{
+	margin: 30px auto;
+	width: 60%;
+	height: 20%;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+}
+
+.reportBox li{
+	list-style:none;
+}
+
+.ulReport{
+	padding-left:0;
+}
+
+/* MESSAGE PAGES */
+
+.messagePage{
+	text-align:center;
+}
+
+/* CENTER PAGE */
+.centerContent{
+	margin-left:auto;
+	margin-right:auto;
+	width:80%;
+
+}
+
+/* STEP */
+
+.informationBox{
+    margin: 30px auto;
+    background-color: #FFFFFF;
+}
+
+.messageEmptyBox{
+    margin-left: 30px;
+    margin-right: 30px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    border: 2px solid #ff0000;
+}
+
+.centerContent .boxStepAdvance{
+	border-radius:6px;
+	border-color: #ececec;
+	width:60%;
+}
+
+fieldset.scheduler-border-step {
+	float:left;
+	width:50%;
+    border: 2px groove #0C1E53 !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 20px 20px !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+
+.centerContent > .step > fieldset.scheduler-border{
+	width: 100%;
+}
+
+.allButtons > .geoloc{
+	float:left;
+	width:100%;
+    margin-top: 5px;
+}
+/* VEDI ACCOUNT */
+
+#formInfo{
+	padding:10px;
+}
+
+.myAccount{
+	width:30%;
+	padding-bottom: 20px;
+}
+
+.legendInfo{
+	float:left;
+	font-size:1.1em;
+	font-family: verdana;
+	font-style:italic;
+	border-radius:10px;
+}
+
+.myAccount fieldset{
+	border-radius:6px;
+	padding-top:15px;
+	background-color:#fff;
+	line-height:2em;
+    text-align: center;
+    align-items: center;
+}
+
+.myAccount fieldset table{
+    margin-left: 70px;
+}
+
+.listSx li{
+	margin: 0 0 0 20px;
+	list-style:none;
+	float:left;
+	width:35%;
+}
+
+/* Bottone Edit */
+
+.myAccount .btn-group{
+	float:right;
+	margin: 0 0 10px 0;
+}
+
+.btn-default{
+	background-color: #0C1E53;
+	color:#fff;
+}
+
+.allButtons a:hover,
+.allButtons a:focus{
+	background-color: #3276b1;
+	border-color: #285e8e;
+	color:#fff;
+}
+
+.myAccount li{
+	padding-left:10px;
+	font-family: verdana;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+/* PROCESS BUTTON LIST */
+.processButtonList{
+  background: #faebfa;
+  background-image: -webkit-linear-gradient(top, #faebfa, #f0ebf0);
+  background-image: -moz-linear-gradient(top, #faebfa, #f0ebf0);
+  background-image: -ms-linear-gradient(top, #faebfa, #f0ebf0);
+  background-image: -o-linear-gradient(top, #faebfa, #f0ebf0);
+  background-image: linear-gradient(to bottom, #faebfa, #f0ebf0);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Georgia;
+  color: #785f78;
+  font-size: 30px;
+  padding: 0px 40px 0px 40px;
+  text-decoration: none;
+  width:100%;
+  margin-top:5%;
+}
+
+/* LIST TYPE NONE */
+.listTypeNone{
+	list-style-type: none;
+}
+
+/* LIST USER PROCESS */
+
+.userProcess{
+    width:100%;
+}
+
+/* NEW STEP BOX */
+
+.newStepBox{
+	margin: 30px auto;
+	width: 80%;
+	height: 20%;
+	border: 3px solid;
+	border-color: #0C1E53;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+	
+}
+
+/* STEP VALIDATOR BOX */
+
+.panel-group .panel-heading+.panel-collapse .panel-body{
+	padding:0;
+	padding-bottom:0;
+}
+
+.stepListValidatorBox{
+	width:100%;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+
+.stepValidatorBox > .control-group{
+	font-size:1em;
+	padding:2%;
+	background-color: #ececec;
+	padding-bottom:22px;
+	border-radius:3px;
+}
+
+.task {
+	border: 3px solid #fff;
+	border-radius: 6px;
+	padding: 10px;
+	margin: 3px;
+}
+
+.stepValidatorBox{
+	width:100%;
+	margin: 0 0 ;
+}
+
+.verify{
+    padding: 5px;
+    background-color : #fff;
+    border-radius: 3px;
+    text-align:center;
+    width:50%;
+    margin: 3px auto;
+}
+
+.processValidator{
+	clear:both;
+	float:left;
+	width:70%;
+	margin-left:15%;
+}
+
+.levelValidator{
+	clear:both;
+	width:60%;
+	margin-right: 20%;
+}
+
+.stepValidator{
+	clear:both;
+	width:50%;
+	margin-right:25%;
+}
+
+.allButtons > .estendi{
+	width:100%;
+	margin: 0 auto;
+}
+
+a.green.btn.btn-default.validator{
+	width:100%;
+}
+
+/* PAGINATION */
+
+.pagination{
+	width:100%;
+}
+
+.buttonsPagination{
+	width:205px;
+	margin: 0 auto;
+}
+
+.buttonsPagination button{
+	width:100px;
+    background-color: #ffffff;
+	border-radius: 3px;
+}
+
+/* STEP VALIDATOR LABEL */
+
+.labelStepValidator{
+	font-size:100%;
+	margin-top:2%;
+}
+
+/* ACTIVE PROCESS */
+
+.btn-group button:hover,
+.btn-group button:focus{
+	background-color: #3276b1;
+	border-color: #285e8e;
+	color:#fff;
+}
+
+.processButtons > .dropdown-menu{
+	position:relative;
+	width:70%;
+}
+
+.processButtons > .registrationBox{
+	margin: 0 auto 2% auto;
+}
+
+.indrop > .btn-default{
+	width:30%;
+}
+
+.btn-group{
+	margin-left:15%;
+}
+
+fieldset.activeProcessBox, fieldset.availableProcessBox{
+	padding:10px;
+}
+
+/* CREATE PROCESS */
+
+.calendario > .btn-default{
+	float:none;
+	width:15%;
+}
+
+.myLabel{
+	margin: 1% auto;
+}
+
+.levelBox{
+	margin: 3px auto;
+	width: 80%;
+	height: 20%;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+	border-radius: 6px;
+}
+
+.createStepBox{
+	margin: auto;
+	width: 80%;
+	height: 20%;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+	border-radius: 6px;
+}
+
+.newProcessBox{
+	margin: auto;
+	width: 80%;
+	height: 20%;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+	
+}
+
+.newStepListBox > .registrationBox{
+	margin: 5% auto;
+	width: 80%;
+	height: 20%;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+}
+
+.label-input-calendar{
+    padding-top: 4px;
+    width: 375px;
+}
+
+.label-input-div{
+    width: 325px;
+}
+
+.input-div{
+    float: right;
+    margin-right: 15px;
+    text-align: left;
+    display: table;
+}
+
+.label-div{
+    float: none;
+    margin-right: 15px;
+}
+
+/* ADMIN PROCESS */
+
+.adminProcess{
+	width:100%;
+}
+
+a.adminProcessList.btn.btn-default{
+	width:60%;
+	margin-left:20%;
+}
+
+fieldset.adminProcessBox{
+	padding-left:4%;
+	padding-right: 2%;
+    padding-top: 10px;
+}
+
+/* CURRENT STEP */
+
+.btn-group > .stepButtons{
+	background-color: #01796F;
+}
+
+div.upload {
+    margin-top: 5px;
+    width: 157px;
+    height: 45px;
+    background: url('../img/upload.png');
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+div.upload input {
+    display: block !important;
+    width: 157px !important;
+    height: 45px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+}
+
+/* VIEW ALL PROCESS */
+
+div.btn-group.processButtons{
+	width:100%;
+}
+
+ .processButtons > .btn-default{
+	width:70%;
+}
+
+.btn.btn-default.btn-lg.dropdown-toggle{
+	margin-left:15%;
+}
+
+ul.processMenu.dropdown-menu{
+	margin-left:15%;
+}
+
+button.btn-group{
+	margin: 0 auto;
+}
+
+.indrop > .availableProcessButton {
+	margin: 0 auto;
+}
+
+.boxStepAdvance{
+	margin: 30px auto;
+	width: 100%;
+	height: 20%;
+	border: 3px solid;
+	border-color: #0C1E53;
+	border-radius: 6px;
+	background-color: #FFFFFF;
+	padding: 10px 20px;
+}
+
+.textAreaInsertedText{
+	width:100%;
+  	font-size: 18px;
+  	resize: none;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.textAreaStepText{
+    width:100%;
+    font-size: 15px;
+    resize: none;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.buttonSonoQui{
+	width:100%;
+  	font-size: 25px;
+}
+
+.buttonInviaDati{
+  	font-size: 25px;
+}
+
+.orangeColor{
+	color: orange;
+}
+
+a.orange:hover,
+a.orange:focus{
+	color:#fff;
+	background-color:orange;
+	border-color: transparent;
+}
+
+a.blue:hover,
+a.blue:focus{
+    color: #fff;
+    background-color: darkblue;
+    border-color: transparent;
+}
+
+.greenColor{
+	color: green;
+}
+
+a.green:hover,
+a.green:focus{
+	color:#fff;
+	background-color:#008000;
+	border-color: transparent;
+}
+
+button.green:hover,
+button.green:focus{
+	color:#fff;
+	background-color:#008000;
+	border-color: transparent;
+}
+
+.grey{
+	background-color: #ececec;
+}
+
+.borderGrey{
+	border: 3px solid #ececec;
+	border-radius: 3px;
+}
+
+.redColor{
+	color: red;
+}
+
+a.red:hover,
+a.red:focus{
+	color:#fff;
+	background-color:red;
+	border-color: transparent;
+}
+
+.inputDay{
+	width: 30px;
+}
+
+.inputMonth{
+	width: 30px;
+}
+
+.inputYear{
+	width: 50px;
+}
+
+.form-group{
+	margin: auto;
+	width:90%;
+}
+
+.form-group-login{
+    margin-left:auto;
+    margin-right:auto;
+    width:100%;
+}
+
+.scheduler-border{
+	background-color:#fff;
+}
+
+.allButtons > .inField{
+	background-color: #555555;
+	width:136px;
+}
+
+.allButtons > .scegliData{
+	background-color: #888888;
+	width:128px;
+}
+
+.allButtons > .Level{
+    background-color: #888888;
+    width:175px;
+    height: 30px;
+    padding: 3px;
+}
+
+.allButtons > .ActiveProcess{
+    background-color: #888888;
+    width:120px;
+    height: 28px;
+    padding: 2px;
+}
+
+.allButtons > .definisci{
+	background-color: #555555;
+	width: 140px;
+}
+
+.btn-primary{
+	width:200px;
+}
+
+.allButtons > .recovery{
+	margin-right: 25px;
+}
+
+.btn-internal{
+    color: #ffffff;
+    width:70px;
+    background-color: #b9b9b9;
+}
+
+.btn-internal-del:hover{
+    background-color: #ff0000;
+}
+
+.btn-internal-mod:hover{
+    background-color: darkorange;
+}
+
+/* iPads (portrait and landscape) */
+@media only screen
+and (min-width : 768px)
+and (max-width : 1024px) {
+    .headerTop{
+        margin-top: 0px;
+    }
+
+    .myAccount fieldset table{
+        margin-left: 0px;
+    }
+}
+
+
+/* Mobile */
+@media only screen
+and (min-width : 320px)
+and (max-width : 768px) {
+    .headerTop{
+        margin-top: 0px;
+    }
+
+    .list-group-item{
+        font-size: 17px;
+    }
+
+    .labelHeading{
+        font-size: 20px;
+    }
+
+    .labelContent{
+        font-size: 17px;
+    }
+
+	#benvenuto{
+		margin-top:0px;
+		display:none;
+	}
+
+    .imageBox{
+        width: 98%;
+        height: 250px;
+    }
+
+    .edit{
+        margin-right: 10px;
+    }
+
+    .myAccount fieldset table{
+        margin-left: 0px;
+    }
+	
+    .navbar-inverse .navbar-toggle{
+        background-color: #589FC9;
+        border-color: #fff;
+    }
+
+    .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
+    background-color: #999;
+    border-color: #fff;
+    }
+	
+	#seq-login{
+		display:block;
+		margin: 5px auto;
+	}
+	
+	.legendInfo{
+		width:99%;
+	}
+	
+	.loginbox{
+		margin: 10px auto;
+		width: 99%;
+		padding: 5px 5px;
+	}
+	
+	.registrationBox{
+		margin: 10px auto;
+		width: 92%;
+		height:100%;
+		padding: 5px 5px;
+	}
+	
+	.recoveryBox{
+		margin: 10px auto;
+		width: 92%;
+		height:100%;
+		padding: 5px 5px;
+	}
+	
+	#divisorio{
+	display:none;
+	}
+
+	.loginbox > .btn-primary{
+	background-color: #0C1E53;
+	border-color: #0C1E53;
+	float: none;
+	margin: 0 2px;
+	}
+
+	.loginbox > .acapo{
+	display: block;
+	}
+
+	.loginsocial{
+	width: 148px;
+	}
+	
+	#logo{
+		display:none;
+	}
+	
+	.myhome{
+		width:98%;
+	}
+
+    .panelContent{
+        width: 98%;
+        padding: 2px;
+    }
+	
+	fieldset.scheduler-border{
+		width:98%;
+	}
+	
+	.mieiProcessi{
+		width:100%;
+	}
+	
+	.list-group-item > .btn-group{
+		float:none;
+	}
+	
+	.navbar-inverse .navbar-nav .open .dropdown-menu>li>a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu>li>a:focus {
+		color: #fff;
+		background-color: #555555;
+	}
+
+	.navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+		color: #999;
+	}	
+	
+	.panel-default{
+		width:99%;
+	}
+	
+	.centerContent > .myAccount{
+		width:100%;
+        text-align: left;
+	}
+	
+	.centerContent > .registrationBox{
+		width:98%;
+	}
+	
+	.myAccount > .allButtons{
+		width:100%;
+	}
+	
+	fieldset.myAccount{
+		width:100%;
+	}
+	
+	.btn.btn-default{
+		width:100%;
+	}
+	
+	.open>.dropdown-menu{
+		width:98%;
+	}
+	
+	ul.processMenu.dropdown-menu{
+		margin-right: 10px;
+	}
+	
+	.btn-group.processButtons.open{
+		width:99%;
+		margin-right:2px;
+	}
+	
+	.centerContent{
+		width:99%;
+	}
+	
+	div.btn-group.processButtons{
+		width:100%;
+	}
+	
+	.btn.btn-default.btn-lg.dropdown-toggle{
+        margin: 0 auto;
+    }
+
+    ul.processMenu.dropdown-menu{
+        width:100%;
+        margin:1% auto;
+    }
+
+    .registrationBox, .newProcessBox{
+            width:99%;
+    }
+
+    a.green.btn.btn-primary{
+        width:100%;
+    }
+
+    .navbar-inverse .navbar-nav .open .dropdown-menu>li>a,
+    .navbar-inverse .navbar-nav .open .dropdown-menu>li>a{
+        color: #555555;
+    }
+
+    .control-group{
+        width:99%;
+    }
+
+    .centerContent{
+        width:100%;
+    }
+
+    .btn-primary{
+        width:100%;
+    }
+
+    .buttonsPagination{
+        margin: 0 auto;
+    }
+
+    .btn-group{
+        margin: 0 0;
+    }
+
+    .dropdown-menu{
+        width:99%;
+        margin: 0 0;
+    }
+
+    /* LOGIN */
+    .accedi{
+        width:80%;
+        margin: auto;
+    }
+
+    .alert{
+        width:100%;
+        margin: 0 0;
+    }
+
+    .registrati > a.btn.btn-primary{
+        margin-right:0;
+        margin-top:2%;
+    }
+
+    /* ACTIVE PROCESS */
+
+    fieldset.registrationBox.dropdown-menu{
+        width:100%;
+        margin: 0 0 20px 0;
+    }
+
+    .btn-group.processButtons.open{
+        width: 100%;
+    }
+
+    /* VEDI ACCOUNT */
+    .myAccount fieldset{
+        padding-left: 0px;
+    }
+
+    /* CREATE PROCESS */
+    .newStepListBox > .registrationBox{
+        width:100%;
+    }
+
+    .levelBox{
+        margin:3px auto;
+        width: 99%;
+    }
+
+    .createStepBox{
+        margin: auto;
+        width: 99%;
+    }
+
+    .input-div{
+        float: none;
+        margin-right: 10px;
+        display: inline;
+    }
+
+    .label-input-calendar{
+        width: auto;
+        margin-bottom: 10px;
+    }
+
+    /* STEP VALIDATOR */
+    a.btn.btn-default.processValidator, a.btn.btn-default.levelValidator,a.btn.btn-default.levelValidator{
+        width:100%;
+        margin:0 0 ;
+    }
+
+    .stepValidator{
+        margin-right: 0;
+    }
+
+
+    .stepValidatorBox > .control-group{
+        font-size:1em;
+        padding:2%;
+        background-color: #fff;
+    }
+
+    .verify{
+        background-color : #999;
+        color: #fff;
+        border-radius: 3px;
+        text-align:center;
+        width:70%;
+        margin: 3px auto;
+    }
+
+    .pagination{
+        margin: 10px auto;
+    }
+
+    /* LIST USER PROCESS */
+
+    .listUserProcess{
+        width: 100%;
+        padding: 15px;
+    }
+
+    .dd{
+        margin-left: 10px;
+    }
+
+    /* REPORTBOX */
+    .reportBox{
+        width:100%;
+        margin: 0 0;
+    }
+
+    .reportBox > .panel .panel-info{
+        width:100%;
+        margin: 0 0;
+        padding: 0;
+    }
+
+    .allButtons > .recovery{
+        margin-right: 0;
+    }
+
+    .allButtons > .inField{
+        width: auto;
+    }
+
+    .allButtons > .scegliData{
+        width: auto;
+    }
+}

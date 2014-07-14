@@ -1,0 +1,159 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : stepvalidator.html
+* Location : /applicationContent/com/sequenziatore/client/view/admin
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-25     Pavanello Mirko
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlStepValidator" xmlns="http://www.w3.org/1999/html">
+	 <alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+    <div class="panelContent">
+        <div class="panel-heading"><label class="labelHeading">Processi con passi da validare</label></div>
+        <div ng-show="messageResult === 'Non ci sono processi con passi da validare'" class="messageEmptyBox">
+            <label class="labelContent">{{messageResult}}</label>
+        </div>
+        <accordion close-others="oneAtATime === undefined">
+            <div class="stepValidatorPage" ng-repeat="(indexProcess, process) in stepListToValidate | startFrom:currentPage*pageSize | limitTo:pageSize">
+                <accordion-group is-open="process.status.open" ng-class="accordionProcess">
+                    <accordion-heading>
+                        <div>
+                            <i class="pull-left glyphicon">
+                                <span data-ng-click="" class="badge">{{calculateTotalDataCollection(indexProcess)}}</span>
+                            </i>
+                            {{process.Name}}
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': process.status.open, 'glyphicon-chevron-right': !process.status.open}"></i>
+                        </div>
+                    </accordion-heading>
+                    <accordion>
+                        <div class="accordionBox" ng-repeat="(indexLevel, level) in process['List']">
+                            <accordion-group is-open="level.status.open">
+                                <accordion-heading>
+                                    <div>
+                                        Livello : {{level.Name+1}}
+                                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': level.status.open, 'glyphicon-chevron-right': !level.status.open}"></i>
+                                    </div>
+                                </accordion-heading>
+                                <accordion>
+                                    <div class="accordionBox" ng-repeat="(indexStep, step) in level['List']">
+                                        <accordion-group is-open="step.status.open">
+                                            <accordion-heading>
+                                                <div>
+                                                    Passo : {{step.Name}}
+                                                    <i class="col-xs-push-3 glyphicon" ng-class="{'glyphicon-chevron-down': step.status.open, 'glyphicon-chevron-right': !step.status.open}"></i>
+                                                </div>
+                                            </accordion-heading>
+                                            <accordion>
+                                                <div class="accordionBox" ng-repeat="(indexDataCollection, dataCollection) in step['List']">
+                                                    <accordion-group is-open="dataCollection.status.open">
+                                                        <accordion-heading>
+                                                            <div>
+                                                                Utente: <b>{{dataCollection.Username}}</b>
+                                                                <i class="col-xs-push-3 glyphicon" ng-class="{'glyphicon-chevron-down': dataCollection.status.open, 'glyphicon-chevron-right': !dataCollection.status.open}"></i>
+                                                            </div>
+                                                        </accordion-heading>
+                                                        <accordion>
+                                                            <fieldset class="stepValidatorBox">
+                                                                <legend class="legendInfo"> </b> </legend>
+                                                                <div class="control-group">
+                                                                    <br />
+                                                                    <div class="task" ng-show="!(dataCollection.CheckLatitude === 'null') && dataCollection.WrongGeolocation === false">
+                                                                        <h4 class="control-label input-label verify"> Verifica geolocalizzazione</h4><br />
+                                                                        <p class="control-label input-label"> Latitudine rilevata:
+                                                                            <label class="labelContent"> {{ dataCollection.Latitude }}</label></p>
+                                                                        <p class="control-label input-label"> Latitudine campione:
+                                                                            <label class="labelContent"> {{ dataCollection.CheckLatitude }}</label></p>
+                                                                        <p class="control-label input-label"> Longitudine rilevata:
+                                                                            <label class="labelContent"> {{ dataCollection.Longitude }}</label></p>
+                                                                        <p class="control-label input-label"> Longitudine campione:
+                                                                            <label class="labelContent"> {{ dataCollection.CheckLongitude }}</label></p>
+
+                                                                        <div class ="allButtons">
+                                                                            <a data-ng-click="showMap(indexProcess,indexLevel,indexStep,indexDataCollection)" class="inField green btn btn-default validator"><span class="glyphicon glyphicon-ok"> </span> Mostra mappa</a>
+                                                                        </div>
+
+                                                                        <div ng-show="dataCollection.mapVisible === true" ng-repeat="map in mapList" >
+                                                                            <map class="map" map-type-id="MapTypeId.MAP" zoom="5">
+                                                                                <marker position="[{{ dataCollection.CheckLatitude }}, {{ dataCollection.CheckLongitude }}]" icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" centered="true" title="drag me"></marker>
+                                                                                <marker position="[{{ dataCollection.Latitude }}, {{ dataCollection.Longitude }}]" centered="true" animation="Animation.BOUNCE" title="drag me"></marker>
+                                                                            </map>
+                                                                        </div>
+
+                                                                        <br><br><br>
+                                                                        <label class="control-label input-label">Superato: </label>
+                                                                        <input type="radio" ng-model="dataCollection.geolocationConfirmation" value='true'> Si </input>
+                                                                        <input type="radio" ng-model="dataCollection.geolocationConfirmation" value='false'> No </input>
+                                                                    </div>
+
+                                                                    <div class="task" ng-show="!(dataCollection.CheckText === 'null') && dataCollection.WrongText === false">
+                                                                        <h4 class="control-label input-label verify"> Verifica testo</h4>
+                                                                        <p class="control-label input-label"> Testo inserito:
+                                                                            <label class="labelContent"> {{ dataCollection.Text }}</label></p>
+                                                                        <p class="control-label input-label"> Testo campione:
+                                                                            <label class="labelContent"> {{ dataCollection.CheckText }}</label></p>
+
+                                                                        <label class="control-label input-label">Superato: </label>
+                                                                        <input type="radio" ng-model="dataCollection.textConfirmation" value='true'> Si </input>
+                                                                        <input type="radio" ng-model="dataCollection.textConfirmation" value='false'> No </input>
+                                                                    </div>
+
+                                                                    <div class="task" ng-show="!(dataCollection.WrongPhoto === true) && !(dataCollection.Photo === undefined)">
+                                                                        <h4 class="control-label input-label verify"> Verifica foto</h4>
+                                                                        <p class="control-label input-label"> Foto:
+                                                                            <!-- <label class="labelContent" > {{ dataCollection.Photo }}</label> --> </p>
+                                                                        <img class="imageBox" alt="" ng-src="{{dataCollection.Photo}}"/>
+
+                                                                        <label class="control-label input-label">Superato: </label>
+                                                                        <input type="radio" ng-model="dataCollection.photoConfirmation" value='true'> Si </input>
+                                                                        <input type="radio" ng-model="dataCollection.photoConfirmation" value='false'> No </input>
+                                                                    </div>
+
+                                                                    <div class ="allButtons">
+                                                                        <a ng-show="!(dataCollection.buttonVisible === false)" data-ng-click="doStepValidation(indexProcess,indexLevel,indexStep,indexDataCollection)" class="inField green btn btn-default validator"><span class="glyphicon glyphicon-ok"> </span> Valida</a>
+                                                                    </div>
+                                                                    <h3 class="redColor">{{dataCollection.messageValidation}}</h3>
+                                                                </div>
+                                                            </fieldset>
+                                                        </accordion>
+                                                    </accordion-group>
+                                                </div>
+                                            </accordion>
+                                        </accordion-group>
+                                    </div>
+                                </accordion>
+                            </accordion-group>
+                        </div>
+                    </accordion>
+                </accordion-group>
+            </div>
+        </accordion>
+         <div class="pagination">
+            <div class="buttonsPagination">
+                <button ng-disabled="currentPage == 0 || numberOfPages==undefined" data-ng-click="currentPage=currentPage-1"> Precedenti </button>
+                <button class="next" ng-disabled="currentPage >= stepListToValidate.length/pageSize-1 || numberOfPages==undefined" data-ng-click="currentPage=currentPage+1"> Successivi </button>
+            </div>
+        </div>
+    </div>
+</div>

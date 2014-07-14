@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceUserRegistrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.shared</a> &gt; <span class="el_source">ServiceUserRegistrationTest.java</span></div><h1>ServiceUserRegistrationTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceUserRegistrationTest
+ * 
+ *	@file		ServiceUserRegistrationTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.shared;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.json.JSONObject;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.User;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe ServiceUserRegistration.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L48">public class ServiceUserRegistrationTest {</span>
+
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L58">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L61">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L62">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L65">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L66">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L69">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L70">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L73">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L74">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L77">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L78">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L80">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L81">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L91">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L94">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L95">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L98">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L99">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L102">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L103">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L106">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L107">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L110">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L111">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L113">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L114">	}</span>
+	
+	/**
+	 *	Test del metodo serviceOperation() che permette la registrazione di un utente al sistema.
+	 */
+    @Test
+    public void testServiceOperation() {
+<span class="fc" id="L121">    	ServiceUserRegistration serviceUserRegistrationObject = new ServiceUserRegistration();</span>
+    	
+    	//creazione utente
+<span class="fc" id="L124">        User testUser = new User();</span>
+<span class="fc" id="L125">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L126">        testUser.setUsername(&quot;testUsername&quot;);</span>
+<span class="fc" id="L127">        testUser.setPassword(&quot;testPassword&quot;);</span>
+<span class="fc" id="L128">        testUser.setEmail(&quot;test@test.com&quot;);</span>
+<span class="fc" id="L129">        testUser.setName(&quot;testName&quot;);</span>
+<span class="fc" id="L130">        testUser.setSurname(&quot;testSurname&quot;);</span>
+<span class="fc" id="L131">        testUser.setCity(&quot;testCity&quot;);</span>
+<span class="fc" id="L132">        testUser.setDistrict(&quot;PD&quot;);</span>
+        
+    	//creazione della lista di entità
+<span class="fc" id="L135">	    List&lt;IEntity&gt; iEntityList = new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L136">	    iEntityList.add(testUser);</span>
+    	
+<span class="fc" id="L138">    	JSONObject jsonReturnedObject = serviceUserRegistrationObject.serviceOperation(iEntityList);</span>
+<span class="fc" id="L139">    	assertEquals(&quot;registrationOK&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+    	
+    	//invocazione con utente già registrato
+<span class="fc" id="L142">    	jsonReturnedObject = serviceUserRegistrationObject.serviceOperation(iEntityList);</span>
+<span class="fc" id="L143">    	assertEquals(&quot;userAndMailNotAvailable&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+    
+    	//invocazione con username già registrato
+<span class="fc" id="L146">    	testUser.setEmail(&quot;abc@abc.com&quot;);</span>
+<span class="fc" id="L147">    	jsonReturnedObject = serviceUserRegistrationObject.serviceOperation(iEntityList);</span>
+<span class="fc" id="L148">    	assertEquals(&quot;usernameNotAvailable&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+    
+    	//invocazione con email già registrata
+<span class="fc" id="L151">    	testUser.setUsername(&quot;newUser&quot;);</span>
+<span class="fc" id="L152">    	testUser.setEmail(&quot;test@test.com&quot;);</span>
+<span class="fc" id="L153">    	jsonReturnedObject = serviceUserRegistrationObject.serviceOperation(iEntityList);</span>
+<span class="fc" id="L154">    	assertEquals(&quot;emailNotAvailable&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+<span class="fc" id="L155">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

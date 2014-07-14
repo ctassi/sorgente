@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DAOManagementProcessAdmin.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.databaseutil.dao</a> &gt; <span class="el_source">DAOManagementProcessAdmin.java</span></div><h1>DAOManagementProcessAdmin.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe DAOManagementProcessAdmin
+ * 
+ *	@file		DAOManagementProcessAdmin.java
+ *	@author		DeSQ
+ *	@date		2014-05-07
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.databaseutil.dao;
+
+import java.util.List;
+
+import org.hibernate.Query;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.DataCollection;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.Subscription;
+import com.sequenziatore.server.entity.User;
+
+/**
+ *	La classe DAOManagementProcessAdmin implementa i metodi per eseguire operazioni di lettura e scrittura sul database disponibili agli amministratori.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L44">public class DAOManagementProcessAdmin implements IDAOManagementProcessAdmin {</span>
+ 
+	/**
+	 * Permette di creare un nuovo processo con i dati forniti.
+	 * 
+	 * @param process contiene i dati del nuovo processo da inserire
+	 * @throws Exception 
+	 */
+	@Override
+	public void insertProcess(Process process) throws Exception {
+<span class="fc" id="L54">		HibernateUtil.getSession().saveOrUpdate(process);</span>
+<span class="fc" id="L55">	}</span>
+	
+	/**
+	 * Permette di cercare i processi terminati e amministrati da un certo amministratore.
+	 * 
+	 * @param user contiene l'id dell'amministratore che esegue la ricerca
+	 * @return la lista dei processi
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Process&gt; findClosedProcess(User user) throws Exception {
+<span class="fc" id="L67">		List&lt;Process&gt; processes=null;</span>
+<span class="fc" id="L68">		Query query = HibernateUtil.getSession().createQuery(&quot;select p from Process p where p.admin = :idAdmin and (p.closingDate &lt; current_date() or p.available = 0) order by p.publicationDate DESC&quot;);</span>
+<span class="fc" id="L69">		query.setParameter(&quot;idAdmin&quot;, user);</span>
+<span class="fc" id="L70">		processes=(List&lt;Process&gt;)query.list();</span>
+<span class="fc" id="L71">		return processes;</span>
+	}
+	
+	/**
+	 * Permette di cercare i passi da validare da un certo amministratore.
+	 * 
+	 * @param user contiene l'id dell'amministratore che esegue la ricerca
+	 * @return la lista degli id della raccolta dati dei passi da validare
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Integer&gt; findIdDataCollectionToVerify(User user) throws Exception {
+<span class="fc" id="L84">		List&lt;Integer&gt; dataCollections=null;</span>
+<span class="fc" id="L85">		Query query = HibernateUtil.getSession().createQuery(&quot;select d.idCollection from DataCollection d join d.idStep as s join s.idProcess as p where p.admin = :idAdmin and d.state='TOVERIFY'&quot;);</span>
+<span class="fc" id="L86">		query.setParameter(&quot;idAdmin&quot;, user);</span>
+<span class="fc" id="L87">		dataCollections=(List&lt;Integer&gt;)query.list();</span>
+<span class="fc" id="L88">		return dataCollections;</span>
+		}
+	
+	/**
+	 * Permette di trovare tutti gli utenti che partecipano ad un determinato processo dell'amministratore.
+	 * 
+	 * @param process contiene l'id del processo su cui si vuole eseguire la ricerca
+	 * @return la lista degli utenti
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;User&gt; findUserSubscription(Process process) throws Exception {
+<span class="fc" id="L101">		List&lt;User&gt; users=null;</span>
+<span class="fc" id="L102">		Query query = HibernateUtil.getSession().createQuery(&quot;select us &quot;</span>
+				+ &quot;from Process p, User us, Subscription sub &quot;
+				+ &quot;where  p.idProcess =:idProcess and p.idProcess = sub.idProcess and us.idUser = sub.idUser&quot;);
+<span class="fc" id="L105">		query.setParameter(&quot;idProcess&quot;, process.getIdProcess());</span>
+<span class="fc" id="L106">		users=(List&lt;User&gt;)query.list();</span>
+<span class="fc" id="L107">		return users;	</span>
+	}
+	
+	/**
+	 * Permette di cercare gli utenti che hanno completato un determinato processo.
+	 * 
+	 * @param process contiene l'id del processo su cui si vuole eseguire la ricerca
+	 * @return la lista degli id utente che hanno completato il processo
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Integer&gt; findUserSubscriptionComplete(Process process) throws Exception {
+<span class="fc" id="L120">		List&lt;Integer&gt; users=null;</span>
+<span class="fc" id="L121">		Query query = HibernateUtil.getSession().createQuery(&quot;select us.idUser &quot;</span>
+				+ &quot;from Process p, User us, Subscription sub &quot;
+				+ &quot;where  p.idProcess =:idProcess and p.idProcess = sub.idProcess and us.idUser = sub.idUser and sub.complete = 1&quot;);
+<span class="fc" id="L124">		query.setParameter(&quot;idProcess&quot;, process.getIdProcess());</span>
+<span class="fc" id="L125">		users=(List&lt;Integer&gt;)query.list();</span>
+<span class="fc" id="L126">		return users;	</span>
+	}
+	
+	
+	/**
+	 * Permette di trovare tutti i processi attivi amministrati da un certo amministratore.
+	 * 
+	 * @param user contiene l'id dell'amministratore che fa la richiesta
+	 * @return la lista dei processi
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Process&gt; findActiveProcess(User user) throws Exception {
+<span class="fc" id="L140">		List&lt;Process&gt; processes=null;</span>
+<span class="fc" id="L141">		Query query = HibernateUtil.getSession().createQuery(&quot;select p from Process p, User us where us.idUser = :idAdmin and p.closingDate &gt;= current_date() and us.idUser = p.admin order by p.publicationDate DESC&quot;);</span>
+<span class="fc" id="L142">		query.setParameter(&quot;idAdmin&quot;, user.getIdUser());</span>
+<span class="fc" id="L143">		processes=(List&lt;Process&gt;)query.list();</span>
+<span class="fc" id="L144">		return processes;</span>
+	}
+	
+	
+	/**
+	 * Permette di trovare una specifica raccolta dati.
+	 * 
+	 * @param data contiene l'id della raccolta dati da trovare
+	 * @return la raccolta dati
+	 * @throws Exception 
+	 */
+	@Override
+	public DataCollection findDataCollection(DataCollection data) throws Exception {
+<span class="fc" id="L157">		DataCollection datacollection = null;</span>
+<span class="fc" id="L158">		Query query = HibernateUtil.getSession().createQuery(&quot;select d from DataCollection d where d.idCollection = :idCollection&quot;);</span>
+<span class="fc" id="L159">		query.setParameter(&quot;idCollection&quot;, data.getIdCollection());</span>
+<span class="fc" id="L160">		datacollection = (DataCollection) query.uniqueResult();</span>
+<span class="fc" id="L161">		return datacollection;</span>
+	}
+	
+	/**
+	 * Permette di creare una nuova raccolta dati con i dati forniti.
+	 * 
+	 * @param data contiene i valori della raccolta dati da inserire
+	 * @throws Exception 
+	 */
+	@Override
+	public void insertDataCollection(DataCollection data) throws Exception {
+<span class="fc" id="L172">		HibernateUtil.getSession().saveOrUpdate(data);</span>
+<span class="fc" id="L173">	}</span>
+	
+	/**
+	 * Permette di trovare tutte le raccolte dati di un determinato: utente, processo e livello .
+	 * 
+	 * @param datacollection contiene l'id dell'utente, il livello e l'id processo
+	 * @return la lista della raccolta dati
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;DataCollection&gt; findDataCollectionByLevel(DataCollection datacollection) throws Exception {
+<span class="fc" id="L185">		List&lt;DataCollection&gt; datacollections=null;</span>
+<span class="fc" id="L186">		Query queryList = HibernateUtil.getSession().createQuery(&quot;select d from DataCollection d JOIN d.idStep s where s.level = :level and s.idProcess = :idProcess and d.idUser = :idUser and d.idCollection&lt;&gt; :idCollection&quot;);</span>
+<span class="fc" id="L187">		queryList.setParameter(&quot;level&quot;, datacollection.getIdStep().getLevel());</span>
+<span class="fc" id="L188">		queryList.setParameter(&quot;idUser&quot;, datacollection.getIdUser());</span>
+<span class="fc" id="L189">		queryList.setParameter(&quot;idProcess&quot;, datacollection.getIdStep().getIdProcess());</span>
+<span class="fc" id="L190">		queryList.setParameter(&quot;idCollection&quot;, datacollection.getIdCollection());</span>
+<span class="fc" id="L191">		datacollections=(List&lt;DataCollection&gt;)queryList.list();</span>
+<span class="fc" id="L192">		return datacollections;</span>
+	}
+	
+	/**
+	 * Permette di trovare una specifica iscrizione a un processo.
+	 * 
+	 * @param user contiene l'id del user
+	 * @param process contiene l'id del processo
+	 * @return l'iscrizione al processo
+	 * @throws Exception 
+	 */
+	@Override
+	public Subscription findSubscription(User user , Process process) throws Exception {
+<span class="fc" id="L205">		Subscription subscription=null;</span>
+<span class="fc" id="L206">		Query query = HibernateUtil.getSession().createQuery(&quot;select sub &quot;</span>
+				+ &quot;from Subscription sub, User us, Process pro &quot;
+				+ &quot;where us.idUser = :idUser and pro.idProcess = :idProcess and pro.idProcess = sub.idProcess and us.idUser = sub.idUser&quot;);
+<span class="fc" id="L209">		query.setParameter(&quot;idUser&quot;, user.getIdUser());</span>
+<span class="fc" id="L210">		query.setParameter(&quot;idProcess&quot;, process.getIdProcess());</span>
+<span class="fc" id="L211">		subscription = (Subscription) query.uniqueResult();</span>
+<span class="fc" id="L212">		return subscription;</span>
+	}
+	
+	/**
+	 * Permette di creare una nuova iscrizione al processo con i dati forniti.
+	 * 
+	 * @param subscription contiene i dati dell'iscrizione al processo da inserire
+	 * @throws Exception 
+	 */
+	@Override
+	public void insertSubscription(Subscription subscription) throws Exception {
+<span class="fc" id="L223">		HibernateUtil.getSession().saveOrUpdate(subscription);</span>
+<span class="fc" id="L224">	}</span>
+	
+	/**
+	 * Permette di trovare tutti i processi di un amministratore.
+	 * 
+	 * @param user contiene l'id dell'amministratore che esegue la richiesta
+	 * @return la lista dei processi
+	 * @throws Exception
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Process&gt; findAllProcesses(User user) throws Exception {
+<span class="fc" id="L236">		List&lt;Process&gt; processes=null;</span>
+<span class="fc" id="L237">		Query query = HibernateUtil.getSession().createQuery(&quot;select p from Process p, User u where u.idUser = :idUser and p.admin = u.idUser order by p.publicationDate DESC&quot;);</span>
+<span class="fc" id="L238">		query.setParameter(&quot;idUser&quot;, user.getIdUser());</span>
+<span class="fc" id="L239">		processes=(List&lt;Process&gt;)query.list();</span>
+<span class="fc" id="L240">		return processes;</span>
+	}
+	
+	/**
+	 * Permette di trovare tutti i passi di un determinato: amministratore, processo e livello .
+	 * 
+	 * @param admin contiene l'id dell'amministratore
+	 * @param process contiene l'id processo
+	 * @param level contiene il livello
+	 * @return la lista dei passi
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Step&gt; findDataCollectionsStep(User admin, Process process, Integer level) throws Exception {
+<span class="fc" id="L255">		List&lt;Step&gt; resultQuery = null;</span>
+<span class="fc" id="L256">		Query query = HibernateUtil.getSession().createQuery(&quot;select distinct s from DataCollection d join d.idStep as s join s.idProcess as p where p.admin = :idAdmin and s.idProcess = :idProcess and s.level = :level and d.state='TOVERIFY' order by s.idStep&quot;);</span>
+<span class="fc" id="L257">		query.setParameter(&quot;idAdmin&quot;, admin);</span>
+<span class="fc" id="L258">		query.setParameter(&quot;idProcess&quot;, process);</span>
+<span class="fc" id="L259">		query.setParameter(&quot;level&quot;, level);</span>
+<span class="fc" id="L260">		resultQuery = (List&lt;Step&gt;) query.list();</span>
+<span class="fc" id="L261">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare tutti i processi amministrati da un certo amministratore e che hanno passi da validare.
+	 * 
+	 * @param admin contiene l'id dell'amministratore che fa la richiesta
+	 * @return la lista dei processi
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Process&gt; findDataCollectionsProcess(User admin) throws Exception {
+<span class="fc" id="L274">		List&lt;Process&gt; resultQuery = null;</span>
+<span class="fc" id="L275">		Query query = HibernateUtil.getSession().createQuery(&quot;select distinct p from DataCollection d join d.idStep as s join s.idProcess as p where p.admin = :idAdmin and d.state='TOVERIFY' order by p.idProcess asc&quot;);</span>
+<span class="fc" id="L276">		query.setParameter(&quot;idAdmin&quot;, admin);</span>
+<span class="fc" id="L277">		resultQuery = (List&lt;Process&gt;) query.list();</span>
+<span class="fc" id="L278">		return resultQuery;</span>
+
+	}
+	
+	/**
+	 * Permette di trovare tutti i livelli di un processo amministrati da un certo amministratore e che hanno passi da validare.
+	 * 
+	 * @param admin contiene l'id dell'amministratore che fa la richiesta
+	 * @param process contiene l'id del processo
+	 * @return la lista dei livelli
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Integer&gt; findDataCollectionsLevel(User admin, Process process) throws Exception {
+<span class="fc" id="L293">		List&lt;Integer&gt; resultQuery = null;</span>
+<span class="fc" id="L294">		Query query = HibernateUtil.getSession().createQuery(&quot;select distinct s.level from DataCollection d join d.idStep as s join s.idProcess as p where p.admin = :idAdmin and p.idProcess = :idProcess and d.state='TOVERIFY' order by s.level&quot;);</span>
+<span class="fc" id="L295">		query.setParameter(&quot;idAdmin&quot;, admin);</span>
+<span class="fc" id="L296">		query.setParameter(&quot;idProcess&quot;, process.getIdProcess());</span>
+<span class="fc" id="L297">		resultQuery = (List&lt;Integer&gt;) query.list();</span>
+<span class="fc" id="L298">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare tutte le raccolte dati di un passo.
+	 * 
+	 * @param admin contiene l'id dell'amministratore che fa la richiesta
+	 * @param process contiene l'id del processo
+	 * @param level contiene il livello del passo
+	 * @param idStep contiene il passo
+	 * @return la lista della raccolta dati
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;DataCollection&gt; findDataCollectionIdStep(User admin, Process process, Integer level, Integer idStep) throws Exception {
+<span class="fc" id="L314">		List&lt;DataCollection&gt; resultQuery = null;</span>
+<span class="fc" id="L315">		Query query = HibernateUtil.getSession().createQuery(&quot;select d from DataCollection d join d.idStep as s join s.idProcess as p where p.admin = :idAdmin and s.idProcess = :idProcess and s.level = :level and s.idStep = :idStep and d.state='TOVERIFY'&quot;);</span>
+<span class="fc" id="L316">		query.setParameter(&quot;idAdmin&quot;, admin);</span>
+<span class="fc" id="L317">		query.setParameter(&quot;idProcess&quot;, process);</span>
+<span class="fc" id="L318">		query.setParameter(&quot;level&quot;, level);</span>
+<span class="fc" id="L319">		query.setParameter(&quot;idStep&quot;, idStep);</span>
+<span class="fc" id="L320">		resultQuery = (List&lt;DataCollection&gt;) query.list();</span>
+<span class="fc" id="L321">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare tutti gli id degli utenti che sono presenti nel applicazione.
+	 * 
+	 * @return la lista degli id utente
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Integer&gt; findAllUser() throws Exception {
+<span class="fc" id="L333">		List&lt;Integer&gt; resultQuery = null;</span>
+<span class="fc" id="L334">		Query query = HibernateUtil.getSession().createQuery(&quot;select us.idUser from User us where us.isAdmin = 0&quot;);</span>
+<span class="fc" id="L335">		resultQuery = (List&lt;Integer&gt;) query.list();</span>
+<span class="fc" id="L336">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare un specifico processo.
+	 * 
+	 * @param process contiene l'id del processo da trovare
+	 * @return il processo
+	 * @throws Exception 
+	 */
+	@Override
+	public Process findProcess(Process process) throws Exception {
+<span class="fc" id="L348">		Process resultQuery = null;</span>
+<span class="fc" id="L349">		Query query = HibernateUtil.getSession().createQuery(&quot;select p from Process p where p.idProcess = :idProcess&quot;);</span>
+<span class="fc" id="L350">		query.setParameter(&quot;idProcess&quot;, process.getIdProcess());</span>
+<span class="fc" id="L351">		resultQuery = (Process) query.uniqueResult();</span>
+<span class="fc" id="L352">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare gli id delle raccolte dati completate di un determinato passo.
+	 * 
+	 * @param step contiene l'id del passo da trovare
+	 * @return la lista degli id delle raccolte dati
+	 * @throws Exception 
+	 */
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public List&lt;Integer&gt; findUserStepComplete(Step step) throws Exception {
+<span class="fc" id="L365">		List&lt;Integer&gt; resultQuery = null;</span>
+<span class="fc" id="L366">		Query query = HibernateUtil.getSession().createQuery(&quot;select d.idCollection from DataCollection d join d.idStep as s where s.idStep = :idStep and d.state='VERIFIED'&quot;);</span>
+<span class="fc" id="L367">		query.setParameter(&quot;idStep&quot;, step.getIdStep());</span>
+<span class="fc" id="L368">		resultQuery = (List&lt;Integer&gt;) query.list();</span>
+<span class="fc" id="L369">		return resultQuery;</span>
+	}
+	
+	/**
+	 * Permette di trovare il livello a cui è arrivato un utente in un processo.
+	 * 
+	 * @param user contiene l'id dell'utente
+	 * @param process contiene l'id del processo
+	 * @return il livello a cui è arrivato
+	 * @throws Exception 
+	 */
+	@Override
+	public Integer findMinStep(User user , Process process) throws Exception {
+<span class="fc" id="L382">		Integer minLevel=null;</span>
+<span class="fc" id="L383">		Query query = HibernateUtil.getSession().createQuery(&quot;select min(s.level) &quot;</span>
+				+ &quot;from DataCollection d JOIN d.idStep s &quot;
+				+ &quot;where d.idUser = :idUser and s.idProcess = :idProcess and (d.state='NOTCOLLECTED' or d.state='FAILED' or d.state='TOVERIFY')&quot;);
+<span class="fc" id="L386">		query.setParameter(&quot;idUser&quot;, user);</span>
+<span class="fc" id="L387">		query.setParameter(&quot;idProcess&quot;, process);</span>
+<span class="fc" id="L388">		minLevel = (Integer) query.uniqueResult();</span>
+<span class="fc" id="L389">		return minLevel;</span>
+	}
+}
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

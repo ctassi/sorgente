@@ -1,0 +1,55 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    background-color: white;
+    color:black;
+    font-family: "Times New Romans", Times, serif;
+    font-size: 1em;
+    margin:1em;
+}
+
+#header,#footer{
+    display: none;
+}
+
+.reportBox{
+    width: 80%;
+    margin: 0px;
+    border: 0px;
+}
+
+.panel-heading{
+    text-align: left;
+    font-size: 20px;
+}
+
+.grey{
+    font-weight: bold;
+}
+
+.list-group-item{
+    text-align: left;
+    border: none;
+}
+
+.borderGrey{
+    border: none;
+}
+
+#content{
+    float: none;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+}
+
+
+.article{
+    page-break-after: auto;
+}
+.image-storia-left{display: none;}
+.paragrafo-right{float:none;}

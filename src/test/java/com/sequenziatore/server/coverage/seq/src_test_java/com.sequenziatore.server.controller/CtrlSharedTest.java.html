@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CtrlSharedTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.controller</a> &gt; <span class="el_source">CtrlSharedTest.java</span></div><h1>CtrlSharedTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe CtrlSharedTest
+ * 
+ *	@file		CtrlSharedTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.controller;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.Writer;
+import java.lang.reflect.Field;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.hibernate.Query;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.User;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe CtrlShared.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L57">public class CtrlSharedTest {</span>
+
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L67">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L70">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L71">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L74">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L75">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L78">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L79">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L82">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L83">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L86">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L87">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L89">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L90">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L100">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L103">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L104">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L107">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L108">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L111">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L112">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L115">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L116">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L119">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L120">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L122">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L123">	}</span>
+	
+	/**
+	 *	Test del metodo ctrlUserFacebookLogin() che permette ad un utente di loggarsi tramite Facebook.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+	public void testCtrlUserFacebookLogin() throws Exception{
+<span class="fc" id="L131">		HttpServletRequest request = mock(HttpServletRequest.class);       </span>
+<span class="fc" id="L132">		HttpServletResponse response = mock(HttpServletResponse.class);    </span>
+<span class="fc" id="L133">		HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L134">		CtrlShared ctrlSharedObject = new CtrlShared();</span>
+	     
+		//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L137">		HibernateUtil.getSession().beginTransaction();</span>
+		
+     	//creazione utente
+<span class="fc" id="L140">        User testUser = new User();</span>
+<span class="fc" id="L141">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L142">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L143">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L144">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L145">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L146">		HibernateUtil.commitTransaction();</span>
+		
+<span class="fc" id="L148">	    String stringObject = &quot;{Username: 'testUsername', Password: 'testPassword', &quot;</span>
+        		+ &quot;Name: 'testName', Surname: 'testSurname', Email: 'testEmail', &quot;
+        		+ &quot;City: 'testCity', District: 'Di', IsAdmin: false}&quot;;
+<span class="fc" id="L151">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L152">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L154">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L155">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L157">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L158">			when(request.getSession()).thenReturn(session);</span>
+<span class="fc" id="L159">			when(request.getContentType()).thenReturn(&quot;application/json&quot;);</span>
+			
+<span class="fc" id="L161">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L162">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L164">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L165">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L166">		}</span>
+<span class="nc" id="L167">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L168">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L170">        Field iParserObject = null;</span>
+<span class="fc" id="L171">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L174">			iParserObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L175">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L176">			iServiceObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L177">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L178">		}</span>
+<span class="nc" id="L179">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L180">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L182">		ctrlSharedObject.ctrlUserFacebookLogin(request, response);</span>
+<span class="fc" id="L183">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L184">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L185">	}</span>
+	
+	/**
+	 *	Test del metodo ctrlModifyAccount() che permette all'utente di modificare i dati del proprio account.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlModifyAccount() throws Exception {
+<span class="fc" id="L193">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L194">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L195">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L196">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L199">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+        //creazione utente
+<span class="fc" id="L202">        User testUser = new User();</span>
+<span class="fc" id="L203">        testUser.setEmail(&quot;desq@mailinator.com&quot;);</span>
+<span class="fc" id="L204">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L205">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L206">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L207">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L208">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L210">	    String stringObject = &quot;{Username: &quot;+testUser.getUsername()+&quot;, Email: &quot;+testUser.getEmail()+&quot;, Password: &quot;+testUser.getPassword()+&quot;, IdUser: &quot;+testUser.getIdUser()+&quot;, IsAdmin: &quot;+testUser.getIsAdmin()+&quot;, Name: 'test', Surname: 'test', Password2: 'test'}&quot;;</span>
+<span class="fc" id="L211">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L212">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L214">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L215">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L217">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L218">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L220">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+			
+<span class="fc" id="L222">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L223">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L224">		}</span>
+<span class="nc" id="L225">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L226">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L228">		ctrlSharedObject.ctrlModifyAccount(request, response);</span>
+<span class="fc" id="L229">    }</span>
+    
+    /**
+	 *	Test del metodo ctrlRecoveryPassword() che permette all'utente di recuperare la password nel caso l'avesse dimenticata.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlRecoveryPassword() throws Exception {
+<span class="fc" id="L237">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L238">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L239">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L240">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L243">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+        //creazione utente
+<span class="fc" id="L246">        User testUser = new User();</span>
+<span class="fc" id="L247">        testUser.setEmail(&quot;desq@mailinator.com&quot;);</span>
+<span class="fc" id="L248">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L249">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L250">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L251">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L252">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L254">	    String stringObject = &quot;{Username: &quot;+testUser.getUsername()+&quot;}&quot;;</span>
+<span class="fc" id="L255">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L256">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L258">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L259">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L261">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L262">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L264">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L265">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L266">		}</span>
+<span class="nc" id="L267">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L268">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L270">		ctrlSharedObject.ctrlRecoveryPassword(request, response);</span>
+<span class="fc" id="L271">    }</span>
+    
+    /**
+	 *	Test del metodo ctrlLogout() che permette ad un utente di terminare la sessione.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlLogout() throws Exception {
+<span class="fc" id="L279">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L280">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L281">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L282">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L285">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+        //creazione utente
+<span class="fc" id="L288">        User testUser = new User();</span>
+<span class="fc" id="L289">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L290">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L291">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L292">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L293">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L294">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L296">	    String stringObject = &quot;{Username: &quot;+testUser.getUsername()+&quot;, Password: &quot;+testUser.getPassword()+&quot;, IdUser: &quot;+testUser.getIdUser()+&quot;, IsAdmin: &quot;+testUser.getIsAdmin()+&quot;}&quot;;</span>
+<span class="fc" id="L297">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L298">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L300">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L301">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L303">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L304">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L306">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L307">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L308">		}</span>
+<span class="nc" id="L309">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L310">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L312">		ctrlSharedObject.ctrlLogout(request, response);</span>
+<span class="fc" id="L313">    }</span>
+    
+	/**
+	 *	Test del metodo ctrlLogin() che permette ad un utente di autenticarsi.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlLogin() throws Exception {
+<span class="fc" id="L321">        HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L322">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L323">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L324">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L327">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+        //creazione utente
+<span class="fc" id="L330">        User testUser = new User();</span>
+<span class="fc" id="L331">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L332">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L333">        testUser.hashAndSetPassword(&quot;test&quot;);</span>
+<span class="fc" id="L334">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L335">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L336">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L338">        String stringObject = &quot;{Username: &quot;+testUser.getUsername()+&quot;, Password: 'test'}&quot;;</span>
+<span class="fc" id="L339">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L340">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L342">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L343">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L345">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L346">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L348">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L349">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L350">		}</span>
+<span class="nc" id="L351">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L352">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L354">        Field iParserObject = null;</span>
+<span class="fc" id="L355">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L358">			iParserObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L359">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L360">			iServiceObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L361">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L362">		}</span>
+<span class="nc" id="L363">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L364">		catch (SecurityException e) {}</span>
+		
+		//utente non amministratore e dati corretti
+<span class="fc" id="L367">		ctrlSharedObject.ctrlLogin(request, response);</span>
+		
+<span class="fc" id="L369">		HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L370">	    testUser.setIsAdmin(true);</span>
+<span class="fc" id="L371">	    HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L372">	    HibernateUtil.commitTransaction();</span>
+	    
+	    
+<span class="fc" id="L375">	    stringObject = &quot;{Username: &quot;+testUser.getUsername()+&quot;, Password: 'test'}&quot;;</span>
+<span class="fc" id="L376">    	stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L377">    	bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+    	try {
+<span class="fc" id="L379">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L380">		}</span>
+<span class="nc" id="L381">    	catch (IOException e) {}</span>
+    	
+		//utente amministratore e dati corretti
+<span class="fc" id="L384">	    ctrlSharedObject.ctrlLogin(request, response);</span>
+	    
+<span class="fc" id="L386">		stringObject = &quot;{Username: 'username', Password: 'password'}&quot;;</span>
+<span class="fc" id="L387">    	stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L388">    	bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+    	try {
+<span class="fc" id="L390">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L391">		}</span>
+<span class="nc" id="L392">    	catch (IOException e) {}</span>
+    	
+    	//utente amministratore e dati errati
+<span class="fc" id="L395">    	ctrlSharedObject.ctrlLogin(request, response);</span>
+		
+<span class="fc" id="L397">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L398">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L399">    }</span>
+    
+    /**
+	 *	Test del metodo ctrlViewAccount() che permette all'utente di visualizzare i dati del proprio account.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlViewAccount() throws Exception {
+<span class="fc" id="L407">        HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L408">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L409">        HttpSession session= mock(HttpSession.class);</span>
+        
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L412">        HibernateUtil.getSession().beginTransaction();</span>
+        
+        //creazione utente
+<span class="fc" id="L415">        User testUser = new User();</span>
+<span class="fc" id="L416">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L417">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L418">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L419">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L420">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L421">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L423">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+        
+<span class="fc" id="L425">        String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;}&quot;;</span>
+<span class="fc" id="L426">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L427">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L429">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L430">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L432">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L433">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L435">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+			
+<span class="fc" id="L437">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L438">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L439">		}</span>
+<span class="nc" id="L440">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L441">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L443">        Field iParserObject = null;</span>
+<span class="fc" id="L444">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L447">			iParserObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L448">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L449">			iServiceObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L450">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L451">		}</span>
+<span class="nc" id="L452">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L453">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L455">		ctrlSharedObject.ctrlViewAccount(request, response);</span>
+<span class="fc" id="L456">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L457">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L458">    }</span>
+    
+
+    /**
+	 *	Test del metodo ctrlUserRegistration() che permette ad un nuovo utente di registrarsi.
+	 */
+    @Test
+    public void testCtrlUserRegistration() {
+<span class="fc" id="L466">        HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L467">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L468">        CtrlShared ctrlSharedObject = new CtrlShared();</span>
+        
+<span class="fc" id="L470">        String stringObject = &quot;{Username: 'testUsername', Password: 'testPassword', &quot;</span>
+        		+ &quot;Name: 'testName', Surname: 'testSurname', Email: 'testEmail', &quot;
+        		+ &quot;City: 'testCity', District: 'Di', IsAdmin: true}&quot;;
+<span class="fc" id="L473">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L474">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L476">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L477">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L479">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L480">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L481">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L482">		}</span>
+<span class="nc" id="L483">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L484">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L486">        Field iParserObject = null;</span>
+<span class="fc" id="L487">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L490">			iParserObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L491">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L492">			iServiceObject = ctrlSharedObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L493">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L494">		}</span>
+<span class="nc" id="L495">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L496">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L498">		ctrlSharedObject.ctrlUserRegistration(request, response);</span>
+<span class="fc" id="L499">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L500">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L501">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

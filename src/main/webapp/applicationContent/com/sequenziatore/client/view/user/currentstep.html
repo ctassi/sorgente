@@ -1,0 +1,149 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : currentstep.html
+* Location : /applicationContent/com/sequenziatore/client/view/user
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-04-10     Romagnosi Nicolò
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlCurrentStep">
+    <h1 class="messagePage"> {{processName}} </h1>
+    <alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+	<div ng-hide="messageData === 'Processo completato con SUCCESSO'" class="registrationBox">
+        <strong>{{parallelism}}</strong>
+    </div>
+    <div class="panelContent" ng-hide="messageData === 'Processo completato con SUCCESSO'">
+        <div class="panel-heading"><label class="labelHeading">Livello {{stepList[0].getLevel()+1}}</label></div>
+        <accordion close-others="oneAtATime == undefined" ng-show="messageSuccess == 'false'"">
+            <div class="userProcess centerContent" ng-repeat="(indexStep, step) in stepList" >
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        <div>
+                            <label>{{step.getDescription()}}</label>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                        </div>
+                        <div ng-if="step.getAdminVerify() == true">
+                            <label class="control-label">
+                                (Richiede verifica dell'amministratore)
+                            </label>
+                        </div>
+                        <div ng-if="step.getAdminVerify() == false">
+                            <label class="control-label">
+                                (Passo a validazione automatica)
+                            </label>
+                        </div>
+                        <div ng-show="step.localIsDefined !== undefined">
+                            <p class="orangeColor">Ci sono dei dati salvati per questo passo</p>
+                        </div>
+                    </accordion-heading>
+                    <fieldset class="adminProcessBox">
+                        <div ng-show="step.localIsDefined !== undefined" class="informationBox">
+                            <label class="labelContent">
+                                Precedentemente avevi tentato di eseguire questo passo,
+                                ma non era disponibile una connessione.
+                            </label>
+                            <label class="labelContent">
+                                Clicca su <em>"Invia Dati"</em> per
+                                provare nuovamente ad inviare i dati o clicca su <em>"Cancella Dati"</em>
+                                per scartare i dati precedenti e raccoglierne di nuovi
+                            </label>
+                        </div>
+                        <div ng-show="step.getIsGeolocation() === 'true' && !(step.getState() === 'VERIFIED')">
+                            <label class="labelContent" ng-show="step.getWrongGeolocation() === false && step.getState() === 'FAILED'">
+                                Posizione: <label class="redColor">NON SUPERATO - Riprova</label>
+                            </label>
+                            <label class="labelContent" ng-show="step.getWrongGeolocation() === true">
+                                Posizione: <label class="greenColor">SUPERATO</label>
+                            </label>
+                            <label ng-show="step.getState() === 'TOVERIFY' && step.getWrongGeolocation() === false" class="labelContent">
+                                Posizione: <label class="orangeColor">IN ATTESA DI VERIFICA</label>
+                            </label>
+
+                            <div class = "allButtons">																																							<!-- && !(step.mapVisible === true) -->
+                                <a ng-show="(step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED') && (step.getWrongGeolocation() === false || step.getWrongGeolocation() === undefined) && step.localIsDefined == undefined" class="btn btn-default geoloc blue" data-ng-click="getGeolocationData(step.getIdStep())"> {{buttonMyPosition}} </a>
+                                <br ng-show="(step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED') && (step.getWrongGeolocation() === false || step.getWrongGeolocation() === undefined) && step.localIsDefined == undefined"/>
+                                <br/>
+                            </div>
+
+                            <div data-ng-if="step.mapVisible === true" ng-hide="step.getWrongGeolocation() === true" ng-repeat="map in step.mapList" >
+                                <map class="map" map-type-id="MapTypeId.MAP" zoom="15">
+                                    <marker ng-show="step.contentLocalStorageData !== undefined" position="[{{step.contentLocalStorageData.Latitude}}, {{step.contentLocalStorageData.Longitude}}]" animation="Animation.BOUNCE" title="drag me"></marker>
+                                    <marker ng-show="!(step.contentLocalStorageData == undefined)" position="current" animation="Animation.BOUNCE" title="drag me"></marker>
+                                </map>
+                                <br />
+                                <label class="labelContent greenColor">{{step.messageInfoResultGeo}}</label>
+                                <p data-ng-if="step.messageInfoLatitude !== undefined">La tua latitudine: <label class="labelContent">{{step.messageInfoLatitude}}</label></p>
+                                <p data-ng-if="step.messageInfoLongitude !== undefined">La tua longitudine: <label class="labelContent">{{step.messageInfoLongitude}}</label></p>
+                            </div>
+                        </div>
+
+                        <div ng-show="step.getIsText() === 'true' && !(step.getState() === 'VERIFIED')">
+                            <label ng-show="step.getWrongText() === false && step.getState() === 'FAILED'" class="labelContent">
+                                Testo: <label class="redColor">NON SUPERATO - Riprova</label>
+                            </label>
+                            <label ng-show="step.getWrongText() === true" class="labelContent">
+                                Testo: <label class="greenColor">SUPERATO</label>
+                            </label>
+                            <label ng-show="step.getState() === 'TOVERIFY' && step.getWrongText() === false"  class="labelContent">
+                                Testo: <label class="orangeColor">IN ATTESA DI VERIFICA</label>
+                            </label>
+                            <textarea ng-show="(step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED') " ng-hide="step.getState() === 'TOVERIFY' || step.getState() === 'VERIFIED' || step.getWrongText() === true" placeholder="inserisci il testo richiesto da inviare"  class="textAreaInsertedText" rows="4" cols="20" ng-model="step.insertedText" >{{step.insertedText}}</textarea>
+                            <h3>{{step.messageInfoResultText}}</h3>
+                        </div>
+
+                        <div ng-show="step.getIsPhoto() === 'true' && !(step.getState() === 'VERIFIED')">
+                            <label ng-show="step.getWrongPhoto() === false && step.getState() === 'FAILED'" class="labelContent">
+                                Foto: <label class="redColor">NON SUPERATO - Riprova</label>
+                            </label>
+                            <label ng-show="step.getWrongPhoto() === true" class="labelContent">
+                                Foto: <label class="greenColor">SUPERATO</label>
+                            </label>
+                            <label ng-show="step.getState() === 'TOVERIFY' && step.getWrongPhoto() === false"  class="labelContent">
+                                Foto: <label class="orangeColor">IN ATTESA DI VERIFICA</label>
+                            </label>
+
+							<img ng-if="!(step.image == undefined)" class="imageBox" alt="Nessuna immagine selezionata" ng-src="{{step.image}}" ng-show="step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED' " ng-hide="step.getState() === 'TOVERIFY' || step.getState() === 'VERIFIED' || step.getWrongPhoto() === true "></img>
+	                        <div class="upload" ng-show="step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED' " ng-hide="step.getState() === 'TOVERIFY' || step.getState() === 'VERIFIED' || step.getWrongPhoto() === true || step.contentLocalStorageData !== undefined">
+	                        	<input type="file" name="upload" accept="image/*" ng-file-select="onFileSelect($files,step.getIdStep())" ng-show="step.getState() === 'NOTCOLLECTED' || step.getState() === 'FAILED' " ng-hide="step.getState() === 'TOVERIFY' || step.getState() === 'VERIFIED' || step.getWrongPhoto() === true || step.contentLocalStorageData !== undefined">
+	                        </div>
+                        </div>
+
+                        <label ng-show="step.getState() === 'VERIFIED'"  class="labelContent greenColor"> Il passo è stato superato con successo</label>
+                        <div>
+                            <a ng-hide="step.getState() === 'VERIFIED' || step.getState() === 'TOVERIFY' || step.contentLocalStorageData !== undefined || step.buttonDoStepVisible === false"  class="inField green btn btn-default" data-ng-click="doStep(step.getIdStep(),step.insertedText)"><span class="glyphicon glyphicon-info-sign"></span> Invia dati</a>
+                            <div class="allButtons" ng-show="step.contentLocalStorageData !== undefined">
+                                <a data-ng-click="deleteContentLocalStorageData(step.getIdStep())" class="inField red btn btn-default"><span class="glyphicon glyphicon-info-sign"></span> Cancella dati</a>
+                            </div>
+                            <div class="allButtons" ng-show="step.contentLocalStorageData !== undefined">
+                                <a data-ng-click="sendContentLocalStorageData(step.getIdStep())" class="inField green btn btn-default"><span class="glyphicon glyphicon-book"></span> Invia dati</a>
+                            </div>
+                            <h4 class="redColor">{{step.messageNotification}}</h4>
+                        </div>
+                    </fieldset>
+                </accordion-group>
+            </div>
+        </accordion>
+    </div>
+</div>

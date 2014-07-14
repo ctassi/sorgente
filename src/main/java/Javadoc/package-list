@@ -1,0 +1,8 @@
+com.sequenziatore.server.controller
+com.sequenziatore.server.databaseutil.dao
+com.sequenziatore.server.databaseutil.util
+com.sequenziatore.server.entity
+com.sequenziatore.server.service.admin
+com.sequenziatore.server.service.interfaceservice
+com.sequenziatore.server.service.shared
+com.sequenziatore.server.service.user

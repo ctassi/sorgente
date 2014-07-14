@@ -1,0 +1,80 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : profile.html
+* Location : /applicationContent/com/sequenziatore/client/view/shared
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-25     Sartoretto Massimiliano
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlProfile">
+ <alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+	<div class="centerContent">
+	    <div class="myAccount">
+            <fieldset>
+                <legend class="legendInfo"> Profilo personale </legend>
+                <div class=" col-md-9 col-lg-9 ">
+                    <table class="table table-user-information">
+                        <tbody>
+                        <tr>
+                            <td><label class="label label-primary">Username:</label></td>
+                            <td>{{username}}</td>
+                        </tr>
+                        <tr>
+                            <td><label class="label label-primary">Nome:</label></td>
+                            <td>{{name}}</td>
+                        </tr>
+                        <tr>
+                            <td><label class="label label-primary">Cognome:</label></td>
+                            <td>{{surname}}</td>
+                        </tr>
+                        <tr>
+                            <tr>
+                                <td><label class="label label-primary">Email:</label></td>
+                                <td>{{email}}</td>
+                            </tr>
+                            <tr>
+                                <td><label class="label label-primary">Città:</label></td>
+                                <td>{{city}}</td>
+                            </tr>
+                            <tr>
+                                <td><label class="label label-primary">Provincia:</label></td>
+                                <td>{{district}}</td>
+                            </tr>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div class="allButtons">
+                                    <a href="#modifyaccount" class="inField edit orange btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Modifica</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+	    </div>
+	</div>
+</div>

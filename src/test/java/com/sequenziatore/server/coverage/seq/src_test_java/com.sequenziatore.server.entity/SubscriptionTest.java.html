@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SubscriptionTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">SubscriptionTest.java</span></div><h1>SubscriptionTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe SubscriptionTest
+ * 
+ *	@file		SubscriptionTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import static org.junit.Assert.*;
+
+import org.json.JSONObject;
+import org.junit.Test;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe Subscription.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L38">public class SubscriptionTest {</span>
+
+	/**
+	 * Test del costruttore Subscription(JSONObject).
+	 */
+	@Test
+	public void testSubscription(){
+<span class="fc" id="L45">		JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L46">		jsonObject.put(&quot;IdSubscription&quot;, 1);</span>
+<span class="fc" id="L47">		jsonObject.put(&quot;Complete&quot;, false);</span>
+<span class="fc" id="L48">		jsonObject.put(&quot;IdUser&quot;, 1);</span>
+<span class="fc" id="L49">		jsonObject.put(&quot;IdProcess&quot;, 1);</span>
+		
+<span class="fc" id="L51">		Subscription subscriptionObject = new Subscription(jsonObject);</span>
+<span class="fc" id="L52">		assertTrue(jsonObject.get(&quot;IdSubscription&quot;).equals(subscriptionObject.getIdSubscription()));</span>
+<span class="fc" id="L53">	}</span>
+	
+	/**
+	 * Test del metodo toJSONObject().
+	 */
+	@Test
+	public void testToJSONObject(){
+<span class="fc" id="L60">		User userObject = new User();</span>
+<span class="fc" id="L61">		userObject.setIdUser(1);</span>
+		
+<span class="fc" id="L63">		Process processObject = new Process();</span>
+<span class="fc" id="L64">		processObject.setIdProcess(1);</span>
+		
+<span class="fc" id="L66">		Subscription subscriptionObject = new Subscription();</span>
+<span class="fc" id="L67">		subscriptionObject.setIdSubscription(1);</span>
+<span class="fc" id="L68">		subscriptionObject.setComplete(false);</span>
+<span class="fc" id="L69">		subscriptionObject.setIdUser(userObject);</span>
+<span class="fc" id="L70">		subscriptionObject.setIdProcess(processObject);</span>
+		
+<span class="fc" id="L72">		JSONObject jsonObject = subscriptionObject.toJSONObject();</span>
+		
+<span class="fc" id="L74">		assertEquals(jsonObject.get(&quot;Complete&quot;), subscriptionObject.getComplete());</span>
+<span class="fc" id="L75">	}</span>
+	
+	/**
+	 *	Test dei metodi getIdSubscription() e setIdSubscription().
+	 */
+	@Test
+	public void testGetAndSetIdSubscription(){
+<span class="fc" id="L82">		int startValue = 10;</span>
+<span class="fc" id="L83">		Subscription subscriptionObject = new Subscription();</span>
+<span class="fc" id="L84">		subscriptionObject.setIdSubscription(startValue);</span>
+<span class="fc" id="L85"> 		int endValue = subscriptionObject.getIdSubscription();</span>
+<span class="fc" id="L86"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L87"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIdUser() e setIdUser().
+	 */
+	@Test
+	public void testGetAndSetIdUser(){
+<span class="fc" id="L94">		User startValue = new User();</span>
+<span class="fc" id="L95">		Subscription subscriptionObject = new Subscription();</span>
+<span class="fc" id="L96">		subscriptionObject.setIdUser(startValue);</span>
+<span class="fc" id="L97">		User endValue = subscriptionObject.getIdUser();</span>
+<span class="fc" id="L98"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L99"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIdProcess() e setIdProcess().
+	 */
+	@Test
+	public void testGetAndSetIdProcess(){
+<span class="fc" id="L106">		Process startValue = new Process();</span>
+<span class="fc" id="L107">		Subscription subscriptionObject = new Subscription();</span>
+<span class="fc" id="L108">		subscriptionObject.setIdProcess(startValue);</span>
+<span class="fc" id="L109"> 		Process endValue = subscriptionObject.getIdProcess();</span>
+<span class="fc" id="L110"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L111"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getComplete() e setComplete().
+	 */
+	@Test
+	public void testGetAndSetComplete(){
+<span class="fc" id="L118">		boolean startValue = true;</span>
+<span class="fc" id="L119">		Subscription subscriptionObject = new Subscription();</span>
+<span class="fc" id="L120">		subscriptionObject.setComplete(startValue);</span>
+<span class="fc" id="L121"> 		boolean endValue = subscriptionObject.getComplete();</span>
+<span class="fc" id="L122"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L123"> 	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

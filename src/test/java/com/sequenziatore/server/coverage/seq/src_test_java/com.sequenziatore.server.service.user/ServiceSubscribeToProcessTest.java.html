@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceSubscribeToProcessTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.user</a> &gt; <span class="el_source">ServiceSubscribeToProcessTest.java</span></div><h1>ServiceSubscribeToProcessTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceSubscribeToProcessTest
+ * 
+ *	@file		ServiceSubscribeToProcessTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.user;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.json.JSONObject;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.User;
+import com.sequenziatore.server.entity.Step.EnumParallelism;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe ServiceSubscribeToProcess.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L52">public class ServiceSubscribeToProcessTest {</span>
+
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L62">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L65">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L66">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L69">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L70">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L73">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L74">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L77">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L78">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L81">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L82">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L84">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L85">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L95">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L98">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L99">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L102">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L103">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L106">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L107">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L110">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L111">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L114">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L115">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L117">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L118">	}</span>
+	
+	/**
+	 * Test del metodo serviceOperation() che permette ad un utente di iscriversi ad un processo.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+	public void testServiceOperation() throws Exception {
+<span class="fc" id="L126">		ServiceSubscribeToProcess serviceSubscribeToProcessObject = new ServiceSubscribeToProcess();</span>
+		
+		//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L129">        HibernateUtil.getSession().beginTransaction();</span>
+        
+        //creazione utente
+<span class="fc" id="L132">        User testUser = new User();</span>
+<span class="fc" id="L133">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L134">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L135">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L136">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L137">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L140">        Process testProcess = new Process();</span>
+<span class="fc" id="L141">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L142">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L143">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L144">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L145">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L146">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L147">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L148">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L151">        Step testStep = new Step();</span>
+<span class="fc" id="L152">        testStep.setAdminVerify(false);</span>
+<span class="fc" id="L153">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L154">        testStep.setIsGeolocation(false);</span>
+<span class="fc" id="L155">        testStep.setIsPhoto(false);</span>
+<span class="fc" id="L156">        testStep.setIsText(false);</span>
+<span class="fc" id="L157">        testStep.setLevel(1);</span>
+<span class="fc" id="L158">        testStep.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L159">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L160">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L163">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L164">        testStepList.add(testStep);</span>
+<span class="fc" id="L165">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L166">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+<span class="fc" id="L167">	    HibernateUtil.commitTransaction();</span>
+	    
+	    //creazione della lista di entità
+<span class="fc" id="L170">	    List&lt;IEntity&gt; iEntityList = new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L171">	    iEntityList.add(testUser);</span>
+<span class="fc" id="L172">	    iEntityList.add(testProcess);</span>
+        
+<span class="fc" id="L174">        JSONObject jsonReturnedObject = serviceSubscribeToProcessObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L176">        assertEquals(&quot;successSubscription&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+        
+<span class="fc" id="L178">        jsonReturnedObject = serviceSubscribeToProcessObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L180">        assertEquals(&quot;wrongSubscription&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+<span class="fc" id="L181">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

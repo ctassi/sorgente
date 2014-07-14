@@ -1,0 +1,82 @@
+<!--
+ * Copyright [2014] [DeSQ]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ *
+ * Name : adminprocess.html
+ * Location : /applicationContent/com/sequenziatore/client/view/admin
+ *
+ * History :
+ *
+ * Version         Date           Programmer
+ * ======================================================
+ * 0.0.1           2014-03-22     Sartoretto Massimiliano
+ * ------------------------------------------------------
+ * Codifica view
+ * ======================================================
+ -->
+
+<div ng-controller="CtrlAdminProcess">
+ <alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+    <div class="panelContent">
+        <div class="panel-heading"><label class="labelHeading">Processi creati</label></div>
+        <div ng-show="messageResult === 'Non ci sono processi attivi'" class="messageEmptyBox"><label class="labelContent">{{messageResult}}</label></div>
+        <accordion close-others="oneAtATime == undefined">
+            <div class="adminProcess centerContent" ng-repeat="process in processList | startFrom:currentPage*pageSize | limitTo:pageSize" >
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        <div>
+                            <i class="pull-left glyphicon" ng-class="icon" data-ng-hide="process.Available"/>
+                            <img class="pull-right glyphicon" src="img/buttonRed.png" alt="Il processo non è attivo"/>
+                            </i>
+                            <i class="pull-left glyphicon" ng-class="icon" data-ng-show="process.Available"/>
+                            <img class="pull-right glyphicon" src="img/buttonGreen.png" alt="Il processo è attivo"/>
+                            </i>
+                            <i class="pull-left glyphicon" ng-class="" data-ng-show="process.Available"/></i>
+                            {{process.Name}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                        </div>
+                    </accordion-heading>
+                    <fieldset class="adminProcessBox">
+                        <div class="control-group">
+                            <label class="control-label input-label"> Descrizione:</label>
+                            <label class="labelContent" >{{ process.Description}}</label>
+                            <br />
+                            <label class="control-label input-label"> Data di pubblicazione:</label>
+                            <label class="labelContent" > {{ process.PublicationDate }}</label>
+                            <br />
+                            <label class="control-label input-label"> Data di chiusura:</label>
+                            <label class="labelContent" > {{ process.ClosingDate }}</label>
+
+                            <div class="allButtons">
+                                <a href="#modifyprocess" data-ng-click="goToModifyProcess(process.IdProcess)" class="inField orange btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Modifica</a>
+                            </div>
+                            <div class="allButtons">
+                                <a href="#listuserprocess" data-ng-click="goToViewAllListUserProcess(process.IdProcess,process.Name)" class="inField green btn btn-default"><span class="glyphicon glyphicon-book"></span> Partecipanti</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </accordion-group>
+            </div>
+        </accordion>
+        <!-- Blocco paginazione -->
+        <div class="pagination">
+            <div class="buttonsPagination">
+                <button ng-disabled="currentPage == 0 || numberOfPages==undefined" data-ng-click="currentPage=currentPage-1"> Precedenti </button>
+
+                <button class="next" ng-disabled="currentPage >= processList.length/pageSize-1 || numberOfPages==undefined" data-ng-click="currentPage=currentPage+1"> Successivi </button>
+            </div>
+        </div>
+    </div>
+</div>

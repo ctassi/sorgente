@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MediaManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.controller</a> &gt; <span class="el_source">MediaManager.java</span></div><h1>MediaManager.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe MediaManager
+ * 
+ *	@file		MediaManager.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.controller;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
+
+/**
+ *	La classe permette di salvare i file inviati dal front-end.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L46">public class MediaManager {</span>
+	
+	/**
+	 * Salva il file inviato dal front-end.
+	 * 
+	 * @param fileItems file da salvare
+	 * @param uploadPath percorso dove viene salvato il file 
+	 * @return il percorso e il nome del file salvato
+	 */
+	public String uploadMedia(List&lt;FileItem&gt; fileItems , String uploadPath){
+<span class="fc" id="L56">		String filePath = null;</span>
+<span class="fc" id="L57">		File fileToBeSaved = null;</span>
+		//creates the directory if it does not exist
+<span class="fc" id="L59">		File uploadDir = new File(uploadPath);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		if (!uploadDir.exists()) {</span>
+<span class="nc" id="L61">			uploadDir.mkdirs();</span>
+		}
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		for(int i=0;i&lt;fileItems.size();i++){</span>
+<span class="fc" id="L64">			FileItem item = (FileItem) fileItems.get(i);</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">			if (!item.isFormField()) {</span>
+<span class="fc" id="L66">				String fileName = new SimpleDateFormat(&quot;yyyyMMdd_HHmmss&quot;).format(Calendar.getInstance().getTime());</span>
+<span class="fc" id="L67">				filePath = uploadPath + File.separator + fileName;</span>
+<span class="fc" id="L68">				fileToBeSaved = new File(filePath);</span>
+				try{
+<span class="nc" id="L70">					item.write(fileToBeSaved);</span>
+<span class="pc" id="L71">				    }catch(Exception e){}</span>
+				}
+			}
+
+<span class="fc" id="L75">		String imagePathForBrowser = &quot;&quot;;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		for(int i =filePath.length(); i&gt;0; i--){</span>
+<span class="pc bpc" id="L77" title="5 of 6 branches missed.">			if(filePath.charAt(i-1) == 'q' &amp;&amp; filePath.charAt(i-2) == 'e' &amp;&amp; filePath.charAt(i-3) == 's'){</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">				for(int j = i+1; j &lt; filePath.length(); j++){</span>
+<span class="nc" id="L79">					imagePathForBrowser = imagePathForBrowser + filePath.charAt(j);</span>
+				}
+
+<span class="nc" id="L82">				break;</span>
+				
+			}
+		}
+<span class="fc" id="L86">		return imagePathForBrowser;</span>
+	}
+	
+	/**
+	 * Salva il file inviato dal front-end.
+	 * 
+	 * @param photo foto da salvare
+	 * @param uploadPath percorso dove viene salvato il file 
+	 * @return il percorso e il nome del file salvato
+	 */
+	public String uploadMediaBase64(String photo , String uploadPath){
+        byte[] imgBytes;
+        //creates the directory if it does not exist
+<span class="fc" id="L99">        File uploadDir = new File(uploadPath);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">		if (!uploadDir.exists()) {</span>
+<span class="nc" id="L101">			uploadDir.mkdirs();</span>
+		}
+<span class="fc" id="L103">        String fileName = new SimpleDateFormat(&quot;yyyyMMdd_HHmmss&quot;).format(Calendar.getInstance().getTime());</span>
+<span class="fc" id="L104">		String filePath = uploadPath + File.separator + fileName;</span>
+<span class="fc" id="L105">		File fileToBeSaved = new File(filePath);</span>
+		try {
+<span class="nc" id="L107">			imgBytes = Base64.decodeBase64(photo.getBytes());</span>
+<span class="nc" id="L108">			FileOutputStream osf = new FileOutputStream(fileToBeSaved);</span>
+<span class="nc" id="L109">			IOUtils.write(imgBytes, osf);</span>
+<span class="nc" id="L110">			osf.flush();</span>
+<span class="nc" id="L111">			osf.close();</span>
+<span class="pc" id="L112">		} catch (FileNotFoundException e) {</span>
+<span class="fc" id="L113">			e.printStackTrace();</span>
+<span class="nc" id="L114">		} catch (IOException e) {</span>
+<span class="nc" id="L115">			e.printStackTrace();</span>
+		} 
+<span class="fc" id="L117">		String imagePathForBrowser = &quot;&quot;;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		for(int i =filePath.length(); i&gt;0; i--){</span>
+<span class="pc bpc" id="L119" title="5 of 6 branches missed.">			if(filePath.charAt(i-1) == 'q' &amp;&amp; filePath.charAt(i-2) == 'e' &amp;&amp; filePath.charAt(i-3) == 's'){</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">				for(int j = i+1; j &lt; filePath.length(); j++){</span>
+<span class="nc" id="L121">					imagePathForBrowser = imagePathForBrowser + filePath.charAt(j);</span>
+				}
+<span class="nc" id="L123">				break;</span>
+				
+			}
+		}
+<span class="fc" id="L127">		return imagePathForBrowser;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Step.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">Step.java</span></div><h1>Step.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">/*</span>
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe Step
+ * 
+ *	@file		Step.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.json.JSONObject;
+
+/**
+ *	La classe Step rappresenta logicamente un passo di un processo nell'applicazione.
+ *
+ *	@author 	DeSQ
+ */
+@Entity
+@Table(name = &quot;Steps&quot;)
+public class Step implements Serializable, IEntity{
+
+	private static final long serialVersionUID = 1L;
+
+	/** Id del passo. */
+	@Id
+	@GeneratedValue
+	@Column(name = &quot;IdStep&quot;, nullable=false)
+	private Integer idStep;
+	
+	/** Livello del passo nel processo a cui appartiene. */
+	@Column(name = &quot;Level&quot;, nullable=false)
+	private Integer level;
+
+	/** Descrizione del passo. */
+	@Column(name = &quot;Description&quot;, nullable=false, length=300)
+	private String description;
+
+	/** Attributo che indica se il passo richiede una foto. */
+	@Column(name = &quot;IsPhoto&quot;, nullable=false)
+	private Boolean isPhoto;
+
+	/** Attributo che indica se il passo richiede del testo. */
+	@Column(name = &quot;IsText&quot;, nullable=false)
+	private Boolean isText;
+
+	/** Attributo che indica se il passo richiede la geolocalizzazione. */
+	@Column(name = &quot;IsGeolocation&quot;, nullable=false)
+	private Boolean isGeolocation;
+
+	/** Testo da usare per la verifica automatica dei dati trasmessi. */
+	@Column(name = &quot;CheckText&quot;, length=300)
+	private String checkText;
+
+	/** Latitudine da usare per la verifica automatica dei dati trasmessi. */
+	@Column(name = &quot;CheckLatitude&quot;, length=100)
+	private String checkLatitude;
+
+	/** Longitudine da usare per la verifica automatica dei dati trasmessi. */
+	@Column(name = &quot;CheckLongitude&quot;, length=100)
+	private String checkLongitude;
+
+	/** Attributo che indica se il passo richiede la verifica manuale da un amministratore. */
+	@Column(name = &quot;AdminVerify&quot;, nullable=false)
+	private Boolean adminVerify;
+
+	/** L'attributo che indica il rapporto logico tra passi dello stesso livello nello stesso processo. */
+	@Column(name = &quot;Parallelism&quot;, nullable=false)
+	@Enumerated(EnumType.STRING)
+	private EnumParallelism parallelism;
+
+	/** Id del processo a cui il passo appartiene. */
+	@ManyToOne  
+ 	@JoinColumn(name = &quot;IdProcess&quot;)
+	private Process idProcess;
+
+	/**
+	 * Stati possibili di un passo: AND, OR, NOT.
+	 */
+<span class="fc" id="L108">	public enum EnumParallelism {</span>
+<span class="fc" id="L109">   		AND, OR, NOT; </span>
+	}
+	
+	/**
+	 * Costruttore di default.
+	 */
+<span class="fc" id="L115">	public Step(){}</span>
+	
+	/**
+ 	 * Costruttore che imposta l'entità con i dati contenuti nel JSONObject.
+ 	 * 
+ 	 * @param json il valore che permette di impostare gli attributi dell'entità
+ 	 */
+<span class="fc" id="L122">	public Step(JSONObject json) {</span>
+<span class="fc" id="L123">		idProcess=new Process();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if(json.has(&quot;IdStep&quot;))</span>
+<span class="fc" id="L125">			idStep = (Integer)json.get(&quot;IdStep&quot;);</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">		if(json.has(&quot;Level&quot;))</span>
+<span class="fc" id="L127">			level = (Integer)json.get(&quot;Level&quot;);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">		if(json.has(&quot;Description&quot;))</span>
+<span class="fc" id="L129">			description = (String)json.get(&quot;Description&quot;);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">		if(json.has(&quot;IsPhoto&quot;))</span>
+<span class="fc" id="L131">			isPhoto = (Boolean)json.get(&quot;IsPhoto&quot;);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">		if(json.has(&quot;IsText&quot;))</span>
+<span class="fc" id="L133">			isText = (Boolean)json.get(&quot;IsText&quot;);</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">		if(json.has(&quot;IsGeolocation&quot;))</span>
+<span class="fc" id="L135">			isGeolocation = (Boolean)json.get(&quot;IsGeolocation&quot;);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">		if(json.has(&quot;CheckText&quot;))</span>
+<span class="fc" id="L137">			checkText = (String)json.get(&quot;CheckText&quot;);</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">		if(json.has(&quot;CheckLatitude&quot;))</span>
+<span class="fc" id="L139">			checkLatitude = (String)json.get(&quot;CheckLatitude&quot;);</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">		if(json.has(&quot;CheckLongitude&quot;))</span>
+<span class="fc" id="L141">			checkLongitude = (String)json.get(&quot;CheckLongitude&quot;);</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">		if(json.has(&quot;AdminVerify&quot;))</span>
+<span class="fc" id="L143">			adminVerify = (Boolean)json.get(&quot;AdminVerify&quot;);</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">		if(json.has(&quot;Parallelism&quot;)){</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">			if(((String)json.get(&quot;Parallelism&quot;)).equals(&quot;OR&quot;))</span>
+<span class="fc" id="L146">				parallelism = EnumParallelism.OR;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">			if(((String)json.get(&quot;Parallelism&quot;)).equals(&quot;AND&quot;))</span>
+<span class="fc" id="L148">				parallelism = EnumParallelism.AND;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">			if(((String)json.get(&quot;Parallelism&quot;)).equals(&quot;NOT&quot;))</span>
+<span class="fc" id="L150">				parallelism = EnumParallelism.NOT;</span>
+		}
+
+<span class="fc bfc" id="L153" title="All 2 branches covered.">		if(json.has(&quot;IdProcess&quot;))</span>
+<span class="fc" id="L154">			idProcess.setIdProcess((Integer)json.get(&quot;IdProcess&quot;));</span>
+<span class="fc" id="L155">	}</span>
+	
+	/**
+	 * Ritorna l'id del passo.
+	 * 
+	 * @return l'id del passo
+	 */
+	public Integer getIdStep(){
+<span class="fc" id="L163">		return idStep; </span>
+	}
+	
+	/**
+	 * Imposta l'id del passo al valore passato.
+	 * 
+	 * @param idStep il valore da impostare come id del passo
+	 */
+	public void setIdStep(Integer idStep){ 
+<span class="fc" id="L172">		this.idStep = idStep; </span>
+<span class="fc" id="L173">	}</span>
+	
+	/**
+	 * Ritorna il livello del passo nel processo a cui appartiene.
+	 * 
+	 * @return il livello del passo nel processo a cui appartiene
+	 */
+	public Integer getLevel(){ 
+<span class="fc" id="L181">		return level; </span>
+	}
+	
+	/**
+	 * Imposta il livello del passo nel processo a cui appartiene al valore passato.
+	 * 
+	 * @param level il valore da impostare come livello del passo nel processo a cui appartiene
+	 */
+	public void setLevel(Integer level){ 
+<span class="fc" id="L190">		this.level = level; </span>
+<span class="fc" id="L191">	}</span>
+	
+	/**
+	 * Ritorna la descrizione del passo.
+	 * 
+	 * @return la descrizione del passo
+	 */
+	public String getDescription(){ 
+<span class="fc" id="L199">		return description; </span>
+	}
+	
+	/**
+	 * Imposta la descrizione del passo al valore passato.
+	 * 
+	 * @param description il valore da impostare come descrizione del passo
+	 */
+	public void setDescription(String description){ 
+<span class="fc" id="L208">		this.description = description; </span>
+<span class="fc" id="L209">	}</span>
+	
+	/**
+	 * Ritorna l'attributo che indica se il passo richiede una foto.
+	 * 
+	 * @return l'attributo che indica se il passo richiede una foto
+	 */
+	public Boolean getIsPhoto(){
+<span class="fc" id="L217">		return isPhoto; </span>
+	}
+	
+	/**
+	 * Imposta l'attributo che indica se il passo richiede una foto al valore passato.
+	 * 
+	 * @param isPhoto il valore da impostare come attributo che indica se il passo richiede una foto
+	 */
+	public void setIsPhoto(Boolean isPhoto){ 
+<span class="fc" id="L226">		this.isPhoto = isPhoto; </span>
+<span class="fc" id="L227">	}</span>
+	
+	/**
+	 * Ritorna l'attributo che indica se il passo richiede del testo.
+	 * 
+	 * @return l'attributo che indica se il passo richiede del testo
+	 */
+	public Boolean getIsText(){ 
+<span class="fc" id="L235">		return isText; </span>
+	}
+	
+	/**
+	 * Imposta l'attributo che indica se il passo richiede del testo al valore passato.
+	 * 
+	 * @param isText il valore da impostare come attributo che indica se il passo richiede del testo
+	 */
+	public void setIsText(Boolean isText){ 
+<span class="fc" id="L244">		this.isText = isText; </span>
+<span class="fc" id="L245">	}</span>
+	
+	/**
+	 * Ritorna l'attributo che indica se il passo richiede la geolocalizzazione.
+	 * 
+	 * @return l'attributo che indica se il passo richiede la geolocalizzazione
+	 */
+	public Boolean getIsGeolocation(){ 
+<span class="fc" id="L253">		return isGeolocation; </span>
+	}
+	
+	/**
+	 * Imposta l'attributo che indica se il passo richiede la geolocalizzazione al valore passato.
+	 * 
+	 * @param isGeolocation il valore da impostare come attributo che indica se il passo richiede la geolocalizzazione
+	 */
+	public void setIsGeolocation(Boolean isGeolocation){ 
+<span class="fc" id="L262">		this.isGeolocation = isGeolocation; </span>
+<span class="fc" id="L263">	}</span>
+	
+	/**
+	 * Ritorna il testo da usare per la verifica automatica dei dati trasmessi.
+	 * 
+	 * @return il testo da usare per la verifica automatica dei dati trasmessi
+	 */
+	public String getCheckText(){ 
+<span class="fc" id="L271">		return checkText; </span>
+	}
+	
+	/**
+	 * Imposta il testo da usare per la verifica automatica dei dati trasmessi al valore passato.
+	 * 
+	 * @param checkText il valore da impostare come testo da usare per la verifica automatica dei dati trasmessi
+	 */
+	public void setCheckText(String checkText){ 
+<span class="fc" id="L280">		this.checkText = checkText; </span>
+<span class="fc" id="L281">	}</span>
+	
+	/**
+	 * Ritorna la latitudine da usare per la verifica automatica dei dati trasmessi.
+	 * 
+	 * @return la latitudine da usare per la verifica automatica dei dati trasmessi
+	 */
+	public String getCheckLatitude(){ 
+<span class="fc" id="L289">		return checkLatitude; </span>
+	}
+	
+	/**
+	 * Imposta la latitudine da usare per la verifica automatica dei dati trasmessi al valore passato.
+	 * 
+	 * @param checkLatitude il valore da impostare come latitudine da usare per la verifica automatica dei dati trasmessi
+	 */
+	public void setCheckLatitude(String checkLatitude){ 
+<span class="fc" id="L298">		this.checkLatitude = checkLatitude; </span>
+<span class="fc" id="L299">	}</span>
+	
+	/**
+	 * Ritorna la longitudine da usare per la verifica automatica dei dati trasmessi.
+	 * 
+	 * @return la longitudine da usare per la verifica automatica dei dati trasmessi
+	 */
+	public String getCheckLongitude(){ 
+<span class="fc" id="L307">		return checkLongitude; </span>
+	}
+	
+	/**
+	 * Imposta la longitudine da usare per la verifica automatica dei dati trasmessi al valore passato.
+	 * 
+	 * @param checkLongitude il valore da impostare come longitudine da usare per la verifica automatica dei dati trasmessi
+	 */
+	public void setCheckLongitude(String checkLongitude){ 
+<span class="fc" id="L316">		this.checkLongitude = checkLongitude; </span>
+<span class="fc" id="L317">	}</span>
+	
+	/**
+	 * Ritorna l'attributo che indica se il passo richiede la verifica manuale da un amministratore.
+	 * @return l'attributo che indica se il passo richiede la verifica manuale da un amministratore
+	 */
+	public Boolean getAdminVerify(){ 
+<span class="fc" id="L324">		return adminVerify; </span>
+	}
+	
+	/**
+	 * Imposta l'attributo che indica se il passo richiede la verifica manuale da un amministratore al valore passato.
+	 * 
+	 * @param adminVerify il valore da impostare come attributo che indica se il passo richiede la verifica manuale da un amministratore
+	 */
+	public void setAdminVerify(Boolean adminVerify){ 
+<span class="fc" id="L333">		this.adminVerify = adminVerify; </span>
+<span class="fc" id="L334">	}</span>
+	
+	/**
+	 * Ritorna l'attributo che indica il rapporto logico tra passi dello stesso livello nello stesso processo.
+	 * 
+	 * @return l'attributo che indica il rapporto logico tra passi dello stesso livello nello stesso processo
+	 */
+	public EnumParallelism getParallelism(){ 
+<span class="fc" id="L342">		return parallelism; </span>
+	}
+	
+	/**
+	 * Imposta l'attributo che indica il rapporto logico tra passi dello stesso livello nello stesso processo al valore passato.
+	 * 
+	 * @param parallelism il valore da impostare come attributo che indica il rapporto logico tra passi dello stesso livello nello stesso processo
+	 */
+	public void setParallelism(EnumParallelism parallelism){ 
+<span class="fc" id="L351">		this.parallelism = parallelism; </span>
+<span class="fc" id="L352">	}</span>
+
+	/**
+	 * Ritorna l'id del processo a cui il passo appartiene.
+	 * 
+	 * @return l'id del processo a cui il passo appartiene
+	 */
+	public Process getIdProcess(){ 
+<span class="fc" id="L360">		return idProcess; </span>
+	}
+	
+	/**
+	 * Imposta l'id del processo a cui il passo appartiene al valore passato.
+	 * 
+	 * @param idProcess il valore da impostare come id del processo a cui il passo appartiene
+	 */
+	public void setIdProcess(Process idProcess){ 
+<span class="fc" id="L369">		this.idProcess = idProcess; </span>
+<span class="fc" id="L370">	}</span>
+	
+	/**
+ 	 * Ritorna un JSONObject con i dati dell'entità.
+ 	 * 
+ 	 * @return un JSONObject con i dati dell'entità
+ 	 */
+	@Override
+	public JSONObject toJSONObject() {
+<span class="fc" id="L379">		JSONObject json = new JSONObject();</span>
+<span class="fc" id="L380">		json.put(&quot;IdStep&quot; , idStep);</span>
+<span class="fc" id="L381">		json.put(&quot;Level&quot; , level);</span>
+<span class="fc" id="L382">		json.put(&quot;Description&quot; , description);</span>
+<span class="fc" id="L383">		json.put(&quot;IsPhoto&quot; , isPhoto.toString());</span>
+<span class="fc" id="L384">		json.put(&quot;IsText&quot; , isText.toString());</span>
+<span class="fc" id="L385">		json.put(&quot;IsGeolocation&quot; , isGeolocation.toString());</span>
+<span class="fc" id="L386">		json.put(&quot;CheckText&quot; , checkText);</span>
+<span class="fc" id="L387">		json.put(&quot;CheckLatitude&quot; , checkLatitude);</span>
+<span class="fc" id="L388">		json.put(&quot;CheckLongitude&quot; , checkLongitude);</span>
+<span class="fc" id="L389">		json.put(&quot;AdminVerify&quot; , adminVerify);</span>
+<span class="fc" id="L390">		json.put(&quot;Parallelism&quot; , parallelism);</span>
+<span class="fc" id="L391">		json.put(&quot;IdProcess&quot; , idProcess.getIdProcess());</span>
+<span class="fc" id="L392">		return json;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

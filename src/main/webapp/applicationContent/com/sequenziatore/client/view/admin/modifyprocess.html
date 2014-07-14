@@ -1,0 +1,112 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : modifyprocess.html
+* Location : /applicationContent/com/sequenziatore/client/view/admin
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-25     Pavanello Mirko
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlModifyProcess">
+	<div class="centerContent">
+        <!-- Messaggi di notifica -->
+        <alert ng-show="showAlertOK" type="success" close="closeAlert()">{{messageOk}}</alert>
+        <alert ng-show="showAlertError" type="danger" close="closeAlert()">{{messageError}}</alert>
+		<div>
+			<fieldset class="newProcessBox">
+				<legend class="legendInfo">Modifica Processo</legend> <br>
+
+                <div class="label-input-calendar">
+                    <label>Nome: </label>
+                    <div class="input-div">
+                        <input type="text" size="42" ng-model="processName" />
+                    </div>
+                </div>
+
+                <div class="label-input-calendar">
+                    <label>Stato:</label>
+                    <div class="input-div">
+                        <strong>{{isActive}}</strong> &nbsp; &nbsp;
+                        <input type="checkbox" ng-model="available" data-ng-click="isActiveClicked()" checked="{{buttonIsActiveStatus}}==='Disattiva Processo'"/>
+                    </div>
+                </div>
+
+                <label>Descrizione: </label> <br />
+                <textarea class="textAreaInsertedText" rows="5" cols="20" ng-model="processDescription"></textarea>
+
+                <div class="input-group" style="margin-bottom: 10px">
+                    <div class="label-input-calendar">
+                        <label>Data di inizio processo: </label>
+                        <div class="input-div">
+                            <input type="text" class="form" ng-model="dateStartView" placeholder="Inizio" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="label-input-calendar">
+                        <label>Data di fine processo: </label>
+                        <div class="input-div">
+                            <input type="text" class="form" ng-model="dateCloseView" placeholder="Fine" readonly>
+                        </div>
+                    </div>
+                    <span class="input-group-btn">
+                        <div class ="allButtons calendario">
+                            <a data-ng-click="showCalendarClose()" class="inField scegliData btn btn-default"><span class="glyphicon glyphicon-calendar"></span> Scegli data</a>
+                        </div>
+                    </span>
+                </div>
+                <div class="calendarioPik" ng-show="dateCloseVisible === 'true'" pickadate ng-model="dateClose" data-ng-click="dateCloseSelected(dateClose)" >
+                </div>
+
+                <div class="input-group">
+                    <div class="label-input-calendar">
+                        <label>Data di chiusura iscrizioni: </label>
+                        <div class="input-div">
+                            <input type="text" class="form" ng-model="dateEndSubscriptionView" placeholder="Chiusura iscrizioni" readonly>
+                        </div>
+                    </div>
+                    <span class="input-group-btn">
+                        <div class ="allButtons calendario">
+                            <a data-ng-click="showCalendarEndSubscription()" class="inField scegliData btn btn-default"><span class="glyphicon glyphicon-calendar"></span> Scegli data</a>
+                        </div>
+                    </span>
+                </div>
+                <div ng-show="dateEndSubscriptionVisible === 'true'"  pickadate ng-model="dateEndSubscription" data-ng-click="dateEndSubscriptionSelected(dateEndSubscription)" >
+                </div>
+                <div class ="allButtons">
+                    <a data-ng-click="doModifyProcess()" class="green btn btn-default inField"> Applica modifiche </a>
+                </div>
+			</fieldset>
+		</div>
+
+		<!-- Lista Passi -->
+		<div ng-repeat="step in stepList">
+            <fieldset class="levelBox">
+                <label>Livello: {{step.Level+1}} </label> </br>
+                <label>Descrizione Passo: </label> </br>
+                <textarea class="textAreaStepText" rows="2" cols="20" ng-model="step.Description">{{step.Description}}</textarea> </br>
+            </fieldset>
+		</div>
+	</div>
+</div>

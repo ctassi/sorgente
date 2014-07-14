@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CtrlUserTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.controller</a> &gt; <span class="el_source">CtrlUserTest.java</span></div><h1>CtrlUserTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe CtrlUserTest
+ * 
+ *	@file		CtrlUserTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.controller;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.Writer;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.hibernate.Query;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.DataCollection;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.Subscription;
+import com.sequenziatore.server.entity.User;
+import com.sequenziatore.server.entity.DataCollection.EnumState;
+import com.sequenziatore.server.entity.Step.EnumParallelism;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe CtrlUser.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L66">public class CtrlUserTest {</span>
+	
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L76">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L79">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L80">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L83">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L84">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L87">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L88">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L91">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L92">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L95">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L96">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L98">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L99">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L109">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L112">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L113">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L116">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L117">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L120">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L121">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L124">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L125">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L128">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L129">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L131">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L132">	}</span>
+	
+	/**
+	 *	Test del metodo ctrlUnsubscribeProcess() che permette ad un utente di disiscriversi da un processo.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+	public void testCtrlUnsubscribeProcess() throws Exception{
+<span class="fc" id="L140">		HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L141">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L142">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L143">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L146">	    HibernateUtil.getSession().beginTransaction();</span>
+
+    	//creazione amministratore
+<span class="fc" id="L149">        User testAdmin = new User();</span>
+<span class="fc" id="L150">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L151">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L152">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L153">        testAdmin.setUsername(&quot;testAdmin&quot;);</span>
+<span class="fc" id="L154">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+    	
+    	//creazione utente
+<span class="fc" id="L157">        User testUser = new User();</span>
+<span class="fc" id="L158">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L159">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L160">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L161">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L162">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L165">        Process testProcess = new Process();</span>
+<span class="fc" id="L166">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L167">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L168">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L169">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L170">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L171">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L172">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L173">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L174">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L177">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L178">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L179">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L180">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L181">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L182">        HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L184">	    String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;, Admin: &quot;+testUser.getIsAdmin()+&quot;, IdProcess: &quot;+testProcess.getIdProcess()+&quot;}&quot;;</span>
+<span class="fc" id="L185">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L186">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L188">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L189">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L191">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L192">			when(request.getSession()).thenReturn(session);</span>
+<span class="fc" id="L193">			when(request.getContentType()).thenReturn(&quot;application/json&quot;);</span>
+			
+<span class="fc" id="L195">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L196">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L198">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L199">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L200">		}</span>
+<span class="nc" id="L201">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L202">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L204">        Field iParserObject = null;</span>
+<span class="fc" id="L205">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L208">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L209">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L210">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L211">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L212">		}</span>
+<span class="nc" id="L213">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L214">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L216">		ctrlUserObject.ctrlUnsubscribeProcess(request, response);</span>
+<span class="fc" id="L217">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L218">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L219">	}</span>
+	
+	/**
+	 *	Test del metodo ctrlViewProcessNotActive() che permette ad un utente di visualizzare i processi che non sono più attivi.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlViewProcessNotActive() throws Exception {
+<span class="fc" id="L227">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L228">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L229">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L230">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L233">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //creazione utente
+<span class="fc" id="L236">        User testUser = new User();</span>
+<span class="fc" id="L237">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L238">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L239">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L240">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L241">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L242">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L244">        String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;}&quot;;</span>
+<span class="fc" id="L245">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L246">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L248">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L249">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L251">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L252">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L254">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L255">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L257">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L258">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L259">		}</span>
+<span class="nc" id="L260">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L261">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L263">        Field iParserObject = null;</span>
+<span class="fc" id="L264">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L267">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L268">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L269">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L270">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L271">		}</span>
+<span class="nc" id="L272">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L273">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L275">		ctrlUserObject.ctrlViewProcessNotActive(request, response);</span>
+<span class="fc" id="L276">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L277">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L278">    }</span>
+	
+	/**
+	 *	Test del metodo ctrlStatisticsUser) che permette di ricevere le statistiche dei processi di un utente.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+	public void testCtrlStatisticsUser() throws Exception{
+<span class="fc" id="L286">		HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L287">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L288">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L289">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L292">	    HibernateUtil.getSession().beginTransaction();</span>
+
+    	//creazione amministratore
+<span class="fc" id="L295">        User testAdmin = new User();</span>
+<span class="fc" id="L296">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L297">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L298">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L299">        testAdmin.setUsername(&quot;testAdmin&quot;);</span>
+<span class="fc" id="L300">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+    	
+    	//creazione utente
+<span class="fc" id="L303">        User testUser = new User();</span>
+<span class="fc" id="L304">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L305">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L306">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L307">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L308">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L311">        Process testProcess = new Process();</span>
+<span class="fc" id="L312">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L313">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L314">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L315">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L316">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L317">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L318">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L319">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L320">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L323">        Step testStep = new Step();</span>
+<span class="fc" id="L324">        testStep.setAdminVerify(false);</span>
+<span class="fc" id="L325">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L326">        testStep.setCheckText(&quot;null&quot;);</span>
+<span class="fc" id="L327">        testStep.setIsGeolocation(true);</span>
+<span class="fc" id="L328">        testStep.setIsPhoto(true);</span>
+<span class="fc" id="L329">        testStep.setIsText(true);</span>
+<span class="fc" id="L330">        testStep.setLevel(1);</span>
+<span class="fc" id="L331">        testStep.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L332">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L333">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L336">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L337">        testStepList.add(testStep);</span>
+<span class="fc" id="L338">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L339">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L342">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L343">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L344">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L345">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L346">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L349">        DataCollection testCollection = new DataCollection();</span>
+<span class="fc" id="L350">        testCollection.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L351">        testCollection.setIdStep(testStep);</span>
+<span class="fc" id="L352">        testCollection.setIdUser(testUser);</span>
+<span class="fc" id="L353">        testCollection.setPhoto(new String(&quot;null&quot;));</span>
+<span class="fc" id="L354">        testCollection.setText(&quot;null&quot;);</span>
+<span class="fc" id="L355">        testCollection.setLongitude(&quot;null&quot;);</span>
+<span class="fc" id="L356">        testCollection.setLatitude(&quot;null&quot;);</span>
+<span class="fc" id="L357">        testCollection.setWrongText(true);</span>
+<span class="fc" id="L358">        testCollection.setWrongPhoto(true);</span>
+<span class="fc" id="L359">        testCollection.setWrongGeolocation(true);</span>
+<span class="fc" id="L360">        HibernateUtil.getSession().saveOrUpdate(testCollection);</span>
+<span class="fc" id="L361">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L363">	    String dataCollectionInfo = new String(&quot;WrongText: true, WrongGeolocation: true, WrongPhoto: true&quot;);</span>
+<span class="fc" id="L364">	    String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;, Admin: &quot;+testUser.getIsAdmin()+&quot;, IdStep: &quot;+testCollection.getIdStep().getIdStep()+&quot;, &quot;+dataCollectionInfo+&quot;}&quot;;</span>
+<span class="fc" id="L365">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L366">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L368">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L369">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L371">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L372">			when(request.getSession()).thenReturn(session);</span>
+<span class="fc" id="L373">			when(request.getContentType()).thenReturn(&quot;application/json&quot;);</span>
+			
+<span class="fc" id="L375">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L376">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L378">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L379">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L380">		}</span>
+<span class="nc" id="L381">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L382">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L384">        Field iParserObject = null;</span>
+<span class="fc" id="L385">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L388">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L389">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L390">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L391">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L392">		}</span>
+<span class="nc" id="L393">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L394">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L396">		ctrlUserObject.ctrlStatisticsUser(request, response);</span>
+<span class="fc" id="L397">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L398">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L399">	}</span>
+	
+	/**
+	 *	Test del metodo ctrlSaveDataStep() che permette di salvare i dati raccolti per completare un passo.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+    public void testCtrlSaveDataStep() throws Exception {
+<span class="fc" id="L407">		HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L408">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L409">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L410">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L413">	    HibernateUtil.getSession().beginTransaction();</span>
+
+    	//creazione amministratore
+<span class="fc" id="L416">        User testAdmin = new User();</span>
+<span class="fc" id="L417">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L418">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L419">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L420">        testAdmin.setUsername(&quot;testAdmin&quot;);</span>
+<span class="fc" id="L421">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+    	
+    	//creazione utente
+<span class="fc" id="L424">        User testUser = new User();</span>
+<span class="fc" id="L425">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L426">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L427">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L428">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L429">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L432">        Process testProcess = new Process();</span>
+<span class="fc" id="L433">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L434">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L435">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L436">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L437">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L438">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L439">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L440">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L441">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L444">        Step testStep = new Step();</span>
+<span class="fc" id="L445">        testStep.setAdminVerify(false);</span>
+<span class="fc" id="L446">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L447">        testStep.setCheckText(&quot;null&quot;);</span>
+<span class="fc" id="L448">        testStep.setIsGeolocation(true);</span>
+<span class="fc" id="L449">        testStep.setIsPhoto(true);</span>
+<span class="fc" id="L450">        testStep.setIsText(true);</span>
+<span class="fc" id="L451">        testStep.setLevel(1);</span>
+<span class="fc" id="L452">        testStep.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L453">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L454">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L457">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L458">        testStepList.add(testStep);</span>
+<span class="fc" id="L459">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L460">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L463">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L464">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L465">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L466">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L467">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L470">        DataCollection testCollection = new DataCollection();</span>
+<span class="fc" id="L471">        testCollection.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L472">        testCollection.setIdStep(testStep);</span>
+<span class="fc" id="L473">        testCollection.setIdUser(testUser);</span>
+<span class="fc" id="L474">        testCollection.setPhoto(new String(&quot;null&quot;));</span>
+<span class="fc" id="L475">        testCollection.setText(&quot;null&quot;);</span>
+<span class="fc" id="L476">        testCollection.setLongitude(&quot;null&quot;);</span>
+<span class="fc" id="L477">        testCollection.setLatitude(&quot;null&quot;);</span>
+<span class="fc" id="L478">        testCollection.setWrongText(true);</span>
+<span class="fc" id="L479">        testCollection.setWrongPhoto(true);</span>
+<span class="fc" id="L480">        testCollection.setWrongGeolocation(true);</span>
+<span class="fc" id="L481">        HibernateUtil.getSession().saveOrUpdate(testCollection);</span>
+<span class="fc" id="L482">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L484">	    String dataCollectionInfo = new String(&quot;WrongText: true, WrongGeolocation: true, WrongPhoto: true&quot;);</span>
+<span class="fc" id="L485">	    String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;, Admin: &quot;+testUser.getIsAdmin()+&quot;, IdStep: &quot;+testCollection.getIdStep().getIdStep()+&quot;, &quot;+dataCollectionInfo+&quot;}&quot;;</span>
+<span class="fc" id="L486">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L487">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L489">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L490">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L492">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L493">			when(request.getSession()).thenReturn(session);</span>
+<span class="fc" id="L494">			when(request.getContentType()).thenReturn(&quot;application/json&quot;);</span>
+			
+<span class="fc" id="L496">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L497">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L499">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L500">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L501">		}</span>
+<span class="nc" id="L502">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L503">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L505">        Field iParserObject = null;</span>
+<span class="fc" id="L506">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L509">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L510">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L511">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L512">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L513">		}</span>
+<span class="nc" id="L514">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L515">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L517">		ctrlUserObject.ctrlSaveDataStep(request, response);</span>
+<span class="fc" id="L518">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L519">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L520">    }</span>
+    
+	/**
+	 *	Test del metodo ctrlSubscribeToProcess() che permette ad un utente di iscriversi ad un processo.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+    public void testCtrlSubscribeToProcess() throws Exception {
+<span class="fc" id="L528">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L529">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L530">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L531">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L534">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+        //creazione processo
+<span class="fc" id="L537">        Process testProcess = new Process();</span>
+<span class="fc" id="L538">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L539">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L540">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L541">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L542">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L543">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L544">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L545">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione utente
+<span class="fc" id="L548">        User testUser = new User();</span>
+<span class="fc" id="L549">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L550">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L551">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L552">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L553">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L556">        Step testStep = new Step();</span>
+<span class="fc" id="L557">        testStep.setAdminVerify(false);</span>
+<span class="fc" id="L558">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L559">        testStep.setIsGeolocation(false);</span>
+<span class="fc" id="L560">        testStep.setIsPhoto(false);</span>
+<span class="fc" id="L561">        testStep.setIsText(false);</span>
+<span class="fc" id="L562">        testStep.setLevel(1);</span>
+<span class="fc" id="L563">        testStep.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L564">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L565">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L568">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L569">        testStepList.add(testStep);</span>
+<span class="fc" id="L570">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L571">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+<span class="fc" id="L572">	    HibernateUtil.commitTransaction();</span>
+
+<span class="fc" id="L574">	    String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;, Admin: &quot;+testUser.getIsAdmin()+&quot;, IdProcess: &quot;+testProcess.getIdProcess()+&quot;}&quot;;</span>
+<span class="fc" id="L575">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L576">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L578">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L579">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L581">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L582">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L584">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L585">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L587">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L588">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L589">		}</span>
+<span class="nc" id="L590">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L591">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L593">        Field iParserObject = null;</span>
+<span class="fc" id="L594">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L597">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L598">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L599">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L600">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L601">		}</span>
+<span class="nc" id="L602">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L603">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L605">		ctrlUserObject.ctrlSubscribeToProcess(request, response);</span>
+<span class="fc" id="L606">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L607">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L608">    }</span>
+	
+    /**
+	 *	Test del metodo ctrlViewStep() che permette la visualizzazione di un passo da svolgere.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+	@Test
+    public void testCtrlViewStep() throws Exception {
+<span class="fc" id="L616">    	HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L617">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L618">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L619">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L622">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //creazione utente
+<span class="fc" id="L625">        User testUser = new User();</span>
+<span class="fc" id="L626">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L627">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L628">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L629">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L630">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L633">        Process testProcess = new Process();</span>
+<span class="fc" id="L634">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L635">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L636">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L637">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L638">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L639">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L640">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L641">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L644">        Step testStep = new Step();</span>
+<span class="fc" id="L645">        testStep.setAdminVerify(false);</span>
+<span class="fc" id="L646">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L647">        testStep.setIsGeolocation(false);</span>
+<span class="fc" id="L648">        testStep.setIsPhoto(false);</span>
+<span class="fc" id="L649">        testStep.setIsText(false);</span>
+<span class="fc" id="L650">        testStep.setLevel(1);</span>
+<span class="fc" id="L651">        testStep.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L652">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L653">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L656">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L657">        testStepList.add(testStep);</span>
+<span class="fc" id="L658">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L659">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+<span class="fc" id="L660">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L662">	    String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;, Admin: &quot;+testUser.getIsAdmin()+&quot;, IdProcess: &quot;+testProcess.getIdProcess()+&quot;}&quot;;</span>
+<span class="fc" id="L663">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L664">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L666">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L667">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L669">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L670">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L672">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L673">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L675">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L676">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L677">		}</span>
+<span class="nc" id="L678">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L679">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L681">        Field iParserObject = null;</span>
+<span class="fc" id="L682">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L685">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L686">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L687">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L688">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L689">		}</span>
+<span class="nc" id="L690">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L691">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L693">		ctrlUserObject.ctrlViewStep(request, response);</span>
+<span class="fc" id="L694">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L695">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L696">    }</span>
+	
+	/**
+	 *	Test del metodo ctrlAvailableProcess() che ritorna la lista dei processi a cui l'utente può iscriversi.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlAvailableProcess() throws Exception {
+<span class="fc" id="L704">        HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L705">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L706">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L707">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L710">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //creazione utente
+<span class="fc" id="L713">        User testUser = new User();</span>
+<span class="fc" id="L714">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L715">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L716">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L717">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L718">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L719">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L721">        String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;}&quot;;</span>
+<span class="fc" id="L722">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L723">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L725">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L726">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L728">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L729">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L731">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L732">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L734">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L735">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L736">		}</span>
+<span class="nc" id="L737">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L738">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L740">        Field iParserObject = null;</span>
+<span class="fc" id="L741">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L744">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L745">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L746">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L747">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L748">		}</span>
+<span class="nc" id="L749">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L750">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L752">		ctrlUserObject.ctrlAvailableProcess(request, response);</span>
+<span class="fc" id="L753">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L754">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L755">    }</span>
+
+    /**
+	 *	Test del metodo ctrlViewActiveProcesses() che ritorna la lista dei processi attivi a cui l'utente è iscritto.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testCtrlViewActiveProcesses() throws Exception {
+<span class="fc" id="L763">        HttpServletRequest request = mock(HttpServletRequest.class);</span>
+<span class="fc" id="L764">        HttpServletResponse response = mock(HttpServletResponse.class);</span>
+<span class="fc" id="L765">        HttpSession session= mock(HttpSession.class);</span>
+<span class="fc" id="L766">        CtrlUser ctrlUserObject = new CtrlUser();</span>
+
+        //creazione ambiente per l'esecuzione della query
+<span class="fc" id="L769">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //creazione utente
+<span class="fc" id="L772">        User testUser = new User();</span>
+<span class="fc" id="L773">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L774">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L775">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L776">        testUser.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L777">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L778">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L780">        String stringObject = &quot;{IdUser: &quot;+testUser.getIdUser()+&quot;}&quot;;</span>
+<span class="fc" id="L781">    	StringReader stringReaderObject=new StringReader(stringObject);</span>
+<span class="fc" id="L782">    	BufferedReader bufferReaderObject = new BufferedReader(stringReaderObject);</span>
+        
+<span class="fc" id="L784">    	Writer writerMock = mock(Writer.class);</span>
+<span class="fc" id="L785">    	PrintWriter writer = null;</span>
+        try {
+<span class="fc" id="L787">			when(request.getReader()).thenReturn(bufferReaderObject);</span>
+<span class="fc" id="L788">			when(request.getSession()).thenReturn(session);</span>
+			
+<span class="fc" id="L790">			when(session.getAttribute(testUser.getIdUser().toString())).thenReturn(true);</span>
+<span class="fc" id="L791">			when(session.getAttribute(testUser.getIdUser().toString()+&quot;Admin&quot;)).thenReturn(testUser.getIsAdmin());</span>
+			
+<span class="fc" id="L793">			writer = new PrintWriter(writerMock);</span>
+<span class="fc" id="L794">			when(response.getWriter()).thenReturn(writer);</span>
+<span class="fc" id="L795">		}</span>
+<span class="nc" id="L796">        catch (FileNotFoundException e) {}</span>
+<span class="nc" id="L797">        catch (IOException e) {}</span>
+        
+<span class="fc" id="L799">        Field iParserObject = null;</span>
+<span class="fc" id="L800">		Field iServiceObject = null;</span>
+		
+		try {
+<span class="fc" id="L803">			iParserObject = ctrlUserObject.getClass().getDeclaredField(&quot;iParser&quot;);</span>
+<span class="fc" id="L804">			iParserObject.setAccessible(true);</span>
+<span class="fc" id="L805">			iServiceObject = ctrlUserObject.getClass().getDeclaredField(&quot;iService&quot;);</span>
+<span class="fc" id="L806">			iServiceObject.setAccessible(true);</span>
+<span class="fc" id="L807">		}</span>
+<span class="nc" id="L808">		catch (NoSuchFieldException e) {}</span>
+<span class="nc" id="L809">		catch (SecurityException e) {}</span>
+		
+<span class="fc" id="L811">		ctrlUserObject.ctrlViewActiveProcesses(request, response);</span>
+<span class="fc" id="L812">		assertNotNull(iParserObject);</span>
+<span class="fc" id="L813">		assertNotNull(iServiceObject);</span>
+<span class="fc" id="L814">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

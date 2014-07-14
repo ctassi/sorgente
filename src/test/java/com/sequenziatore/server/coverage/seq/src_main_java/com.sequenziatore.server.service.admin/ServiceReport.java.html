@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceReport.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.admin</a> &gt; <span class="el_source">ServiceReport.java</span></div><h1>ServiceReport.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceReport
+ * 
+ *	@file		ServiceReport.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.admin;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.sequenziatore.server.databaseutil.dao.DAOFactory;
+import com.sequenziatore.server.databaseutil.dao.IDAOFactory;
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.entity.User;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.sequenziatore.server.service.interfaceservice.IService;
+
+/**
+ *	La classe ServiceReport offre il servizio di report di un processo.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L49">public class ServiceReport implements IService {</span>
+ 
+	/** Rappresenta l'interfaccia che garantisce l'accesso alle classi DAO per accedere al database. */
+	private IDAOFactory iDAOFactory;
+	
+	/**
+	 * Permette ad un utente di ottenere il report di un processo grazie alle informazioni acquisite dal front-end.
+	 * 
+	 * @param entity contiene l'id del processo di cui è richiesto il report
+	 * @return le informazioni del report del processo
+	 */
+	
+	@Override
+	public JSONObject serviceOperation(List&lt;IEntity&gt; entity) {
+<span class="fc" id="L63">		JSONObject objectJson=new JSONObject();</span>
+<span class="fc" id="L64">		JSONArray arrayStep= new JSONArray();</span>
+<span class="fc" id="L65">		iDAOFactory = new DAOFactory();</span>
+<span class="fc" id="L66">		Process process=(Process)entity.get(0);</span>
+<span class="fc" id="L67">		Process processStepList= null;</span>
+		List&lt;User&gt; allSubscription;
+		List&lt;Integer&gt; subscriptionComplete;
+		List&lt;Integer&gt; step;
+		try {
+<span class="fc" id="L72">		    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L73">		    allSubscription=iDAOFactory.createDAOManagementProcessAdmin().findUserSubscription(process);</span>
+<span class="fc" id="L74">		    processStepList=iDAOFactory.createDAOManagementProcessAdmin().findProcess(process);</span>
+<span class="fc" id="L75">		    HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L76">		} catch(Exception e) {</span>
+<span class="nc" id="L77">			return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+		}
+<span class="fc bfc" id="L79" title="All 2 branches covered.">	    if(allSubscription.size() != 0){</span>
+	    	try {
+<span class="fc" id="L81">			    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L82">			    subscriptionComplete=iDAOFactory.createDAOManagementProcessAdmin().findUserSubscriptionComplete(process);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">			    for(int i=0;i&lt;processStepList.getSteps().size();i++){</span>
+<span class="fc" id="L84">			    	step=iDAOFactory.createDAOManagementProcessAdmin().findUserStepComplete(processStepList.getSteps().get(i));</span>
+<span class="fc" id="L85">			    	JSONObject objectJsonStep=new JSONObject();</span>
+<span class="fc" id="L86">			    	objectJsonStep.put(&quot;Step&quot;, processStepList.getSteps().get(i).getDescription());</span>
+<span class="fc" id="L87">			    	objectJsonStep.put(&quot;StepComplete&quot;, step.size());</span>
+<span class="fc" id="L88">			    	objectJsonStep.put(&quot;StepNotComplete&quot;, allSubscription.size()-step.size());</span>
+<span class="fc" id="L89">			    	objectJsonStep.put(&quot;StepLevel&quot;, processStepList.getSteps().get(i).getLevel());</span>
+<span class="fc" id="L90">			    	arrayStep.put(objectJsonStep);</span>
+			    }
+<span class="fc" id="L92">			    objectJson.put(&quot;Level&quot;, this.report(allSubscription, subscriptionComplete,processStepList));</span>
+<span class="fc" id="L93">			    HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L94">	        } catch(Exception e) {</span>
+<span class="nc" id="L95">	    		return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+	    	}
+<span class="fc" id="L97">		    objectJson.put(&quot;Process&quot;, processStepList.getName());</span>
+<span class="fc" id="L98">	    	objectJson.put(&quot;Step&quot;, arrayStep);</span>
+		    
+<span class="fc" id="L100">		    objectJson.put(&quot;AllSubscription&quot;, allSubscription.size());</span>
+<span class="fc" id="L101">		    objectJson.put(&quot;SubscriptionComplete&quot;, subscriptionComplete.size());</span>
+<span class="fc" id="L102">		    objectJson.put(&quot;SubscriptionNotComplete&quot;, allSubscription.size()-subscriptionComplete.size());</span>
+<span class="fc" id="L103">		    objectJson.put(&quot;Confirmation&quot;,&quot;SomebodyIsSubscribed&quot;);</span>
+<span class="fc" id="L104">	    }else{</span>
+<span class="fc" id="L105">	    	objectJson.put(&quot;Confirmation&quot;, &quot;NoOneIsSubscribed&quot;);</span>
+<span class="fc" id="L106">	    	objectJson.put(&quot;ProcessName&quot;, processStepList.getName());</span>
+	    }
+<span class="fc" id="L108">	    return objectJson;</span>
+	}
+	
+	/**
+	 * Permette di ricavare il report dei livelli.
+	 * 
+	 * @param allSubscription contiene gli utenti che si sono iscritti al processo
+	 * @param subscriptionComplete contiene gli id degli utenti che hanno completato il processo
+	 * @param process contiene i dati del processo
+	 * @return un JSONArray i report dei livelli
+	 * @throws Exception
+	 */
+	private JSONArray report(List&lt;User&gt; allSubscription, List&lt;Integer&gt; subscriptionComplete, Process process) throws Exception{
+<span class="fc" id="L121">		List&lt;Integer&gt; levelUser= new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L122">		List&lt;Integer&gt; level= new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L123">		JSONArray arrayLevel= new JSONArray();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		for(int i=0;i&lt;allSubscription.size();i++){</span>
+<span class="fc" id="L125">	    	Integer minLevel = iDAOFactory.createDAOManagementProcessAdmin().findMinStep(allSubscription.get(i),process);</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">	    	if(minLevel != null)</span>
+<span class="nc" id="L127">	    		levelUser.add(minLevel-1);</span>
+	    }
+<span class="fc" id="L129">	    level.add(subscriptionComplete.size());</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">	    for(int i=process.getTotalLevel()-1 ; i&gt;0 ; i--){</span>
+<span class="nc" id="L131">	    	level.add(Collections.frequency(levelUser, i-1)+level.get(i-1));</span>
+	    }
+<span class="fc bfc" id="L133" title="All 2 branches covered.">	    for(int i=1 ; i&lt;=level.size() ; i++){</span>
+<span class="fc" id="L134">	    	JSONObject objectJsonLevel=new JSONObject();</span>
+<span class="fc" id="L135">	    	objectJsonLevel.put(&quot;Level&quot;, i);</span>
+<span class="fc" id="L136">	    	objectJsonLevel.put(&quot;LevelComplete&quot;, level.get(level.size()-i));</span>
+<span class="fc" id="L137">	    	objectJsonLevel.put(&quot;LevelNotComplete&quot;, allSubscription.size()-level.get(level.size()-i));</span>
+<span class="fc" id="L138">	    	arrayLevel.put(objectJsonLevel);</span>
+	    }
+<span class="fc" id="L140">		return arrayLevel;		</span>
+	}
+}
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

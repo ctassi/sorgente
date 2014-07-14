@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe User
+ * 
+ *	@file		User.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
+
+import org.json.JSONObject;
+
+/**
+ *	La classe User rappresenta logicamente un utente dell'applicazione, sia amministratore che utente standard.
+ *
+ *	@author 	DeSQ
+ */
+@Entity
+@Table(name = &quot;Users&quot;)
+public class User implements Serializable, IEntity{
+
+	private static final long serialVersionUID = 1L;
+	
+	/** Id dell'utente. */
+	@Id
+	@GeneratedValue
+	@Column(name = &quot;IdUser&quot;, nullable=false)
+	private Integer idUser;
+
+	/** Username dell'utente. */
+	@Column(name = &quot;Username&quot;, nullable=false, unique=true, length=50)
+	private String username;
+
+	/** Password dell'utente. */
+	@Column(name = &quot;Password&quot;, nullable=false, length=40)
+	private String password;
+
+	/** Nome dell'utente. */
+	@Column(name = &quot;Name&quot;, length=30)
+	private String name;
+
+	/** Cognome dell'utente. */
+	@Column(name = &quot;Surname&quot;, length=30)
+	private String surname;
+
+	/** Email dell'utente. */
+	@Column(name = &quot;Email&quot;, nullable=false, length=50)
+	private String email;
+
+	/** Città dell'utente. */
+	@Column(name = &quot;City&quot;, length=30)
+	private String city;
+
+	/** Provincia dell'utente. */
+	@Column(name = &quot;District&quot;, length=2)
+	private String district;
+
+	/** Attributo per distinguere amministratori da utenti standard. */
+	@Column(name = &quot;IsAdmin&quot;, nullable=false)
+	private Boolean isAdmin;
+
+	/**
+	 * Costruttore di default.
+	 */
+<span class="fc" id="L92">	public User(){}</span>
+	
+	/**
+ 	 * Costruttore che imposta l'entità con i dati contenuti nel JSONObject.
+ 	 * 
+ 	 * @param json il valore che permette di impostare gli attributi dell'entità
+ 	 */
+<span class="fc" id="L99">	public User(JSONObject json) {</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		if(json.has(&quot;IdUser&quot;))</span>
+<span class="fc" id="L101">			idUser = (Integer)json.get(&quot;IdUser&quot;);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		if(json.has(&quot;Username&quot;))</span>
+<span class="fc" id="L103">			username = (String)json.get(&quot;Username&quot;);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">		if(json.has(&quot;Password&quot;))</span>
+<span class="fc" id="L105">			password = this.hashPassword((String)json.get(&quot;Password&quot;));</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">		if(json.has(&quot;Name&quot;))</span>
+<span class="fc" id="L107">			name = (String)json.get(&quot;Name&quot;);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">		if(json.has(&quot;Surname&quot;))</span>
+<span class="fc" id="L109">			surname = (String)json.get(&quot;Surname&quot;);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		if(json.has(&quot;Email&quot;))</span>
+<span class="fc" id="L111">			email = (String)json.get(&quot;Email&quot;);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		if(json.has(&quot;City&quot;))</span>
+<span class="fc" id="L113">			city = (String)json.get(&quot;City&quot;);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">		if(json.has(&quot;District&quot;))</span>
+<span class="fc" id="L115">			district = (String)json.get(&quot;District&quot;);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		if(json.has(&quot;IsAdmin&quot;))</span>
+<span class="fc" id="L117">			isAdmin = (Boolean)json.get(&quot;IsAdmin&quot;);</span>
+<span class="fc" id="L118">	}</span>
+	
+	/**
+	 * Ritorna l'id dell'utente.
+	 * 
+	 * @return l'id dell'utente
+	 */
+	public Integer getIdUser(){
+<span class="fc" id="L126">		return idUser; </span>
+	}
+	
+	/**
+	 * Imposta l'id dell'utente al valore passato.
+	 * 
+	 * @param idUser il valore da impostare come id dell'utente
+	 */
+	public void setIdUser(Integer idUser){
+<span class="fc" id="L135">		this.idUser = idUser; </span>
+<span class="fc" id="L136">	}</span>
+	
+	/**
+	 * Ritorna l'username dell'utente.
+	 * 
+	 * @return l'username dell'utente
+	 */
+	public String getUsername(){
+<span class="fc" id="L144">		return username; </span>
+	}
+	
+	/**
+	 * Imposta l'username dell'utente al valore passato.
+	 * 
+	 * @param username il valore da impostare come username dell'utente
+	 */
+	public void setUsername(String username){
+<span class="fc" id="L153">		this.username = username; </span>
+<span class="fc" id="L154">	}</span>
+	
+	/**
+	 * Ritorna la password dell'utente.
+	 * 
+	 * @return la password dell'utente
+	 */
+	public String getPassword(){ 
+<span class="fc" id="L162">		return password;</span>
+	}
+	
+	/**
+	 * Imposta la password dell'utente al valore passato.
+	 * 
+	 * @param password il valore da impostare come password dell'utente
+	 */
+	public void setPassword(String password){
+<span class="fc" id="L171">		this.password = password; </span>
+<span class="fc" id="L172">	}</span>
+	
+	/**
+	 * Imposta la password dell'utente al valore passato dopo averla hashata.
+	 * 
+	 * @param password password il valore da impostare come password dell'utente
+	 */
+	public void hashAndSetPassword(String password){
+<span class="fc" id="L180">		this.password = hashPassword(password); </span>
+<span class="fc" id="L181">	}</span>
+	
+	/**
+	 * Ritorna il nome dell'utente.
+	 * 
+	 * @return name il nome dell'utente
+	 */
+	public String getName() {
+<span class="fc" id="L189">		return name;</span>
+	}
+	
+	/**
+	 * Imposta il nome dell'utente al valore passato.
+	 * 
+	 * @param name il valore da impostare come nome dell'utente
+	 */
+	public void setName(String name){
+<span class="fc" id="L198">		this.name = name; </span>
+<span class="fc" id="L199">	}</span>
+	
+	/**
+	 * Ritorna il cognome dell'utente.
+	 * 
+	 * @return surname il cognome dell'utente
+	 */
+	public String getSurname(){ 
+<span class="fc" id="L207">		return surname; </span>
+	}
+	
+	 /**
+	 * Imposta il cognome dell'utente al valore passato.
+	 * 
+	 * @param surname il valore da impostare come cognome dell'utente
+	 */
+	public void setSurname(String surname){
+<span class="fc" id="L216">		this.surname = surname;</span>
+<span class="fc" id="L217">	}</span>
+	
+	/**
+	 * Ritorna l'email dell'utente.
+	 * 
+	 * @return email l'email dell'utente
+	 */
+	public String getEmail(){
+<span class="fc" id="L225">		return email;</span>
+	}
+	
+	/**
+	 * Imposta l'email dell'utente al valore passato.
+	 * 
+	 * @param email il valore da impostare come email dell'utente
+	 */
+	public void setEmail(String email){
+<span class="fc" id="L234">		this.email = email;</span>
+<span class="fc" id="L235">	}</span>
+
+	/**
+	 * Ritorna la città dell'utente.
+	 * 
+	 * @return la città dell'utente
+	 */
+	public String getCity(){
+<span class="fc" id="L243">		return city;</span>
+	}
+	
+	/**
+	 * Imposta la città dell'utente al valore passato.
+	 * 
+	 * @param city il valore da impostare come città dell'utente
+	 */
+	public void setCity(String city){
+<span class="fc" id="L252">		this.city = city;</span>
+<span class="fc" id="L253">	}</span>
+
+	/**
+	 * Ritorna la provincia dell'utente.
+	 * 
+	 * @return la provincia dell'utente
+	 */
+	public String getDistrict(){
+<span class="fc" id="L261">		return district;</span>
+	}
+	
+	/**
+	 * Imposta la provincia dell'utente al valore passato.
+	 * 
+	 * @param district il valore da impostare come provincia dell'utente
+	 */
+	public void setDistrict(String district){
+<span class="fc" id="L270">		this.district = district;</span>
+<span class="fc" id="L271">	}</span>
+
+	/**
+	 * Ritorna l'attributo per distinguere amministratori da utenti standard.
+	 * 
+	 * @return l'attributo per distinguere amministratori da utenti standard
+	 */
+	public Boolean getIsAdmin(){
+<span class="fc" id="L279">		return isAdmin;</span>
+	}
+	
+	/**
+	 * Imposta l'attributo per distinguere amministratori da utenti standard al valore passato.
+	 * 
+	 * @param isAdmin il valore da impostare come attributo per distinguere amministratori da utenti standard
+	 */
+	public void setIsAdmin(Boolean isAdmin){
+<span class="fc" id="L288">		this.isAdmin = isAdmin;</span>
+<span class="fc" id="L289">	}</span>
+
+	/**
+ 	 * Ritorna un JSONObject con i dati dell'entità.
+ 	 * 
+ 	 * @return un JSONObject con i dati dell'entità
+ 	 */
+	@Override
+	public JSONObject toJSONObject() {
+<span class="fc" id="L298">		JSONObject json = new JSONObject();</span>
+<span class="fc" id="L299">		json.put(&quot;IdUser&quot; , idUser);</span>
+<span class="fc" id="L300">		json.put(&quot;Username&quot; , username);</span>
+<span class="fc" id="L301">		json.put(&quot;Name&quot; , name);</span>
+<span class="fc" id="L302">		json.put(&quot;Surname&quot; , surname);</span>
+<span class="fc" id="L303">		json.put(&quot;Email&quot; , email);</span>
+<span class="fc" id="L304">		json.put(&quot;City&quot; , city);</span>
+<span class="fc" id="L305">		json.put(&quot;District&quot; , district);</span>
+<span class="fc" id="L306">		json.put(&quot;IsAdmin&quot; , isAdmin);</span>
+<span class="fc" id="L307">		return json;</span>
+	}
+	
+	/**
+ 	 * Ritorna la password criptata attraverso SHA-1.
+ 	 * 
+ 	 * @param passwordNotSHA password non criptata
+ 	 * @return password criptata
+ 	 */
+	private String hashPassword(String passwordNotSHA){
+		MessageDigest digest;
+<span class="fc" id="L318">		String passwordSHA=new String();</span>
+		try {
+<span class="fc" id="L320">			digest = MessageDigest.getInstance(&quot;SHA-1&quot;);</span>
+<span class="fc" id="L321">			digest.update(passwordNotSHA.getBytes());</span>
+<span class="fc" id="L322">	        byte byteData[] = digest.digest();</span>
+<span class="fc" id="L323">	        StringBuffer sb = new StringBuffer();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">	        for (int i = 0; i &lt; byteData.length; i++) {</span>
+<span class="fc" id="L325">	        	sb.append(Integer.toString((byteData[i] &amp; 0xff) + 0x100, 16).substring(1));</span>
+<span class="fc" id="L326">	        	passwordSHA=sb.toString();</span>
+	        }
+<span class="pc" id="L328">		} catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L329">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L331">		return passwordSHA;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

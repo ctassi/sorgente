@@ -1,0 +1,82 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : registration.html
+* Location : /applicationContent/com/sequenziatore/client/view/user
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-04-08     Romagnosi Nicolò
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div  ng-controller="CtrlRegistration">
+    <alert ng-show="showAlert" type="danger" close="closeAlert()">{{message}}</alert>
+    <div class="centerContent">
+        <fieldset class="registrationBox">
+            <legend class="legendInfo">Registrazione</legend>
+            <form class="form" ng-submit="doRegistration()">
+                <br />
+                <input ng-trim="false" type="text" class="form-control" ng-change="checkEmail()" placeholder="Email*" ng-model="email" maxlength="50" required>
+
+                <p class="redColor">{{errorEmail}}</p>
+
+                <input type="password" class="form-control"  ng-change="checkPassword()" placeholder="Password*" ng-model="password" maxlength="12" required>
+                <p class="redColor">{{errorPassword}}</p>
+
+                <input type="password" class="form-control" ng-change="checkPassword()" placeholder="Conferma password*" ng-model="reinsertedPassword" maxlength="12" required>
+
+                <p class="redColor">{{errorReinsertedPassword}}</p>
+                <p class="greenColor">{{okPassword}}</p>
+
+                <input ng-trim="false" type="text" class="form-control"  placeholder="Username"  ng-change="checkUsername()" ng-model="username" maxlength="50">
+
+                <p class="redColor">{{errorUsername}}</p>
+                <p class="greenColor">{{okUsername}}</p>
+
+                <input type="text" class="form-control" ng-change="checkName()" placeholder="Nome" ng-model="name" maxlength="30">
+
+                <p class="redColor">{{errorName}}</p>
+                <p class="greenColor">{{okName}}</p>
+
+                <input type="text" class="form-control" ng-change="checkSurname()" placeholder="Cognome" ng-model="surname" maxlength="30">
+
+                <p class="redColor">{{errorSurname}}</p>
+                <p class="greenColor">{{okSurname}}</p>
+
+                <input type="text" class="form-control" placeholder="Citt&agrave" ng-model="city" maxlength="30">
+
+                <p class="redColor">{{errorCity}}</p>
+                <p class="greenColor">{{okCity}}</p>
+
+                <select class="form-control" ng-model="selectedDistrict" ng-options="d.district for d in districtList">
+                    <option value="">Seleziona una provincia...</option>
+                </select>
+
+                <div class="form-group-registration">
+                    <input type="submit" class="btn btn-primary" value="Iscriviti"></input>
+                </div>
+			</form>
+	</fieldset>
+	</div>
+</div>	
+
+	

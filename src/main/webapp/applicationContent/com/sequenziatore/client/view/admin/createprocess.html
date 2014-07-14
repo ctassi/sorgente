@@ -1,0 +1,263 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : createprocess.html
+* Location : /applicationContent/com/sequenziatore/client/view/admin
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-25     Visentin Luca
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlCreateProcess">
+    <!-- Messaggi di notifica -->
+    <alert ng-show="showAlert" type="success" close="closeAlert()">{{messageDetailsProcessOk}}</alert>
+    <alert ng-show="showAlertDetailsError" type="danger" close="closeAlert()">{{messageDetailsProcessError}}</alert>
+	<!-- DETTAGLI DEL PROCESSO -->
+	<div class="centerContent">
+        <fieldset ng-show="processDivVisible === 'true'" ng-hide="processDivVisible === 'false'" class="newProcessBox">
+            <legend class="legendInfo">Nuovo processo</legend> <br />
+
+            <div class="label-input-calendar">
+                <label>Nome: </label>
+                <div class="input-div">
+                    <input type="text" size="42" ng-model="processName" maxlength="50"/>
+                </div>
+            </div>
+
+            <label>Descrizione: </label> <br />
+            <textarea class="textAreaInsertedText" rows="5" cols="20" ng-model="processDescription"></textarea>
+
+            <div class="input-group">
+                <div class="label-input-calendar">
+                    <label>Data di inizio processo: </label>
+                    <div class="input-div">
+                        <input type="text" class="form" ng-model="dateStartView" placeholder="Inizio" readonly>
+                    </div>
+                </div>
+                <span class="input-group-btn">
+                    <div class ="allButtons calendario">
+                          <a data-ng-click="showCalendarStart()" class="inField scegliData btn btn-default"><span class="glyphicon glyphicon-calendar"></span> Scegli data</a>
+                    </div>
+                </span>
+            </div>
+            <div class="marginBottom" ng-show="dateStartVisible === 'true'" pickadate ng-model="dateStart" data-ng-click="dateStartSelected(dateStart)" >
+            </div>
+
+            <div class="input-group">
+                <div class="label-input-calendar">
+                    <label>Data di fine processo: </label>
+                    <div class="input-div">
+                        <input type="text" class="form" ng-model="dateCloseView" placeholder="Fine" readonly>
+                    </div>
+                </div>
+                <span class="input-group-btn">
+                    <div class ="allButtons calendario">
+                        <a data-ng-click="showCalendarClose()" class="inField scegliData btn btn-default"><span class="glyphicon glyphicon-calendar"></span> Scegli data</a>
+                    </div>
+                </span>
+            </div>
+            <div class="marginBottom" ng-show="dateCloseVisible === 'true'" pickadate ng-model="dateClose" data-ng-click="dateCloseSelected(dateClose)" >
+            </div>
+
+            <div class="input-group">
+                <div class="label-input-calendar">
+                    <label>Data di chiusura iscrizioni: </label>
+                    <div class="input-div">
+                        <input type="text" class="form" ng-model="dateEndSubscriptionView" placeholder="Chiusura iscrizioni" readonly>
+                    </div>
+                </div>
+                <span class="input-group-btn">
+                    <div class ="allButtons calendario">
+                        <a data-ng-click="showCalendarEndSubscription()" class="inField scegliData btn btn-default"><span class="glyphicon glyphicon-calendar"></span> Scegli data</a>
+                    </div>
+                </span>
+            </div>
+            <div class="marginBottom" ng-show="dateEndSubscriptionVisible === 'true'"  pickadate ng-model="dateEndSubscription" data-ng-click="dateEndSubscriptionSelected(dateEndSubscription)" >
+            </div>
+
+            <div class ="allButtons">
+                <a data-ng-click="createNewProcess()" class=" green btn btn-default inField definisci"> Definisci Processo</a>
+            </div>
+        </fieldset>
+	
+        <!-- RIEPILOGO DEL PROCESSO IN CREAZIONE -->
+        <fieldset ng-show="summaryProcessDivVisible === 'true'" ng-hide="summaryProcessDivVisible === 'false'" class="newProcessBox">
+
+            <alert ng-show="showAlertSummarySuccess" type="success" close="closeAlert()">{{messageSummaryProcessOk}}</alert>
+            <alert ng-show="showAlertSummaryError" type="danger" close="closeAlert()">{{messageSummaryProcessError}}</alert>
+
+            <legend class="legendInfo">Riepilogo Processo</legend> <br />
+
+            <label class="control-label input-label"> Nome:</label>
+            <label class="labelContent" >{{processName}}</label>
+            <br />
+            <label class="control-label input-label"> Descrizione:</label>
+            <label class="labelContent" >{{ processDescription}}</label>
+            <br />
+            <label class="control-label input-label"> Data di inizio:</label>
+            <label class="labelContent" > {{dateStartView}}</label>
+            <br />
+            <label class="control-label input-label"> Data di chiusura:</label>
+            <label class="labelContent" > {{dateCloseView}}</label>
+            <br />
+            <label class="control-label input-label"> Data di fine iscrizione:</label>
+            <label class="labelContent" > {{dateEndSubscriptionView}}</label>
+            <br />
+            <label class="control-label input-label"> Numero Livelli: </label>
+            <label class="labelContent" > {{levelList.length}}</label>
+
+            <div class="marginTop">
+                <span class="input-group-btn">
+                    <div class ="allButtons calendario">
+                        <a data-ng-click="insertNewLevel()" class="inField Level btn btn-default">Aggiungi livello</a>
+                    </div>
+                </span>
+                <div class ="allButtons">
+                    <a data-ng-click="doCreateNewProcess()" class=" green btn btn-default inField definisci"> Salva Processo</a>
+                </div>
+            </div>
+
+        </fieldset>
+	
+	<div ng-repeat="(indexLevel, level) in levelList" ng-show="levelDivVisible === 'true'" ng-hide="levelDivVisible === 'false'" class="newStepListBox" > 
+		<!-- VISUALIZZO UN FORM PER OGNI LIVELLO -->
+		<fieldset class="levelBox">
+            <alert ng-show="level.showStepAlert" type="success">{{level.messageStepOk}}</alert>
+
+			<legend class="legendInfo">Livello {{(indexLevel +1)}}</legend>
+
+            <span class="input-group-btn">
+                <div class ="allButtons calendario">
+                    <a data-ng-show="level.symbol === '+'" data-ng-click="insertNewStep(indexLevel)" class="inField Level btn btn-default">Aggiungi passo</a>
+                    <a data-ng-show="level.symbol === '-'" data-ng-click="insertNewStep(indexLevel)" class="inField Level btn btn-default">Rimuovi passo</a>
+                    <a data-ng-click="deleteLevel(indexLevel)" class=" red inField Level btn btn-default">Elimina livello</a>
+                </div>
+            </span>
+            <div ng-show="level.length > 1">
+                <label>Parallellismo: </label>
+                <input type="radio" ng-model="level.parallelism" value="AND"> AND </input>
+                <input type="radio" ng-model="level.parallelism" value="OR"> OR </input>  <br>
+            </div>
+
+            <label data-ng-hide="level.length === 0" class="labelHeading">Lista passi</label>
+
+            <div class ="allButtons calendario" ng-repeat="step in level">
+                <label class="labelContent"> {{step.getIndexStep() +1}}. </label> <label> {{step.getDescription()}}</label> &nbsp;
+                <button data-ng-click="modifyStep(step.getIndexStep(),indexLevel)" class="btn-internal btn-internal-mod">Modifica</button>
+                <button data-ng-click="deleteStep(step.getIndexStep(),indexLevel)" class="red btn-internal btn-internal-del">Elimina</button>
+            </div>
+		</fieldset>
+		
+
+		<!-- VISUALIZZO UNA CONSOLE INSERIMENTO PASSO PER OGNI LIVELLO -->
+		<fieldset ng-show="level.stepDivVisible === 'true'" ng-hide="level.stepDivVisible === 'false'" class="createStepBox">
+
+            <alert ng-show="level.showStepAlertDanger" type="danger">{{level.messageStepError}}</alert>
+
+            <legend class="legendInfo">{{level.creatingOrModifingStep}}</legend>
+
+			<label>Descrizione Passo: </label> </br>
+			<textarea class="textAreaStepText" rows="2" cols="20" ng-model="level.stepDescription"></textarea> </br>
+
+            <div class="label-input-div">
+			    <label>Richiede verifica dell'admin: </label>
+                <div class="input-div">
+                    <input type="radio" ng-model="level.isAdmin" value="true"> Si </input>
+                    <input type="radio" ng-model="level.isAdmin" value="false"> No </input>
+                </div>
+            </div>
+
+            <div class="label-input-div">
+                <label>Richiede una foto: </label>
+                <div class="input-div">
+                    <input type="radio" ng-model="level.isPhoto" value="true"> Si </input>
+                    <input type="radio" ng-model="level.isPhoto" value="false"> No </input>
+                </div>
+            </div>
+
+            <div class="label-input-div">
+                <label>Richiede del testo: </label>
+                <div class="input-div">
+                    <input type="radio" ng-model="level.isText" value="true"> Si </input>
+                    <input type="radio" ng-model="level.isText" value="false"> No </input>
+                </div>
+                <div class="input-div">
+                    <label ng-show="level.isText">Testo campione:&nbsp;</label>
+                    <input type="text" ng-model="level.textCheck" ng-show="level.isText"/> <br ng-show="level.isText">
+                </div>
+            </div>
+
+            <div class="label-input-div">
+                <label>Richiede la geolocalizzazione: </label>
+                <div class="input-div">
+                    <input type="radio" ng-model="level.isGeolocation" value="true" data-ng-click="createMap(indexLevel)"> Si </input>
+                    <input type="radio" ng-model="level.isGeolocation" value="false"> No </input>
+                </div>
+            </div>
+
+		 	<div ng-show="level.isGeolocation" ng-repeat="map in level.mapList">
+		 		<h5>
+		 		Trascina il pin in un luogo della mappa e poi 
+		 		clicca su di esso per ottenere le sue coordinate.
+		 		</h5>
+		 		<map class="map" style="margin-bottom: 10px;" map-type-id="MapTypeId.MAP" center="[41.890698683129486, 12.485738382812542]" zoom="5" ng-show="level.isGeolocation">
+					<marker position="[{{level.latMarker}}, {{level.longMarker}}]"  animation="Animation.BOUNCE" title="drag me" draggable="true" on-click="myPosition(event,indexLevel)"></marker>
+				</map>
+		 	</div>
+
+            <br ng-show="level.isGeolocation" />
+
+            <div class="label-input-div">
+                <label ng-show="level.isGeolocation">Latitudine: </label>
+                <div class="input-div">
+                    <input type="text" ng-model="level.latitudeCheck" ng-show="level.isGeolocation" readonly/>
+                </div>
+            </div>
+
+            <br ng-show="level.isGeolocation" />
+
+            <div class="label-input-div">
+                <label ng-show="level.isGeolocation">Longitudine: &nbsp;</label>
+                <div class="input-div">
+                    <input type="text" ng-model="level.longitudeCheck" ng-show="level.isGeolocation" readonly/>
+                </div>
+            </div>
+
+            <br ng-show="level.isGeolocation">
+
+            <span class="input-group-btn">
+                <div class ="allButtons calendario">
+                    <a data-ng-show="level.buttonIgnoreModifyStepVisible === 'true'" data-ng-click="ignoreModifyStep(indexLevel)" class="orange inField Level btn btn-default">Ignora modifiche</a>
+                    <a data-ng-show="level.buttonApplyModifyStepVisible === 'true'" data-ng-click="applyModifyStep(indexLevel)" class="green inField Level btn btn-default">Applica modifiche</a>
+                </div>
+            </span>
+
+            <span class="input-group-btn">
+                <div class ="allButtons">
+                    <a ng-show="level.buttonAddStepVisible === 'true'" data-ng-click="addStep(indexLevel)" class="inField Level btn btn-default">Salva passo</a>
+                </div>
+            </span>
+		</fieldset>
+		</div>
+    </div>
+</div>

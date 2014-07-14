@@ -1,0 +1,1255 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for client/ApplicationConfiguration.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+
+        .cstat-skip { background: #ddd; color: #111; }
+        .fstat-skip { background: #ddd; color: #111 !important; }
+        .cbranch-skip { background: #ddd !important; color: #111; }
+
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+        }
+
+        .skip-if-branch {
+            display: none;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: #ccc;
+            color: white;
+        }
+
+        .missing-if-branch .typ, .skip-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+        .ignore-none { color: #999; font-weight: normal; }
+
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">client/ApplicationConfiguration.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">11.59% <small>(8 / 69)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">0% <small>(0 / 20)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">0% <small>(0 / 24)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">11.59% <small>(8 / 69)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">client/</a> &#187; ApplicationConfiguration.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ * Copyright [2014] [DeSQ]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ *
+ * Name : ApplicationConfiguration.js
+ * Module : SeqApp
+ * Location : /applicationContent/com/sequenziatore/client
+ *
+ * History :
+ *
+ * Version         Date           Programmer
+ * ======================================================
+ * 0.0.1           2014-03-24     Romagnosi Nicolò
+ * ------------------------------------------------------
+ * Codifica Modulo
+ * ------------------------------------------------------
+ * 0.0.2           2014-04-08     Sartoretto Massimiliano
+ * ------------------------------------------------------
+ * Aggiornamento Filtri e aggiunte growl
+ * ======================================================
+ */
+&nbsp;
+var application = angular.module('SeqApp',
+								['LoginRouting','RegistrationRouting','LogoutRouting',
+								 'ProfileRouting','WelcomeRouting','CreateProcessRouting',
+								 'RegistrationNewAdminRouting','AdminProcessRouting','StepValidatorRouting',
+                                 'ActiveProcessRouting','AvailableProcessRouting',
+								 'ListUserProcessRouting','ModifyProcessRouting','ModifyAccountRouting',
+								 'CurrentStepRouting','AdminReportRouting','RecoveryPasswordRouting',
+								 'AdminProcessNotActiveRouting','ClosedProcessRouting',
+								 'StandardUserRequestManager','LocalStorageModule',
+								 'ngAnimate','angular-growl','ui.bootstrap','ezfb','chieffancypants.loadingBar']);
+&nbsp;
+&nbsp;
+application.config(['$routeProvider', <span class="fstat-no" title="function not covered" >function($routeProvider){</span>
+<span class="cstat-no" title="statement not covered" >	$routeProvider.otherwise({</span>
+		redirectTo: '/login'
+		});
+}]);
+&nbsp;
+application.config(['growlProvider', <span class="fstat-no" title="function not covered" >function(growlProvider){</span>
+<span class="cstat-no" title="statement not covered" >    growlProvider.onlyUniqueMessages(false);</span>
+<span class="cstat-no" title="statement not covered" >    growlProvider.globalTimeToLive(3000);</span>
+}]);
+&nbsp;
+application.config(<span class="fstat-no" title="function not covered" >function(cfpLoadingBarProvider) {</span>
+<span class="cstat-no" title="statement not covered" >    cfpLoadingBarProvider.includeBar = false;</span>
+});
+&nbsp;
+application.controller('CtrlGlobal',['$scope','LocationManager','growl','StandardUserRequestManager','localStorageService','ezfb',
+<span class="fstat-no" title="function not covered" >                                     function($scope,LocationManager,growl,StandardUserRequestManager,localStorageService,ezfb){</span>
+	
+<span class="cstat-no" title="statement not covered" >	$scope.socket = undefined;</span>
+<span class="cstat-no" title="statement not covered" >	$scope.stompClient = undefined;</span>
+<span class="cstat-no" title="statement not covered" >	$scope.isConnected = undefined;</span>
+&nbsp;
+	//Metodo che gestisce la visibilità dei menu della applicazione
+	//a seconda che l'utente sia loggato o meno e a seconda se
+	//l'utente loggato è un admin o un utente normale
+<span class="cstat-no" title="statement not covered" >	$scope.handlerMenu = <span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(LocationManager.isLogged() === 'true'){</span>
+<span class="cstat-no" title="statement not covered" >			$scope.logged = 'true';</span>
+<span class="cstat-no" title="statement not covered" >			if(LocationManager.isAdmin() === 'true'){</span>
+<span class="cstat-no" title="statement not covered" >				$scope.admin = 'true';</span>
+			}
+			else{
+<span class="cstat-no" title="statement not covered" >				$scope.admin = undefined;</span>
+			}
+		}
+		else{
+<span class="cstat-no" title="statement not covered" >			$scope.logged = undefined;</span>
+<span class="cstat-no" title="statement not covered" >			$scope.admin = undefined;</span>
+			
+		}
+	};
+	
+<span class="cstat-no" title="statement not covered" >	$scope.openWebSocket = <span class="fstat-no" title="function not covered" >function(address){</span></span>
+<span class="cstat-no" title="statement not covered" >		if($scope.socket == undefined){</span>
+<span class="cstat-no" title="statement not covered" >			$scope.socket = new SockJS(address);</span>
+<span class="cstat-no" title="statement not covered" >			$scope.stompClient = Stomp.over($scope.socket);</span>
+			
+			// callback function to be called when stomp client is connected to server
+<span class="cstat-no" title="statement not covered" >			var connectCallback = <span class="fstat-no" title="function not covered" >function(frame) {</span></span>
+<span class="cstat-no" title="statement not covered" >			    $scope.stompClient.subscribe('/notificationlistener', <span class="fstat-no" title="function not covered" >function(msg){</span></span>
+<span class="cstat-no" title="statement not covered" >				    if($scope.$eval(msg['body'])['actionType'] == 'stepValidation' &amp;&amp; $scope.$eval(msg['body'])['username'] == LocationManager.getUserCookie()){</span>
+<span class="cstat-no" title="statement not covered" >                        $scope.$apply(<span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >                            if($scope.$eval(msg['body'])['success'] == 'true'){</span>
+<span class="cstat-no" title="statement not covered" >                                $scope.addSuccessMessage($scope.$eval(msg['body'])['message']);</span>
+<span class="cstat-no" title="statement not covered" >                                StandardUserRequestManager.doGetNextStep($scope,Number(localStorageService.get('IdProcess')));</span>
+                            }
+                            else{
+<span class="cstat-no" title="statement not covered" >                                $scope.addErrorMessage($scope.$eval(msg['body'])['message']);</span>
+<span class="cstat-no" title="statement not covered" >                                StandardUserRequestManager.doGetNextStep($scope,Number(localStorageService.get('IdProcess')));</span>
+                            }
+                        });
+                    }
+				});
+            };
+            // callback function to be called when stomp client could not connect to server
+<span class="cstat-no" title="statement not covered" >            var errorCallback = <span class="fstat-no" title="function not covered" >function(error) {</span></span>
+                // display an error message
+<span class="cstat-no" title="statement not covered" >                $scope.closeWebSocket();</span>
+            };
+<span class="cstat-no" title="statement not covered" >			$scope.stompClient.connect('guest','guest', connectCallback, errorCallback);</span>
+		}
+	};
+	
+<span class="cstat-no" title="statement not covered" >	$scope.closeWebSocket = <span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >		if(!($scope.socket === undefined) &amp;&amp; !($scope.stompClient === undefined)){</span>
+<span class="cstat-no" title="statement not covered" >			$scope.stompClient.disconnect(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >				$scope.socket = undefined;</span>
+<span class="cstat-no" title="statement not covered" >				$scope.stompClient = undefined;</span>
+			});
+		}
+	};
+	
+<span class="cstat-no" title="statement not covered" >	$scope.sendNotification = <span class="fstat-no" title="function not covered" >function(address,dataToSend){</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.stompClient.send(address, {}, dataToSend);</span>
+	};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	$scope.getTimes=<span class="fstat-no" title="function not covered" >function(n){</span></span>
+<span class="cstat-no" title="statement not covered" >	     return new Array(n);</span>
+	};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.addInfoMessage = <span class="fstat-no" title="function not covered" >function(msg) {</span></span>
+<span class="cstat-no" title="statement not covered" >        growl.addInfoMessage(msg);</span>
+    };
+    
+<span class="cstat-no" title="statement not covered" >    $scope.addSuccessMessage = <span class="fstat-no" title="function not covered" >function(msg){</span></span>
+<span class="cstat-no" title="statement not covered" >    	growl.addSuccessMessage(msg);</span>
+    };
+	
+<span class="cstat-no" title="statement not covered" >    $scope.addErrorMessage = <span class="fstat-no" title="function not covered" >function(msg){</span></span>
+<span class="cstat-no" title="statement not covered" >    	growl.addErrorMessage(msg);</span>
+    };
+&nbsp;
+    // Facebook Login
+<span class="cstat-no" title="statement not covered" >     $scope.updateLoginStatus = <span class="fstat-no" title="function not covered" >function(more) {</span></span>
+<span class="cstat-no" title="statement not covered" >         ezfb.getLoginStatus(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+<span class="cstat-no" title="statement not covered" >             $scope.loginStatus = res;</span>
+<span class="cstat-no" title="statement not covered" >             (more || angular.noop)();</span>
+         });
+     };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >     $scope.updateApiMe = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >         ezfb.api('/me', <span class="fstat-no" title="function not covered" >function (res) {</span></span>
+<span class="cstat-no" title="statement not covered" >             $scope.apiMe = res;</span>
+<span class="cstat-no" title="statement not covered" >             $scope.$broadcast('REQUEST_FB_API_IS_END');</span>
+         });
+     };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >     $scope.scrollOnTop = <span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >         $('body,html').animate({</span>
+             scrollTop: 0
+         }, 800);
+     };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >     $scope.handlerMenu();</span>
+}]);
+&nbsp;
+// Dichiarazione delle costante da iniettare nei controller
+// ^[a-zA-Z] primo carattere deve essere una lettera maiuscola o minuscola
+// [a-zA-Z0-9]+ una serie di 1 o più dei caratteri presenti nelle parentesi
+// [a-zA-Z0-9]$ l'ultimo carattere deve essere uno dei caratteri delle parentesi
+&nbsp;
+application.constant('RegularExpressions',{
+	regularExpressionUsername: new RegExp('^[a-zA-Z][a-zA-Z0-9]+([a-zA-Z0-9]+|[a-zA-Z0-9]*)[a-zA-Z0-9]$'),
+	regularExpressionEmail: new RegExp('^[a-zA-Z0-9]([.]?[_]?[-]?[.]?)+[a-zA-Z0-9]+(([.]?[_]?[-]?[.]?)+[a-zA-Z0-9]+|[a-zA-Z0-9]*)[@][a-zA-Z0-9]+[.]([a-z]{2,3})$'),
+	regularExpressionPassword: new RegExp(''),
+	regularExpressionName: new RegExp(''),
+	regularExpressionSurname: new RegExp(''),
+	regularExpressionWhiteSpaces: new RegExp('\s')
+&nbsp;
+});
+&nbsp;
+application.constant('DistrictList',{
+	DistrictList: districtList = [
+	                  			{district:'Agrigento', abbrev:'AG'},
+	                			{district:'Alessandria', abbrev:'AL'},
+	                			{district:'Ancona', abbrev: 'AN'},
+	                			{district:'Aosta', abbrev: 'AO'},
+	                			{district:'Arezzo', abbrev:'AR'},
+	                			{district:'Ascoli Piceno', abbrev: 'AP'},
+	                			{district:'Asti', abbrev: 'AT'},
+	                			{district:'Avellino', abbrev: 'AV'},
+	                			{district:'Bari', abbrev: 'BA'},
+	                			{district:'Barletta-Andria-Trani', abbrev: 'BT'},
+	                			{district:'Belluno', abbrev: 'BL'},
+	                			{district:'Benevento', abbrev: 'BN'},
+	                			{district:'Bergamo', abbrev: 'BG'},
+	                			{district:'Biella', abbrev: 'BI'},
+	                			{district:'Bologna', abbrev: 'BO'},
+	                			{district:'Bolzano', abbrev: 'BZ'},
+	                			{district:'Brescia', abbrev: 'BS'},
+	                			{district:'Brindisi', abbrev: 'BR'},
+	                			{district:'Cagliari', abbrev: 'CA'},
+	                			{district:'Caltanissetta', abbrev: 'CL'},
+	                			{district:'Campobasso', abbrev: 'CB'},
+	                			{district:'Carbonia-Iglesias', abbrev: 'CI'},
+	                			{district:'Caserta', abbrev: 'CE'},
+	                			{district:'Catania', abbrev: 'CT'},
+	                			{district:'Catanzaro', abbrev: 'CZ'},
+	                			{district:'Chieti', abbrev: 'CH'},
+	                			{district:'Como', abbrev: 'CO'},
+	                			{district:'Cosenza', abbrev: 'CS'},
+	                			{district:'Cremona', abbrev: 'CR'},
+	                			{district:'Crotone', abbrev: 'KR'},
+	                			{district:'Cuneo', abbrev: 'CN'},
+	                			{district:'Enna', abbrev: 'EN'},
+	                			{district:'Fermo', abbrev: 'FM'},
+	                			{district:'Ferrara', abbrev: 'FE'},
+	                			{district:'Firenze', abbrev: 'FI'},
+	                			{district:'Foggia', abbrev: 'FG'},
+	                			{district:'Forlì-Cesena', abbrev: 'FC'},
+	                			{district:'Frosinone', abbrev: 'FR'},
+	                			{district:'Genova', abbrev: 'GE'},
+	                			{district:'Gorizia', abbrev: 'GO'},
+	                			{district:'Grosseto', abbrev: 'GR'},
+	                			{district:'Imperia', abbrev: 'IM'},
+	                			{district:'Isernia', abbrev: 'IS'},
+	                			{district:'La Spezia', abbrev: 'SP'},
+	                			{district:"L'Aquila", abbrev: 'AQ'},
+	                			{district:'Latina', abbrev: 'LT'},
+	                			{district:'Lecce', abbrev: 'LE'},
+	                			{district:'Lecco', abbrev: 'LC'},
+	                			{district:'Livorno', abbrev: 'LI'},
+	                			{district:'Lodi', abbrev: 'LO'},
+	                			{district:'Lucca', abbrev: 'LU'},
+	                			{district:'Macerata', abbrev: 'MC'},
+	                			{district:'Mantova', abbrev: 'MN'},
+	                			{district:'Massa-Carrara', abbrev: 'MS'},
+	                			{district:'Matera', abbrev: 'MT'},
+	                			{district:'Messina', abbrev: 'ME'},
+	                			{district:'Milano', abbrev: 'MI'},
+	                			{district:'Modena', abbrev: 'MO'},
+	                			{district:'Monza e della Brianza', abbrev: 'MB'},
+	                			{district:'Napoli', abbrev: 'NA'},
+	                			{district:'Novara', abbrev: 'NO'},
+	                			{district:'Nuoro', abbrev: 'NU'},
+	                			{district:'Olbia-Tempio', abbrev: 'OT'},
+	                			{district:'Oristano', abbrev: 'OR'},
+	                			{district:'Padova', abbrev: 'PD'},
+	                			{district:'Palermo', abbrev: 'PA'},
+	                			{district:'Parma', abbrev: 'PR'},
+	                			{district:'Pavia', abbrev: 'PV'},
+	                			{district:'Perugia', abbrev: 'PG'},
+	                			{district:'Pesaro e Urbino', abbrev: 'PU'},
+	                			{district:'Pescara', abbrev: 'PE'},
+	                			{district:'Piacenza', abbrev: 'PC'},
+	                			{district:'Pisa', abbrev: 'PI'},
+	                			{district:'Pistoia', abbrev: 'PT'},
+	                			{district:'Pordenone', abbrev: 'PN'},
+	                			{district:'Potenza', abbrev: 'PZ'},
+	                			{district:'Prato', abbrev: 'PO'},
+	                			{district:'Ragusa', abbrev: 'RG'},
+	                			{district:'Ravenna', abbrev: 'RA'},
+	                			{district:'Reggio Calabria', abbrev: 'RC'},
+	                			{district:'Reggio Emilia', abbrev: 'RE'},
+	                			{district:'Rieti', abbrev: 'RI'},
+	                			{district:'Rimini', abbrev: 'RN'},
+	                			{district:'Roma', abbrev: 'RM'},
+	                			{district:'Rovigo', abbrev: 'RO'},
+	                			{district:'Salerno', abbrev: 'SA'},
+	                			{district:'Medio Campidano', abbrev: 'VS'},
+	                			{district:'Sassari', abbrev: 'SS'},
+	                			{district:'Savona', abbrev: 'SV'},
+	                			{district:'Siena', abbrev: 'SI'},
+	                			{district:'Siracusa', abbrev: 'SR'},
+	                			{district:'Sondrio', abbrev: 'SO'},
+	                			{district:'Taranto', abbrev: 'TA'},
+	                			{district:'Teramo', abbrev: 'TE'},
+	                			{district:'Terni', abbrev: 'TR'},
+	                			{district:'Torino', abbrev: 'TO'},
+	                			{district:'Ogliastra', abbrev: 'OG'},
+	                			{district:'Trapani', abbrev: 'TP'},
+	                			{district:'Trento', abbrev: 'TN'},
+	                			{district:'Treviso', abbrev: 'TV'},
+	                			{district:'Trieste', abbrev:'TS'},
+	                			{district:'Udine', abbrev: 'UD'},
+	                			{district:'Varese', abbrev: 'VA'},
+	                			{district:'Venezia', abbrev:'VE'},
+	                			{district:'Verbano-Cusio-Ossola', abbrev:'VB'},
+	                			{district:'Vercelli', abbrev: 'VC'},
+	                			{district:'Verona' , abbrev:'VR'},
+	                			{district:'Vibo Valentia', abbrev: 'VV'},
+	                			{district:'Vicenza', abbrev: 'VI'},
+	                			{district:'Viterbo', abbrev:'VT'}
+	                			]
+});
+&nbsp;
+//Filtro per la paginazione dei contenuti
+application.filter('startFrom', <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >function(input, start) {</span></span>
+<span class="cstat-no" title="statement not covered" >    	input = input || '';</span>
+<span class="cstat-no" title="statement not covered" >        start = +start;</span>
+<span class="cstat-no" title="statement not covered" >        return input.slice(start);</span>
+    };
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jul 03 2014 08:58:25 GMT+0200 (CEST)</div>
+</div>
+
+<script src="../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

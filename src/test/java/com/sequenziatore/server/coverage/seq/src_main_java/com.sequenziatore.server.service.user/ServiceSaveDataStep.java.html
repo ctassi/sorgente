@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceSaveDataStep.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.user</a> &gt; <span class="el_source">ServiceSaveDataStep.java</span></div><h1>ServiceSaveDataStep.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceSaveDataStep
+ * 
+ *	@file		ServiceSaveDataStep.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.user;
+
+import java.util.List;
+
+import com.sequenziatore.server.databaseutil.dao.DAOFactory;
+import com.sequenziatore.server.databaseutil.dao.IDAOFactory;
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.DataCollection;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.Subscription;
+import com.sequenziatore.server.entity.DataCollection.EnumState;
+import com.sequenziatore.server.entity.Step.EnumParallelism;
+
+import org.json.JSONObject;
+
+import com.sequenziatore.server.service.interfaceservice.IService;
+
+/**
+ *	La classe ServiceSaveDataStep offre il servizio di salvataggio dei dati raccolti dall'utente.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L49">public class ServiceSaveDataStep implements IService {</span>
+ 
+	/** Rappresenta l'interfaccia che garantisce l'accesso alle classi DAO per accedere al database. */
+	private IDAOFactory iDAOFactory;
+	
+	/**
+	 * Permette ad un utente di salvare i dati raccolti grazie alle informazioni acquisite dal front-end.
+	 * 
+	 * @param entity contiene le informazioni necessarie per il completamento del passo
+	 * @return l'esito dell'operazione di salvataggio dei dati
+	 */
+	@Override
+	public JSONObject serviceOperation(List&lt;IEntity&gt; entity) {
+<span class="fc" id="L62">		iDAOFactory = new DAOFactory();</span>
+<span class="fc" id="L63">		Step stepQuery = null;</span>
+<span class="fc" id="L64">		DataCollection data=(DataCollection)entity.get(0);</span>
+<span class="fc" id="L65">		JSONObject objectJson=new JSONObject();</span>
+<span class="fc" id="L66">		DataCollection dataQuery = null;</span>
+		
+		try {
+<span class="fc" id="L69">		HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L70">		dataQuery = iDAOFactory.createDAOManagementProcessUser().findDataCollection(data.getIdUser(),data.getIdStep());</span>
+<span class="fc" id="L71">		HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L72">		} catch (Exception e) {</span>
+<span class="nc" id="L73">			return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+		}
+		
+<span class="pc bpc" id="L76" title="1 of 4 branches missed.">		if(dataQuery.getState().equals(EnumState.TOVERIFY) || dataQuery.getState().equals(EnumState.VERIFIED)){</span>
+<span class="fc" id="L77">	    	objectJson.put(&quot;Confirmation&quot;, &quot;notSendData&quot;);</span>
+<span class="fc" id="L78">		} else {</span>
+			try {
+<span class="fc" id="L80">				HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L81">				stepQuery = iDAOFactory.createDAOManagementProcessUser().findStep(data.getIdStep());</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">				if(stepQuery.getIdProcess().getAvailable().booleanValue()==false){</span>
+<span class="nc" id="L83">					HibernateUtil.commitTransaction();</span>
+<span class="nc" id="L84">					return objectJson.put(&quot;Confirmation&quot;, &quot;processNotActive&quot;);</span>
+				}
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">				if(stepQuery.getAdminVerify()==true){</span>
+<span class="nc" id="L87">					data.setState(EnumState.TOVERIFY);</span>
+<span class="nc" id="L88">					objectJson.put(&quot;Confirmation&quot;, &quot;successSendData&quot;);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">				} else if(stepQuery.getCheckText().equalsIgnoreCase(&quot;null&quot;) == true){</span>
+<span class="fc" id="L90">					data.setState(EnumState.VERIFIED);</span>
+<span class="fc" id="L91">					this.lastStep(dataQuery);</span>
+<span class="fc" id="L92">					objectJson.put(&quot;Confirmation&quot;, &quot;successSendData&quot;);</span>
+<span class="pc bnc" id="L93" title="All 2 branches missed.">				} else if(stepQuery.getCheckText().equalsIgnoreCase(data.getText())==true){</span>
+<span class="nc" id="L94">						data.setState(EnumState.VERIFIED);</span>
+<span class="nc" id="L95">						this.lastStep(dataQuery);</span>
+<span class="nc" id="L96">						objectJson.put(&quot;Confirmation&quot;, &quot;successAutoVerify&quot;);</span>
+<span class="nc" id="L97">				} else{</span>
+<span class="nc" id="L98">						data.setState(EnumState.FAILED);</span>
+<span class="nc" id="L99">						data.setWrongPhoto(true);</span>
+<span class="nc" id="L100">						data.setWrongGeolocation(true);</span>
+<span class="nc" id="L101">						objectJson.put(&quot;Confirmation&quot;, &quot;notSuccessAutoVerify&quot;);</span>
+				}
+<span class="fc" id="L103">				data.setIdCollection(dataQuery.getIdCollection());</span>
+<span class="fc" id="L104">				iDAOFactory.createDAOManagementProcessUser().insertDataCollection(data);</span>
+<span class="fc" id="L105">				HibernateUtil.commitTransaction();</span>
+<span class="pc" id="L106">			} catch (Exception e) {</span>
+<span class="nc" id="L107">				return objectJson.put(&quot;Confirmation&quot;, &quot;connectionError&quot;);</span>
+			}
+		}
+<span class="fc" id="L110">	    return objectJson;</span>
+	}
+	
+	/**
+	 * Permette di verificare se è l'ultimo passo di un processo.
+	 * 
+	 * @param dataCollection contiene i dati di un passo inviati dall'utente
+	 * @throws Exception 
+	 */
+	private void lastStep(DataCollection dataCollection) throws Exception {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">		if(dataCollection.getIdStep().getParallelism().equals(EnumParallelism.OR)){</span>
+<span class="nc" id="L121">			this.lastStepOr(dataCollection);</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">		}else if(dataCollection.getIdStep().getParallelism().equals(EnumParallelism.AND)){</span>
+<span class="fc" id="L123">			this.lastStepAnd(dataCollection);</span>
+<span class="pc" id="L124">		}else lastStepNot(dataCollection);</span>
+<span class="fc" id="L125">	}</span>
+	
+	/**
+	 * Permette di verificare se è l'ultimo passo di un processo in un livello in OR.
+	 * 
+	 * @param dataCollection contiene i dati di un passo inviati dall'utente
+	 * @throws Exception 
+	 */
+	private void lastStepOr(DataCollection datacollection) throws Exception {
+<span class="nc" id="L134">		List&lt;DataCollection&gt; datacollections=null;</span>
+<span class="nc" id="L135">		Subscription subsrcription=null;</span>
+<span class="nc" id="L136">		Integer lvlMax=new Integer(datacollection.getIdStep().getIdProcess().getTotalLevel());</span>
+<span class="nc" id="L137">		datacollections = iDAOFactory.createDAOManagementProcessUser().findDataCollectionByLevel(datacollection);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		for(int i=0;i&lt;datacollections.size();i++){</span>
+<span class="nc" id="L139">			datacollections.get(i).setState(EnumState.SKIPPED);</span>
+<span class="nc" id="L140">			iDAOFactory.createDAOManagementProcessUser().insertDataCollection(datacollections.get(i));</span>
+		}
+<span class="nc bnc" id="L142" title="All 2 branches missed.">		if(datacollection.getIdStep().getLevel().compareTo(lvlMax-1) == 0){</span>
+<span class="nc" id="L143">			subsrcription = iDAOFactory.createDAOManagementProcessUser().findSubscription(datacollection.getIdUser(), datacollection.getIdStep().getIdProcess());</span>
+<span class="nc" id="L144">			subsrcription.setComplete(true);</span>
+<span class="nc" id="L145">			iDAOFactory.createDAOManagementProcessUser().insertSubscription(subsrcription);</span>
+		}
+<span class="nc" id="L147">	}</span>
+	
+	/**
+	 * Permette di verificare se è l'ultimo passo di un processo in un livello in AND.
+	 * 
+	 * @param dataCollection contiene i dati di un passo inviati dall'utente
+	 * @throws Exception 
+	 */
+	private void lastStepAnd(DataCollection dataCollection) throws Exception {
+<span class="fc" id="L156">		Subscription subsrcription=null;</span>
+<span class="fc" id="L157">		List&lt;DataCollection&gt; datacollections=null;</span>
+<span class="fc" id="L158">		boolean verified=true;</span>
+<span class="fc" id="L159">		Integer lvlMax=new Integer(dataCollection.getIdStep().getIdProcess().getTotalLevel());</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">		if(dataCollection.getIdStep().getLevel().compareTo(lvlMax-1) == 0){</span>
+<span class="nc" id="L161">			datacollections = iDAOFactory.createDAOManagementProcessUser().findDataCollectionByLevel(dataCollection);</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">			for(int i=0; i&lt;datacollections.size() &amp;&amp; verified; i++){</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">				if(!(datacollections.get(i).getState().equals(EnumState.VERIFIED)))</span>
+<span class="nc" id="L164">					verified=false;</span>
+			}
+<span class="nc bnc" id="L166" title="All 2 branches missed.">			if(verified == true){</span>
+<span class="nc" id="L167">				subsrcription = iDAOFactory.createDAOManagementProcessUser().findSubscription(dataCollection.getIdUser(), dataCollection.getIdStep().getIdProcess());</span>
+<span class="nc" id="L168">				subsrcription.setComplete(true);</span>
+<span class="nc" id="L169">				iDAOFactory.createDAOManagementProcessUser().insertSubscription(subsrcription);</span>
+			}
+		}
+<span class="fc" id="L172">	}</span>
+	
+	/**
+	 * Permette di verificare se è l'ultimo passo di un processo in un livello con un solo passo.
+	 * 
+	 * @param dataCollection contiene i dati di un passo inviati dall'utente
+	 * @throws Exception 
+	 */
+	private void lastStepNot(DataCollection dataCollection) throws Exception{
+<span class="nc" id="L181">		Integer lvlMax=new Integer(dataCollection.getIdStep().getIdProcess().getTotalLevel());</span>
+<span class="nc" id="L182">		Subscription subsrcription=null;</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		if(dataCollection.getIdStep().getLevel().compareTo(lvlMax-1) == 0){</span>
+<span class="nc" id="L184">			subsrcription = iDAOFactory.createDAOManagementProcessUser().findSubscription(dataCollection.getIdUser(), dataCollection.getIdStep().getIdProcess());</span>
+<span class="nc" id="L185">			subsrcription.setComplete(true);</span>
+<span class="nc" id="L186">			iDAOFactory.createDAOManagementProcessUser().insertSubscription(subsrcription);</span>
+		}
+<span class="nc" id="L188">	}</span>
+}
+ 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

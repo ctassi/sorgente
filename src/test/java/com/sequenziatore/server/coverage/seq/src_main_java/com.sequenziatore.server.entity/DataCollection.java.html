@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DataCollection.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">DataCollection.java</span></div><h1>DataCollection.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">/*</span>
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe DataCollection
+ * 
+ *	@file		DataCollection.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.json.JSONObject;
+
+/**
+ *	La classe DataCollection rappresenta logicamente una raccolta dati effettuata da un utente per completare un passo.
+ *
+ *	@author 	DeSQ
+ */
+@Entity
+@Table(name = &quot;DataCollection&quot;)
+public class DataCollection implements Serializable, IEntity{
+ 
+	private static final long serialVersionUID = 1L;
+
+	/** Id della raccolta dati. */
+	@Id
+ 	@GeneratedValue
+ 	@Column(name = &quot;IdCollection&quot;, nullable=false)
+ 	private Integer idCollection;
+ 	
+	/** Path della foto caricata dall'utente. */
+ 	@Column(name = &quot;Photo&quot;, length=300)
+ 	private String photo;
+ 	
+ 	/** Attributo che indica lo stato se la foto inserita dall'utente e' coretta. */
+	@Column(name = &quot;WrongPhoto&quot;)
+	private Boolean wrongPhoto;
+
+	/** Testo caricato dall'utente. */
+ 	@Column(name = &quot;Text&quot;, length=300)
+ 	private String text;
+ 	
+ 	/** Attributo che indica lo stato se il testo inserito dall'utente ha inserito e' corretto. */
+	@Column(name = &quot;WrongText&quot;)
+	private Boolean wrongText;
+
+	/** Latitudine fornita dall'utente. */
+ 	@Column(name = &quot;Latitude&quot;, length=100)
+ 	private String latitude;
+
+	/** Longitudine fornita dall'utente. */
+ 	@Column(name = &quot;Longitude&quot;, length=100)
+ 	private String longitude;
+ 	
+ 	/** Attributo che indica lo stato se la geolocazione inserita dall'utente e' coretta. */
+	@Column(name = &quot;WrongGeolocation&quot;)
+	private Boolean wrongGeolocation;
+
+	/** Stato della raccolta dati. */
+ 	@Column(name = &quot;State&quot;, nullable=false)
+ 	@Enumerated(EnumType.STRING)
+ 	private EnumState state;
+
+	/** Id dell'utente che ha caricato i dati. */
+ 	@ManyToOne  
+  	@JoinColumn(name = &quot;IdUser&quot;)
+ 	private User idUser;
+
+	/** Id del passo soddisfatto dalla raccolta dati. */
+ 	@ManyToOne  
+  	@JoinColumn(name = &quot;IdStep&quot;)
+ 	private Step idStep;
+
+	/**
+	 * Stati possibili della raccolta dati: 
+	 * VERIFIED se la raccolta è stata verificata;
+	 * TOVERIFY se la raccolta è da verificare;
+	 * NOTCOLLECTED se la raccolta deve ancora essere eseguita;
+	 * SKIPPED se il passo è stato saltato;
+	 * FAILED se la raccolta non ha superato la convalida.
+	 */
+<span class="fc" id="L111"> 	public enum EnumState {</span>
+<span class="fc" id="L112">    		VERIFIED, TOVERIFY,NOTCOLLECTED, FAILED, SKIPPED; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Costruttore di default.
+ 	 */
+<span class="fc" id="L118"> 	public DataCollection(){}</span>
+
+ 	/**
+ 	 * Costruttore che imposta l'entità con i dati contenuti nel JSONObject.
+ 	 * 
+ 	 * @param json il valore che permette di impostare gli attributi dell'entità
+ 	 */
+<span class="fc" id="L125">	public DataCollection(JSONObject json) {</span>
+<span class="fc" id="L126">		idUser = new User();</span>
+<span class="fc" id="L127">		idStep = new Step();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">		if(json.has(&quot;IdCollection&quot;))</span>
+<span class="fc" id="L129">			idCollection = (Integer)json.get(&quot;IdCollection&quot;);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">		if(json.has(&quot;Photo&quot;))</span>
+<span class="fc" id="L131">			photo=(String)json.get(&quot;Photo&quot;);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">		if(json.has(&quot;Text&quot;))</span>
+<span class="fc" id="L133">			text=(String)json.get(&quot;Text&quot;);</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		if(json.has(&quot;Latitude&quot;))</span>
+<span class="fc" id="L135">			latitude=(String)json.get(&quot;Latitude&quot;);</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		if(json.has(&quot;Longitude&quot;))</span>
+<span class="fc" id="L137">			longitude=(String)json.get(&quot;Longitude&quot;);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">		if(json.has(&quot;State&quot;)){</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">			if(((String)json.get(&quot;State&quot;)).equals(&quot;VERIFIED&quot;))</span>
+<span class="fc" id="L140">				state = EnumState.VERIFIED;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">			if(((String)json.get(&quot;State&quot;)).equals(&quot;TOVERIFY&quot;))</span>
+<span class="fc" id="L142">				state = EnumState.TOVERIFY;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">			if(((String)json.get(&quot;State&quot;)).equals(&quot;NOTCOLLECTED&quot;))</span>
+<span class="fc" id="L144">				state = EnumState.NOTCOLLECTED;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">			if(((String)json.get(&quot;State&quot;)).equals(&quot;SKIPPED&quot;))</span>
+<span class="fc" id="L146">				state = EnumState.SKIPPED;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">			if(((String)json.get(&quot;State&quot;)).equals(&quot;FAILED&quot;))</span>
+<span class="fc" id="L148">				state = EnumState.FAILED;</span>
+		}
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">		if(json.has(&quot;WrongText&quot;)){</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">			if(json.get(&quot;WrongText&quot;).getClass().toString().contains(&quot;java.lang.String&quot;)){</span>
+<span class="fc" id="L152">				String s = (String)json.get(&quot;WrongText&quot;);</span>
+<span class="fc" id="L153">				wrongText = Boolean.parseBoolean(s);</span>
+<span class="fc" id="L154">			}else</span>
+<span class="fc" id="L155">				wrongText=(Boolean)json.get(&quot;WrongText&quot;);</span>
+		}
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">		if(json.has(&quot;WrongPhoto&quot;)){</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">			if(json.get(&quot;WrongPhoto&quot;).getClass().toString().contains(&quot;java.lang.String&quot;)){</span>
+<span class="fc" id="L159">				String s = (String)json.get(&quot;WrongPhoto&quot;);</span>
+<span class="fc" id="L160">				wrongPhoto = Boolean.parseBoolean(s);</span>
+<span class="fc" id="L161">			}else</span>
+<span class="fc" id="L162">				wrongPhoto=(Boolean)json.get(&quot;WrongPhoto&quot;);</span>
+		}
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">		if(json.has(&quot;WrongGeolocation&quot;)){</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">			if(json.get(&quot;WrongGeolocation&quot;).getClass().toString().contains(&quot;java.lang.String&quot;)){</span>
+<span class="fc" id="L166">				String s = (String)json.get(&quot;WrongGeolocation&quot;);</span>
+<span class="fc" id="L167">				wrongGeolocation = Boolean.parseBoolean(s);</span>
+<span class="fc" id="L168">			}else</span>
+<span class="fc" id="L169">				wrongGeolocation=(Boolean)json.get(&quot;WrongGeolocation&quot;);</span>
+		}
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">		if(json.has(&quot;IdUser&quot;)){</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">			if(json.get(&quot;IdUser&quot;).getClass().toString().contains(&quot;java.lang.String&quot;)){</span>
+<span class="fc" id="L173">				String s = (String)json.get(&quot;IdUser&quot;);</span>
+<span class="fc" id="L174">				Integer i = Integer.parseInt(s);</span>
+<span class="fc" id="L175">				idUser.setIdUser(i);</span>
+<span class="fc" id="L176">			}else</span>
+<span class="fc" id="L177">				idUser.setIdUser((Integer)json.get(&quot;IdUser&quot;));</span>
+		}
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">		if(json.has(&quot;IdStep&quot;)){</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">			if(json.get(&quot;IdStep&quot;).getClass().toString().contains(&quot;java.lang.String&quot;)){</span>
+<span class="fc" id="L181">				String s = (String)json.get(&quot;IdStep&quot;);</span>
+<span class="fc" id="L182">				Integer i = Integer.parseInt(s);</span>
+<span class="fc" id="L183">				idStep.setIdStep(i);</span>
+<span class="fc" id="L184">			}else</span>
+<span class="fc" id="L185">				idStep.setIdStep((Integer)json.get(&quot;IdStep&quot;));</span>
+			
+		}
+<span class="fc" id="L188">	}</span>
+ 	
+ 	/**
+ 	 * Ritorna l'id della raccolta dati.
+ 	 * 
+ 	 * @return l'id della raccolta dati
+ 	 */
+ 	public Integer getIdCollection(){
+<span class="fc" id="L196"> 		return idCollection; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'id della collezione al valore passato.
+ 	 * 
+ 	 * @param idCollection il valore da impostare come id della collezione
+ 	 */
+ 	public void setIdCollection(int idCollection){
+<span class="fc" id="L205"> 		this.idCollection = idCollection; </span>
+<span class="fc" id="L206"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna il path della foto caricata dall'utente. 
+ 	 * 
+ 	 * @return il path della foto caricata dall'utente
+ 	 */
+ 	public String getPhoto(){ 
+<span class="fc" id="L214"> 		return photo; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta il path della foto caricata dall'utente.
+ 	 * 
+ 	 * @param photo il valore da impostare come path della foto
+ 	 */
+ 	public void setPhoto(String photo){ 
+<span class="fc" id="L223"> 		this.photo = photo; </span>
+<span class="fc" id="L224"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna lo stato se la foto inserita dall'utente e' coretta. 
+ 	 * 
+ 	 * @return lo stato se la foto inserita dall'utente e' coretta
+ 	 */
+ 	public Boolean getWrongPhoto(){ 
+<span class="fc" id="L232"> 		return wrongPhoto; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'attributo che indica lo stato se la foto inserita dall'utente e' coretta.
+	 * 
+	 * @param wrongPhoto il valore da impostare come attributo che indica lo stato se la foto inserita dall'utente e' coretta.
+ 	 */
+ 	public void setWrongPhoto(Boolean wrongPhoto){ 
+<span class="fc" id="L241"> 		this.wrongPhoto = wrongPhoto; </span>
+<span class="fc" id="L242"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna il testo caricato dall'utente.
+ 	 * 
+ 	 * @return il testo caricato dall'utente
+ 	 */
+ 	public String getText(){ 
+<span class="fc" id="L250"> 		return text; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta il testo caricato dall'utente.
+ 	 * 
+ 	 * @param text il valore da impostare come testo
+ 	 */
+ 	public void setText(String text){ 
+<span class="fc" id="L259"> 		this.text = text; </span>
+<span class="fc" id="L260"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna lo stato se il testo inserito dall'utente e' coretto. 
+ 	 * 
+ 	 * @return lo stato se il testo inserito dall'utente e' coretto
+ 	 */
+ 	public Boolean getWrongText(){ 
+<span class="fc" id="L268"> 		return wrongText; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'attributo che indica lo stato se il testo inserito dall'utente ha inserito e' corretto.
+	 * 
+	 * @param wrongPhoto il valore da impostare come attributo che indica lo stato se il testo inserito dall'utente ha inserito e' corretto.
+ 	 */
+ 	public void setWrongText(Boolean wrongText){ 
+<span class="fc" id="L277"> 		this.wrongText = wrongText; </span>
+<span class="fc" id="L278"> 	}</span>
+
+ 	
+ 	/**
+ 	 * Ritorna la latitudine fornita dall'utente.
+ 	 * 
+ 	 * @return la latitudine fornita dall'utente
+ 	 */
+ 	public String getLatitude(){ 
+<span class="fc" id="L287"> 		return latitude; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta la latitudine fornita dall'utente.
+ 	 * 
+ 	 * @param latitude il valore da impostare come latitudine
+ 	 */
+ 	public void setLatitude(String latitude){ 
+<span class="fc" id="L296"> 		this.latitude = latitude; </span>
+<span class="fc" id="L297"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna la longitudine fornita dall'utente.
+ 	 * 
+ 	 * @return la longitudine fornita dall'utente
+ 	 */
+ 	public String getLongitude(){ 
+<span class="fc" id="L305"> 		return longitude; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta la longitudine fornita dall'utente.
+ 	 * 
+ 	 * @param longitude il valore da impostare come longitudine
+ 	 */
+ 	public void setLongitude(String longitude){ 
+<span class="fc" id="L314"> 		this.longitude = longitude;</span>
+<span class="fc" id="L315"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna lo stato se la geolocazione inserita dall'utente e' coretta. 
+ 	 * 
+ 	 * @return lo stato se la geolocazione inserita dall'utente e' coretta
+ 	 */
+ 	public Boolean getWrongGeolocation(){ 
+<span class="fc" id="L323"> 		return wrongGeolocation; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'attributo che indica lo stato se la geolocazione inserita dall'utente e' coretta.
+	 * 
+	 * @param wrongPhoto il valore da impostare come attributo che indica lo stato se la geolocazione inserita dall'utente e' coretta.
+ 	 */
+ 	public void setWrongGeolocation(Boolean wrongGeolocation){ 
+<span class="fc" id="L332"> 		this.wrongGeolocation = wrongGeolocation; </span>
+<span class="fc" id="L333"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna lo stato della raccolta dati.
+ 	 * 
+ 	 * @return lo stato della raccolta dati
+ 	 */
+ 	public EnumState getState(){ 
+<span class="fc" id="L341"> 		return state; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta lo stato della raccolta dati.
+ 	 * 
+ 	 * @param state il valore da impostare come stato della raccolta dati
+ 	 */
+ 	public void setState(EnumState state){ 
+<span class="fc" id="L350"> 		this.state = state;</span>
+<span class="fc" id="L351"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna l'id dell'utente che ha caricato i dati.
+ 	 * 
+ 	 * @return l'id dell'utente che ha caricato i dati
+ 	 */
+ 	public User getIdUser(){ 
+<span class="fc" id="L359"> 		return idUser; </span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'id dell'utente che ha caricato i dati.
+ 	 * 
+ 	 * @param idUser il valore da impostare come id dell'utente che ha caricato i dati
+ 	 */
+ 	public void setIdUser(User idUser){ 
+<span class="fc" id="L368"> 		this.idUser = idUser;</span>
+<span class="fc" id="L369"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna l'id del passo soddisfatto dalla raccolta dati.
+ 	 * 
+ 	 * @return l'id del passo soddisfatto dalla raccolta dati
+ 	 */
+ 	public Step getIdStep(){ 
+<span class="fc" id="L377"> 		return idStep;</span>
+ 	}
+ 	
+ 	/**
+ 	 * Imposta l'id del passo soddisfatto dalla raccolta dati
+ 	 * 
+ 	 * @param idStep il valore da impostare come id del passo soddisfatto dalla raccolta dati
+ 	 */
+ 	public void setIdStep(Step idStep){ 
+<span class="fc" id="L386"> 		this.idStep = idStep; </span>
+<span class="fc" id="L387"> 	}</span>
+ 	
+ 	/**
+ 	 * Ritorna un JSONObject con i dati dell'entità.
+ 	 * 
+ 	 * @return un JSONObject con i dati dell'entità
+ 	 */
+	@Override
+	public JSONObject toJSONObject() {
+<span class="fc" id="L396">		JSONObject json = new JSONObject();</span>
+<span class="fc" id="L397">		json.put(&quot;IdCollection&quot; , idCollection);</span>
+<span class="fc" id="L398">		json.put(&quot;Photo&quot; , photo);</span>
+<span class="fc" id="L399">		json.put(&quot;Text&quot; , text);</span>
+<span class="fc" id="L400">		json.put(&quot;Latitude&quot; , latitude);</span>
+<span class="fc" id="L401">		json.put(&quot;Longitude&quot; , longitude);</span>
+<span class="fc" id="L402">		json.put(&quot;State&quot; , state);</span>
+<span class="fc" id="L403">		json.put(&quot;WrongText&quot; , wrongText);</span>
+<span class="fc" id="L404">		json.put(&quot;WrongPhoto&quot; , wrongPhoto);</span>
+<span class="fc" id="L405">		json.put(&quot;WrongGeolocation&quot; , wrongGeolocation);</span>
+<span class="fc" id="L406">		json.put(&quot;Username&quot; , idUser.getUsername());</span>
+<span class="fc" id="L407">		return json;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

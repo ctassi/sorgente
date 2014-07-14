@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>StepTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">StepTest.java</span></div><h1>StepTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe StepTest
+ * 
+ *	@file		StepTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import static org.junit.Assert.*;
+
+import org.json.JSONObject;
+import org.junit.Test;
+
+import com.sequenziatore.server.entity.Step.EnumParallelism;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe Step.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L40">public class StepTest {</span>
+
+	/**
+	 * Test del costruttore Step(JSONObject).
+	 */
+	@Test
+	public void testStep(){
+<span class="fc" id="L47">		JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L48">		jsonObject.put(&quot;IdStep&quot;, 1);</span>
+<span class="fc" id="L49">		jsonObject.put(&quot;Level&quot;, 1);</span>
+<span class="fc" id="L50">		jsonObject.put(&quot;Description&quot;, &quot;testDescription&quot;);</span>
+<span class="fc" id="L51">		jsonObject.put(&quot;IsPhoto&quot;, true);</span>
+<span class="fc" id="L52">		jsonObject.put(&quot;IsText&quot;, true);</span>
+<span class="fc" id="L53">		jsonObject.put(&quot;IsGeolocation&quot;, true);</span>
+<span class="fc" id="L54">		jsonObject.put(&quot;CheckText&quot;, &quot;testText&quot;);</span>
+<span class="fc" id="L55">		jsonObject.put(&quot;CheckLatitude&quot;, &quot;testLatitude&quot;);</span>
+<span class="fc" id="L56">		jsonObject.put(&quot;CheckLongitude&quot;, &quot;testLongitude&quot;);</span>
+<span class="fc" id="L57">		jsonObject.put(&quot;AdminVerify&quot;, false);</span>
+<span class="fc" id="L58">		jsonObject.put(&quot;Parallelism&quot;, &quot;OR&quot;);</span>
+<span class="fc" id="L59">		jsonObject.put(&quot;IdProcess&quot;, 1);</span>
+		
+<span class="fc" id="L61">		Step stepObject = new Step(jsonObject);</span>
+<span class="fc" id="L62">		assertEquals(jsonObject.get(&quot;Parallelism&quot;), stepObject.getParallelism().toString());</span>
+		
+<span class="fc" id="L64">		jsonObject.remove(&quot;Parallelism&quot;);</span>
+<span class="fc" id="L65">		jsonObject.put(&quot;Parallelism&quot;, &quot;AND&quot;);</span>
+		
+<span class="fc" id="L67">		stepObject = new Step(jsonObject);</span>
+<span class="fc" id="L68">		assertEquals(jsonObject.get(&quot;Parallelism&quot;), stepObject.getParallelism().toString());</span>
+		
+<span class="fc" id="L70">		jsonObject.remove(&quot;Parallelism&quot;);</span>
+<span class="fc" id="L71">		jsonObject.put(&quot;Parallelism&quot;, &quot;NOT&quot;);</span>
+		
+<span class="fc" id="L73">		stepObject = new Step(jsonObject);</span>
+<span class="fc" id="L74">		assertEquals(jsonObject.get(&quot;Parallelism&quot;), stepObject.getParallelism().toString());</span>
+<span class="fc" id="L75">	}</span>
+	
+	/**
+	 * Test del metodo toJSONObject().
+	 */
+	@Test
+	public void testToJSONObject(){
+<span class="fc" id="L82">		Process processObject = new Process();</span>
+<span class="fc" id="L83">		processObject.setIdProcess(1);</span>
+		
+<span class="fc" id="L85">		Step stepObject = new Step();</span>
+<span class="fc" id="L86">		stepObject.setIdStep(1);</span>
+<span class="fc" id="L87">		stepObject.setLevel(1);</span>
+<span class="fc" id="L88">		stepObject.setDescription(&quot;testDescription&quot;);</span>
+<span class="fc" id="L89">		stepObject.setIsPhoto(true);</span>
+<span class="fc" id="L90">		stepObject.setIsText(true);</span>
+<span class="fc" id="L91">		stepObject.setIsGeolocation(true);</span>
+<span class="fc" id="L92">		stepObject.setCheckText(&quot;testText&quot;);</span>
+<span class="fc" id="L93">		stepObject.setCheckLatitude(&quot;testLatitude&quot;);</span>
+<span class="fc" id="L94">		stepObject.setCheckLongitude(&quot;testLongitude&quot;);</span>
+<span class="fc" id="L95">		stepObject.setAdminVerify(false);</span>
+<span class="fc" id="L96">		stepObject.setParallelism(EnumParallelism.OR);</span>
+<span class="fc" id="L97">		stepObject.setIdProcess(processObject);</span>
+		
+<span class="fc" id="L99">		JSONObject jsonObject = stepObject.toJSONObject();</span>
+		
+<span class="fc" id="L101">		assertEquals(stepObject.getDescription(), jsonObject.get(&quot;Description&quot;));</span>
+<span class="fc" id="L102">	}</span>
+	
+	/**
+	 *	Test dei metodi getIdStep() e setIdStep().
+	 */
+	@Test
+	public void testGetAndSetIdStep(){
+<span class="fc" id="L109">		int startValue = 10;</span>
+<span class="fc" id="L110">		Step stepObject = new Step();</span>
+<span class="fc" id="L111"> 		stepObject.setIdStep(startValue);</span>
+<span class="fc" id="L112"> 		int endValue = stepObject.getIdStep();</span>
+<span class="fc" id="L113"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L114"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getLevel() e setLevel().
+	 */
+	@Test
+	public void testGetAndSetLevel(){
+<span class="fc" id="L121">		int startValue = 10;</span>
+<span class="fc" id="L122">		Step stepObject = new Step();</span>
+<span class="fc" id="L123"> 		stepObject.setLevel(startValue);</span>
+<span class="fc" id="L124"> 		int endValue = stepObject.getLevel();</span>
+<span class="fc" id="L125"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L126"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getDescription() e setDescription().
+	 */
+	@Test
+	public void testGetAndSetDescription(){
+<span class="fc" id="L133">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L134">		Step stepObject = new Step();</span>
+<span class="fc" id="L135"> 		stepObject.setDescription(startValue);</span>
+<span class="fc" id="L136"> 		String endValue = stepObject.getDescription();</span>
+<span class="fc" id="L137"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L138"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIsPhoto() e setIsPhoto().
+	 */
+	@Test
+	public void testGetAndSetPhoto(){
+<span class="fc" id="L145">		boolean startValue = false;</span>
+<span class="fc" id="L146">		Step stepObject = new Step();</span>
+<span class="fc" id="L147"> 		stepObject.setIsPhoto(startValue);</span>
+<span class="fc" id="L148"> 		boolean endValue = stepObject.getIsPhoto();</span>
+<span class="fc" id="L149"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L150"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIsText() e setIsText().
+	 */
+	@Test
+	public void testGetAndSetText(){
+<span class="fc" id="L157">		boolean startValue = false;</span>
+<span class="fc" id="L158">		Step stepObject = new Step();</span>
+<span class="fc" id="L159"> 		stepObject.setIsText(startValue);</span>
+<span class="fc" id="L160"> 		boolean endValue = stepObject.getIsText();</span>
+<span class="fc" id="L161"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L162"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIsGeolocation() e setIsGeolocation().
+	 */
+	@Test
+	public void testGetAndSetGeolocation(){
+<span class="fc" id="L169">		boolean startValue = false;</span>
+<span class="fc" id="L170">		Step stepObject = new Step();</span>
+<span class="fc" id="L171"> 		stepObject.setIsGeolocation(startValue);</span>
+<span class="fc" id="L172"> 		boolean endValue = stepObject.getIsGeolocation();</span>
+<span class="fc" id="L173"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L174"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getCheckText() e setCheckText().
+	 */
+	@Test
+	public void testGetAndSetCheckText(){
+<span class="fc" id="L181">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L182">		Step stepObject = new Step();</span>
+<span class="fc" id="L183"> 		stepObject.setCheckText(startValue);</span>
+<span class="fc" id="L184"> 		String endValue = stepObject.getCheckText();</span>
+<span class="fc" id="L185"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L186"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getCheckLatitude() e setCheckLatitude().
+	 */
+	@Test
+	public void testGetAndSetCheckLatitude(){
+<span class="fc" id="L193">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L194">		Step stepObject = new Step();</span>
+<span class="fc" id="L195"> 		stepObject.setCheckLatitude(startValue);</span>
+<span class="fc" id="L196"> 		String endValue = stepObject.getCheckLatitude();</span>
+<span class="fc" id="L197"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L198"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getCheckLongitude() e setCheckLongitude().
+	 */
+	@Test
+	public void testGetAndSetCheckLongitude(){
+<span class="fc" id="L205">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L206">		Step stepObject = new Step();</span>
+<span class="fc" id="L207"> 		stepObject.setCheckLongitude(startValue);</span>
+<span class="fc" id="L208"> 		String endValue = stepObject.getCheckLongitude();</span>
+<span class="fc" id="L209"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L210"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getAdminVerify() e setAdminVerify().
+	 */
+	@Test
+	public void testGetAndSetAdminVerify(){
+<span class="fc" id="L217">		boolean startValue = false;</span>
+<span class="fc" id="L218">		Step stepObject = new Step();</span>
+<span class="fc" id="L219"> 		stepObject.setAdminVerify(startValue);</span>
+<span class="fc" id="L220"> 		boolean endValue = stepObject.getAdminVerify();</span>
+<span class="fc" id="L221"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L222"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getParallelism() e setParallelism().
+	 */
+	@Test
+	public void testGetAndSetParallelism(){
+<span class="fc" id="L229">		EnumParallelism startValue = EnumParallelism.AND;</span>
+<span class="fc" id="L230">		Step stepObject = new Step();</span>
+<span class="fc" id="L231"> 		stepObject.setParallelism(startValue);</span>
+<span class="fc" id="L232"> 		EnumParallelism endValue = stepObject.getParallelism();</span>
+<span class="fc" id="L233"> 		assertEquals(startValue, endValue);</span>
+ 		
+<span class="fc" id="L235"> 		startValue = EnumParallelism.NOT;</span>
+<span class="fc" id="L236"> 		stepObject.setParallelism(startValue);</span>
+<span class="fc" id="L237"> 		endValue = stepObject.getParallelism();</span>
+<span class="fc" id="L238"> 		assertEquals(startValue, endValue);</span>
+ 		
+<span class="fc" id="L240"> 		startValue = EnumParallelism.OR;</span>
+<span class="fc" id="L241"> 		stepObject.setParallelism(startValue);</span>
+<span class="fc" id="L242"> 		endValue = stepObject.getParallelism();</span>
+<span class="fc" id="L243"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L244"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getIdProcess() e setIdProcess().
+	 */
+	@Test
+	public void testGetAndSetIdProcess(){
+<span class="fc" id="L251">		Process startValue = new Process();</span>
+<span class="fc" id="L252">		Step stepObject = new Step();</span>
+<span class="fc" id="L253"> 		stepObject.setIdProcess(startValue);</span>
+<span class="fc" id="L254"> 		Process endValue = stepObject.getIdProcess();</span>
+<span class="fc" id="L255"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L256"> 	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

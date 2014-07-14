@@ -1,0 +1,96 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : listuserprocess.html
+* Location : /applicationContent/com/sequenziatore/client/view/admin
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-27     Visentin Luca
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div ng-controller="CtrlListUserProcess">
+    <alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+    <div class="panelContent">
+        <div class="panel-heading"><h4>Lista dei partecipanti a </h4><label class="labelHeading">'{{processName}}'</label></div>
+        <div ng-show="messageResult === 'Non ci sono utenti iscritti a questo processo'" class="messageEmptyBox">
+            <label class="labelContent">{{messageResult}}</label>
+        </div>
+         <!-- Un div per ogni user in userList -->
+		<div ng-repeat="user in userList">
+			<!-- Pulsante con il nome utente -->
+            <accordion close-others="oneAtATime == undefined">
+                <accordion-group is-open="status.open">
+                    <accordion-heading>
+                        <div>
+                            <i class="pull-left glyphicon" ng-class="{'glyphicon glyphicon-user': true}"></i>
+                                {{user.Username}}
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                        </div>
+                    </accordion-heading>
+                    <div class="myAccount">
+                        <div class=" col-md-9 col-lg-9 ">
+                            <table class="table table-user-information">
+                                <tbody>
+                                <tr>
+                                    <td><label class="label label-info">Username:</label></td>
+                                    <td>{{user.Username}}</td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-info">Nome:</label></td>
+                                    <td>{{user.Name}}</td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-info">Cognome:</label></td>
+                                    <td>{{user.Surname}}</td>
+                                </tr>
+
+                                <tr>
+                                <tr>
+                                    <td><label class="label label-info">Email:</label></td>
+                                    <td>{{user.Email}}</td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-info">Città:</label></td>
+                                    <td>{{user.City}}</td>
+                                </tr>
+                                <tr>
+                                    <td><label class="label label-info">Provincia:</label></td>
+                                    <td>{{user.District}}</td>
+                                </tr>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </accordion-group>
+            </accordion>
+	    </div>
+		<div class="pagination">
+            <div class="buttonsPagination">
+                <button ng-disabled="currentPage == 0 || numberOfPages==undefined" data-ng-click="currentPage=currentPage-1"> Successivi </button>
+                <button class="next" ng-disabled="currentPage >= userList.length/pageSize-1 || numberOfPages==undefined" data-ng-click="currentPage=currentPage+1"> Successivi </button>
+            </div>
+		</div>
+    </div>
+</div>

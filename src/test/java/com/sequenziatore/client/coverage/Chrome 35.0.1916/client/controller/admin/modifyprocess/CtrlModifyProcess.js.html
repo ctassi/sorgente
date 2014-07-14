@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for client/controller/admin/modifyprocess/CtrlModifyProcess.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../../../../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+
+        .cstat-skip { background: #ddd; color: #111; }
+        .fstat-skip { background: #ddd; color: #111 !important; }
+        .cbranch-skip { background: #ddd !important; color: #111; }
+
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+        }
+
+        .skip-if-branch {
+            display: none;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: #ccc;
+            color: white;
+        }
+
+        .missing-if-branch .typ, .skip-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+        .ignore-none { color: #999; font-weight: normal; }
+
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">client/controller/admin/modifyprocess/CtrlModifyProcess.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">90.23% <small>(157 / 174)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">80.88% <small>(55 / 68)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">93.75% <small>(15 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">90.23% <small>(157 / 174)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../../../index.html">All files</a> &#187; <a href="index.html">client/controller/admin/modifyprocess/</a> &#187; CtrlModifyProcess.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ * Copyright [2014] [DeSQ]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ *
+ * Name : CtrlModifyProcess.js
+ * Module : CtrlModifyProcess
+ * Location : /applicationContent/com/sequenziatore/client/controller/admin
+ *
+ * History :
+ *
+ * Version         Date           Programmer
+ * ======================================================
+ * 0.0.1           2014-03-26     Romagnosi Nicolò
+ * ------------------------------------------------------
+ * Codifica Modulo
+ * ======================================================
+ * 0.0.2           2014-03-26     Romagnosi Nicolò
+ * ------------------------------------------------------
+ * Aggiunta paginazione contenuto
+ * ======================================================
+ * 0.0.3           2014-04-10     Sartoretto Massimiliano
+ * ------------------------------------------------------
+ * Aggiornati controlli di modifica del processo
+ * ======================================================
+ * 0.0.4           2014-04-11     Sartoretto Massimiliano
+ * ------------------------------------------------------
+ * Aggiornate dipendenze del modulo
+ * ======================================================
+ */
+&nbsp;
+var application = angular.module('CtrlModifyProcess',['LocationManager','AdminUserRequestManager','AdminUser','LocalStorageModule','pickadate']);
+&nbsp;
+application.controller('CtrlModifyProcess',['$scope','LocationManager','AdminUserRequestManager','AdminUser','localStorageService',
+                                          function($scope,LocationManager,AdminUserRequestManager,AdminUser,localStorageService){
+	
+	// Metodo che rimanda alla pagina di Welcome se l'utente è già autenticato
+	LocationManager.handleModifyProcessLocation();
+&nbsp;
+      $scope.closeAlert = function(){
+          $scope.showAlertOK = 'false';
+          $scope.showAlertError = 'false';
+      };
+      $scope.closeAlert();
+&nbsp;
+	<span class="missing-if-branch" title="else path not taken" >E</span>if(LocationManager.isLogged() === 'true'){
+		
+		<span class="missing-if-branch" title="else path not taken" >E</span>if(LocationManager.isAdmin() === 'true'){
+&nbsp;
+			AdminUserRequestManager.getAdminInfo($scope);
+&nbsp;
+			$scope.$on('REQUEST_INFO_IS_END',function(event,result){
+            	<span class="missing-if-branch" title="if path not taken" >I</span>if(result == 'connectionError'){
+            		//StandardUserRequestManager.doGetNextStep($scope,Number(localStorageService.get('IdProcess')));
+<span class="cstat-no" title="statement not covered" >                    $scope.showAlertOK = true;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.messageOk = 'Problemi di connessione al server, contattare l\'amministratore';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.scrollOnTop();</span>
+            	}
+            	else{
+    				AdminUserRequestManager.getProcess($scope,Number(localStorageService.get('IdProcess')));
+    				$scope.user = AdminUser.getName();
+    				$scope.openWebSocket("/seq/Sequenziatore/pushservice");
+            	}
+&nbsp;
+			});
+&nbsp;
+			$scope.$on('GET_PROCESS_IS_END',function(event,result){
+				<span class="missing-if-branch" title="if path not taken" >I</span>if(result == 'connectionError'){
+            		//StandardUserRequestManager.doGetNextStep($scope,Number(localStorageService.get('IdProcess')));
+<span class="cstat-no" title="statement not covered" >                    $scope.showAlertOK = true;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.messageOk = 'Problemi di connessione al server, contattare l\'amministratore';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.scrollOnTop();</span>
+            	}
+				else{
+					$scope.result = result;
+					$scope.available = result['Available'];
+					if($scope.available === false){
+						$scope.isActive = 'Non attivo';
+						$scope.buttonIsActiveStatus = 'Attiva processo';
+					}
+					else{
+						$scope.isActive = 'Attivo';
+						$scope.buttonIsActiveStatus = 'Disattiva processo';
+					}
+					$scope.processName = result['Name'];
+					$scope.processDescription = result['Description'];
+					$scope.dateStartView = result['PublicationDate'];
+					$scope.dateCloseView = result['ClosingDate'];
+					$scope.dateEndSubscriptionView = result['EndSubscriptionDate'];
+					$scope.stepList = result['StepList'];
+				}
+			});
+			
+			$scope.$on('CONNECTION_PROBLEM',<span class="fstat-no" title="function not covered" >function(event,result){</span>
+<span class="cstat-no" title="statement not covered" >				$scope.closeWebSocket();</span>
+<span class="cstat-no" title="statement not covered" >				alert(result);</span>
+			});
+		}
+	}
+	
+	$scope.isActiveClicked = function(){
+		if($scope.available === false){
+			var confirmModify = confirm('Sicuro di voler ATTIVARE il processo?');
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(confirmModify === true){
+				$scope.available = true;
+				$scope.isActive = 'Attivo';
+				$scope.buttonIsActiveStatus = 'Disattiva processo';
+			}
+		}
+		else{
+			var confirmModify = confirm("Sicuro di voler DISATTIVARE il processo?");
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(confirmModify === true){
+				$scope.available = false;
+				$scope.isActive = 'Non Attivo';
+				$scope.buttonIsActiveStatus = 'Attiva processo';
+			}
+		}
+	};
+	
+	$scope.showCalendarStart = function(){
+		if($scope.dateStartVisible === undefined){
+			$scope.dateStartVisible = 'true';
+		}
+		else{
+			$scope.dateStartVisible = undefined;
+		}
+	};
+&nbsp;
+	
+	$scope.showCalendarClose = function(){
+		if($scope.dateCloseVisible === undefined){
+			$scope.dateCloseVisible = 'true';
+		}
+		else{
+			$scope.dateCloseVisible = undefined;
+		}
+		
+	};
+	
+	$scope.showCalendarEndSubscription = function(){
+		
+		if($scope.dateEndSubscriptionVisible === undefined){
+			$scope.dateEndSubscriptionVisible = 'true';
+		}
+		else{
+			$scope.dateEndSubscriptionVisible = undefined;
+		}
+	};
+	
+	// Metodo che dati anno mese e giorno nel formato yyy-mm-dd
+	// restituisce un oggetto di tipo Data con ora 00.00.00
+	$scope.yearMonthDayToJSDate = function(year,month,day){
+		var date = new Date(new Date().setHours(0, 0, 0, 0));
+		return date.setFullYear(Number(year), Number(month), Number(day));
+	};
+	
+	$scope.dateStartSelected = function(date){
+		<span class="missing-if-branch" title="else path not taken" >E</span>if(!(date === undefined)){
+			$scope.changedPublicationDate = true;
+			var year = date.substring(0,4); 
+			var month = date.substring(5,7); 
+			var day = date.substring(8,10);
+			$scope.dateStartJSFormat = $scope.yearMonthDayToJSDate(year,month,day);
+			$scope.dateStartView = day + '-' + month + '-' + year;
+		    $scope.dateStartToSend = {'Day': Number(day), 'Month': Number(month), 'Year': Number(year)};
+		    $scope.dateStart = undefined;
+		    // Per nascondere il calendario al click sulla data decommentare la riga sotto
+			$scope.dateStartVisible = undefined;
+		}
+	};
+	
+	$scope.dateCloseSelected = function(date){
+		<span class="missing-if-branch" title="else path not taken" >E</span>if(!(date === undefined)){
+			$scope.changedCloseDate = true;
+			$scope.dateEndSubscriptionSelected(date,true);
+			var year = date.substring(0,4); 
+		    var month = date.substring(5,7); 
+		    var day = date.substring(8,10);
+		    $scope.dateCloseJSFormat = $scope.yearMonthDayToJSDate(year,month,day);
+		    $scope.dateCloseView = day + '-' + month + '-' + year;
+		    $scope.dateCloseToSend = {'Day': Number(day), 'Month': Number(month), 'Year': Number(year)};
+		    $scope.dateClose = undefined;
+		    // Per nascondere il calendario al click sulla data decommentare la riga sotto
+		    $scope.dateCloseVisible = undefined;
+		}
+	};
+	
+	$scope.dateEndSubscriptionSelected = function(date,clickedClose){
+		<span class="missing-if-branch" title="else path not taken" >E</span>if(!(date === undefined)){
+			$scope.changedEndSubDate = true;
+			var year = date.substring(0,4); 
+		    var month = date.substring(5,7); 
+		    var day = date.substring(8,10);
+		    $scope.dateEndSubscriptionJSFormat = $scope.yearMonthDayToJSDate(year,month,day);
+		    $scope.dateEndSubscriptionView = day + '-' + month + '-' + year;
+		    $scope.dateEndSubscriptionToSend = {'Day': Number(day), 'Month': Number(month), 'Year': Number(year)};
+		    $scope.dateEndSubscription = undefined;
+		    // Per nascondere il calendario al click sulla data decommentare la riga sotto
+		    $scope.dateEndSubscriptionVisible = undefined;
+		}
+	};
+&nbsp;
+	// Formato data input 'dd-mm-yyyy'
+	$scope.stringDateToJSONdate = function(data){
+&nbsp;
+		var date = data;
+		var month = undefined;
+		var year = undefined;
+		var day = undefined;
+		
+		day = date.substring(0,2);
+&nbsp;
+		// Se il giorno ha 2 cifre tipo 25
+		if(day.indexOf('-') == -1){
+			month = date.substring(3,5);
+			
+			// Se il mese ha 2 cifre
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(month.indexOf('-') == -1){
+				year = date.substring(6,10);
+			}
+			else{
+<span class="cstat-no" title="statement not covered" >				month = date.substring(3,4);</span>
+<span class="cstat-no" title="statement not covered" >				year = date.substring(5,9);</span>
+			}
+		}
+		// Se il giorno ha 1 cifra
+		else{
+			day = date.substring(0,1);
+			month = date.substring(2,4);
+			// Se il mese ha 2 cifre
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(month.indexOf('-') == -1){
+				year = date.substring(5,9);
+			}
+			else{
+<span class="cstat-no" title="statement not covered" >				month = date.substring(2,3);</span>
+<span class="cstat-no" title="statement not covered" >				year = date.substring(4,8);</span>
+			}
+		}
+&nbsp;
+		return{
+			'Day': Number(day), 
+			'Month': Number(month), 
+			'Year': Number(year)
+		};
+	};
+	
+	$scope.doModifyProcess = function(){
+		try{
+			if($scope.processName === undefined ||
+				$scope.processName === ''){
+				throw 'Nome processo non inserito';
+			}
+			if($scope.processDescription === undefined ||
+					$scope.processDescription === ''){
+					throw 'Descrizione processo non inserita';
+			}
+&nbsp;
+			$scope.result['PublicationDate'] = $scope.stringDateToJSONdate($scope.dateStartView);
+			$scope.result['ClosingDate'] = $scope.stringDateToJSONdate($scope.dateCloseView);
+			$scope.result['EndSubscriptionDate'] = $scope.stringDateToJSONdate($scope.dateEndSubscriptionView);
+&nbsp;
+			var startDateToCast = new Date();
+			var closeDateToCast = new Date();
+			var endSubDateToCast = new Date();
+		
+			if($scope.changedPublicationDate === undefined){
+				startDateToCast.setFullYear($scope.result['PublicationDate'].Year, $scope.result['PublicationDate'].Month -1, $scope.result['PublicationDate'].Day);
+			}
+			if($scope.changedCloseDate === undefined){
+				closeDateToCast.setFullYear($scope.result['ClosingDate'].Year, $scope.result['ClosingDate'].Month -1, $scope.result['ClosingDate'].Day);
+			}
+			if($scope.changedEndSubDate === undefined){
+				endSubDateToCast.setFullYear($scope.result['EndSubscriptionDate'].Year, $scope.result['EndSubscriptionDate'].Month -1, $scope.result['EndSubscriptionDate'].Day);
+			}
+			if($scope.changedPublicationDate === true){
+				startDateToCast.setFullYear($scope.dateStartToSend.Year, $scope.dateStartToSend.Month -1, $scope.dateStartToSend.Day);
+			}
+			if($scope.changedCloseDate === true){
+				closeDateToCast.setFullYear($scope.dateCloseToSend.Year, $scope.dateCloseToSend.Month -1, $scope.dateCloseToSend.Day);
+			}
+			if($scope.changedEndSubDate === true){
+				endSubDateToCast.setFullYear($scope.dateEndSubscriptionToSend.Year, $scope.dateEndSubscriptionToSend.Month -1, $scope.dateEndSubscriptionToSend.Day);
+			}
+&nbsp;
+			// Creo le date in formato JavaScript e setto le ore a zero in quanto
+			// il confronto va fatto solo rispetto alla data
+			var actualDate = new Date(new Date().setHours(0, 0, 0, 0));
+			var startDate = new Date(new Date(startDateToCast).setHours(0, 0, 0, 0));
+			var closeDate = new Date(new Date(closeDateToCast).setHours(0, 0, 0, 0));
+			var endSubscriptionDate = new Date(new Date(endSubDateToCast).setHours(0, 0, 0, 0));
+			
+			if(startDate &lt; actualDate &amp;&amp; $scope.changedPublicationDate === true){
+				throw 'La data di inizio deve essere la stessa di oggi o una maggiore';
+			}
+			
+			if(closeDate &lt; startDate &amp;&amp; $scope.changedCloseDate === true){
+				throw 'La data di chiusura deve essere successiva a quella di inizio';
+			}
+			
+			<span class="missing-if-branch" title="if path not taken" >I</span>if((!((endSubscriptionDate &gt;= startDate)&amp;&amp;(<span class="branch-1 cbranch-no" title="branch not covered" >endSubscriptionDate &lt;= closeDate)</span>)) &amp;&amp; $scope.changedEndSubDate === true){
+<span class="cstat-no" title="statement not covered" >				throw 'La data di chiusura iscrizione deve essere compresa fra quella di inizio e quella fine processo';</span>
+			}
+			
+			$scope.result['Name'] = $scope.processName;
+			$scope.result['Description'] = $scope.processDescription;
+			$scope.result['IdStep'] = Number($scope.result['IdStep']);
+			$scope.result['Level'] = Number($scope.result['Level']);
+			$scope.result['IdProcess'] = Number($scope.result['IdProcess']);
+			$scope.result['Available'] = new Boolean($scope.available === true);
+			
+			for(var i = 0; i &lt; $scope.result.StepList.length; i++){
+<span class="cstat-no" title="statement not covered" >				$scope.stepList[i]['IsPhoto'] = new Boolean($scope.stepList[i]['IsPhoto'] === 'true');</span>
+<span class="cstat-no" title="statement not covered" >				$scope.stepList[i]['IsText'] = new Boolean($scope.stepList[i]['IsText'] === 'true');</span>
+<span class="cstat-no" title="statement not covered" >				$scope.stepList[i]['IsGeolocation'] = new Boolean($scope.stepList[i]['IsGeolocation'] === 'true');</span>
+				
+<span class="cstat-no" title="statement not covered" >				$scope.result.StepList[i] = $scope.stepList[i];</span>
+			}
+	
+			AdminUserRequestManager.doModifyProcess($scope,$scope.result);
+			
+			$scope.$on('MODIFY_PROCESS_IS_END',function(event,result){
+				$scope.messageOk = result;
+                $scope.showAlertOK = 'true';
+                $scope.showAlertError = 'false';
+                $scope.scrollOnTop();
+			});
+		}
+		catch(error){
+			$scope.showAlertOK = 'false';
+			$scope.messageError = error;
+            $scope.showAlertError = 'true';
+            $scope.scrollOnTop();
+		}
+	};
+}]);</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jul 03 2014 08:58:25 GMT+0200 (CEST)</div>
+</div>
+
+<script src="../../../../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

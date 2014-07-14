@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ProcessTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.entity</a> &gt; <span class="el_source">ProcessTest.java</span></div><h1>ProcessTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ProcessTest
+ * 
+ *	@file		ProcessTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.entity;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.junit.Test;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe Process.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L43">public class ProcessTest {</span>
+
+	/**
+	 * Test del costruttore Process(JSONObject).
+	 */
+	@Test
+	public void testProcess(){
+<span class="fc" id="L50">		JSONObject date = new JSONObject();</span>
+<span class="fc" id="L51">		date.put(&quot;Year&quot;, 2014);</span>
+<span class="fc" id="L52">		date.put(&quot;Month&quot;, 1);</span>
+<span class="fc" id="L53">		date.put(&quot;Day&quot;, 1);</span>
+		
+<span class="fc" id="L55">		JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L56">		jsonObject.put(&quot;IdProcess&quot;, 1);		</span>
+<span class="fc" id="L57">		jsonObject.put(&quot;Name&quot;, &quot;testName&quot;);</span>
+<span class="fc" id="L58">		jsonObject.put(&quot;Description&quot;, &quot;testDescription&quot;);</span>
+<span class="fc" id="L59">		jsonObject.put(&quot;TotalLevel&quot;, 1);</span>
+<span class="fc" id="L60">		jsonObject.put(&quot;PublicationDate&quot;, date);</span>
+<span class="fc" id="L61">		jsonObject.put(&quot;ClosingDate&quot;, date);</span>
+<span class="fc" id="L62">		jsonObject.put(&quot;EndSubscriptionDate&quot;, date);</span>
+<span class="fc" id="L63">		jsonObject.put(&quot;Available&quot;, true);</span>
+<span class="fc" id="L64">		jsonObject.put(&quot;IdUser&quot;, 1);</span>
+		
+<span class="fc" id="L66">		Process processObject = new Process(jsonObject);</span>
+		
+<span class="fc" id="L68">		assertEquals(jsonObject.get(&quot;Name&quot;), processObject.getName());</span>
+<span class="fc" id="L69">	}</span>
+	
+	/**
+	 *	Test del metodo testToJSONObject().
+	 */
+	@Test
+	public void testToJSONObject(){
+<span class="fc" id="L76">		GregorianCalendar date = new GregorianCalendar();</span>
+		
+<span class="fc" id="L78">		Process processObject = new Process();</span>
+<span class="fc" id="L79">		processObject.setIdProcess(1);</span>
+<span class="fc" id="L80">		processObject.setName(&quot;test&quot;);</span>
+<span class="fc" id="L81">		processObject.setDescription(&quot;testDescription&quot;);</span>
+<span class="fc" id="L82">		processObject.setTotalLevel(2);</span>
+<span class="fc" id="L83">		processObject.setPublicationDate(date);</span>
+<span class="fc" id="L84">		processObject.setClosingDate(date);</span>
+<span class="fc" id="L85">		processObject.setEndSubscriptionDate(date);</span>
+<span class="fc" id="L86">		processObject.setAvailable(true);</span>
+		
+<span class="fc" id="L88">		JSONObject jsonObject = processObject.toJSONObject();</span>
+		
+<span class="fc" id="L90">		assertEquals(processObject.getDescription(), jsonObject.get(&quot;Description&quot;));</span>
+<span class="fc" id="L91">	}</span>
+	
+	/**
+	 *	Test dei metodi getIdProcess() e setIdProcess().
+	 */
+	@Test
+	public void testGetAndSetIdProcess(){
+<span class="fc" id="L98">		int startValue = 10;</span>
+<span class="fc" id="L99">		Process processObject = new Process();</span>
+<span class="fc" id="L100"> 		processObject.setIdProcess(startValue);</span>
+<span class="fc" id="L101"> 		int endValue = processObject.getIdProcess();</span>
+<span class="fc" id="L102"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L103"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getName() e setName().
+	 */
+	@Test
+	public void testGetAndSetName(){
+<span class="fc" id="L110">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L111">		Process processObject = new Process();</span>
+<span class="fc" id="L112">		processObject.setName(startValue);</span>
+<span class="fc" id="L113"> 		String endValue = processObject.getName();</span>
+<span class="fc" id="L114"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L115"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getDescription() e setDescription().
+	 */
+	@Test
+	public void testGetAndSetDescription(){
+<span class="fc" id="L122">		String startValue = &quot;test&quot;;</span>
+<span class="fc" id="L123">		Process processObject = new Process();</span>
+<span class="fc" id="L124">		processObject.setDescription(startValue);</span>
+<span class="fc" id="L125"> 		String endValue = processObject.getDescription();</span>
+<span class="fc" id="L126"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L127"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getTotalLevel() e setTotalLevel().
+	 */
+	@Test
+	public void testGetAndsetTotalLevel(){
+<span class="fc" id="L134">		int startValue = 10;</span>
+<span class="fc" id="L135">		Process processObject = new Process();</span>
+<span class="fc" id="L136">		processObject.setTotalLevel(startValue);</span>
+<span class="fc" id="L137"> 		int endValue = processObject.getTotalLevel();</span>
+<span class="fc" id="L138"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L139"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getPublicationDate() e setPublicationDate().
+	 */
+	@Test
+	public void testGetAndSetPublicationDate(){
+<span class="fc" id="L146">		Calendar startValue = new GregorianCalendar();</span>
+<span class="fc" id="L147">		Process processObject = new Process();</span>
+<span class="fc" id="L148">		processObject.setPublicationDate(startValue);</span>
+<span class="fc" id="L149"> 		Calendar endValue = processObject.getPublicationDate();</span>
+<span class="fc" id="L150"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L151"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getClosingDate() e setClosingDate().
+	 */
+	@Test
+	public void testGetAndSetClosingDate(){
+<span class="fc" id="L158">		Calendar startValue = new GregorianCalendar();</span>
+<span class="fc" id="L159">		Process processObject = new Process();</span>
+<span class="fc" id="L160">		processObject.setClosingDate(startValue);</span>
+<span class="fc" id="L161"> 		Calendar endValue = processObject.getClosingDate();</span>
+<span class="fc" id="L162"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L163"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getAvailable() e setAvailable().
+	 */
+	@Test
+	public void testGetAndSetAvailable(){
+<span class="fc" id="L170">		boolean startValue = false;</span>
+<span class="fc" id="L171">		Process processObject = new Process();</span>
+<span class="fc" id="L172">		processObject.setAvailable(startValue);</span>
+<span class="fc" id="L173"> 		boolean endValue = processObject.getAvailable();</span>
+<span class="fc" id="L174"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L175"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getEndSubscriptionDate() e setEndSubscriptionDate().
+	 */
+	@Test
+	public void testGetAndSetEndSubscriptionDate(){
+<span class="fc" id="L182">		Calendar startValue = new GregorianCalendar();</span>
+<span class="fc" id="L183">		Process processObject = new Process();</span>
+<span class="fc" id="L184">		processObject.setEndSubscriptionDate(startValue);</span>
+<span class="fc" id="L185"> 		Calendar endValue = processObject.getEndSubscriptionDate();</span>
+<span class="fc" id="L186"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L187"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getAdmin() e setAdmin().
+	 */
+	@Test
+	public void testGetAndSetAdmin(){
+<span class="fc" id="L194">		User startValue = new User();</span>
+<span class="fc" id="L195">		Process processObject = new Process();</span>
+<span class="fc" id="L196">		processObject.setAdmin(startValue);</span>
+<span class="fc" id="L197"> 		User endValue = processObject.getAdmin();</span>
+<span class="fc" id="L198"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L199"> 	}</span>
+	
+	/**
+	 *	Test dei metodi getSteps() e setSteps().
+	 */
+	@Test
+	public void testGetAndSetSteps(){
+<span class="fc" id="L206">		List&lt;Step&gt; startValue = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L207">		Process processObject = new Process();</span>
+<span class="fc" id="L208">		processObject.setSteps(startValue);</span>
+<span class="fc" id="L209"> 		List&lt;Step&gt; endValue = processObject.getSteps();</span>
+<span class="fc" id="L210"> 		assertEquals(startValue, endValue);</span>
+<span class="fc" id="L211"> 	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

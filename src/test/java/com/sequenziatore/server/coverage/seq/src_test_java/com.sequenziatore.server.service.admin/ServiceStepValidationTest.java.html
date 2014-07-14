@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServiceStepValidationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.service.admin</a> &gt; <span class="el_source">ServiceStepValidationTest.java</span></div><h1>ServiceStepValidationTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe ServiceStepValidationTest
+ * 
+ *	@file		ServiceStepValidationTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.service.admin;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.json.JSONObject;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.DataCollection;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.Subscription;
+import com.sequenziatore.server.entity.User;
+import com.sequenziatore.server.entity.DataCollection.EnumState;
+import com.sequenziatore.server.entity.Step.EnumParallelism;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe ServiceStepValidation.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L55">public class ServiceStepValidationTest {</span>
+
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L65">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L68">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L69">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L72">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L73">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L76">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L77">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L80">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L81">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L84">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L85">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L87">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L88">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L98">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L101">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L102">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L105">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L106">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L109">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L110">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L113">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L114">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L117">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L118">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L120">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L121">	}</span>
+	
+	/**
+	 *	Test del metodo serviceOperation() che permette la validazione di una raccolta dati con passi in AND.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testServiceOperation_AND() throws Exception {
+<span class="fc" id="L129">    	ServiceStepValidation serviceStepValidationObject = new ServiceStepValidation();</span>
+    	
+    	//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L132">        HibernateUtil.getSession().beginTransaction();</span>
+        
+        //creazione amministratore
+<span class="fc" id="L135">        User testAdmin = new User();</span>
+<span class="fc" id="L136">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L137">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L138">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L139">        testAdmin.setUsername(&quot;test&quot;);</span>
+<span class="fc" id="L140">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+       
+        //creazione utente
+<span class="fc" id="L143">        User testUser = new User();</span>
+<span class="fc" id="L144">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L145">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L146">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L147">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L148">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L151">        Process testProcess = new Process();</span>
+<span class="fc" id="L152">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L153">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L154">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L155">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L156">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L157">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L158">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L159">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));;</span>
+<span class="fc" id="L160">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L163">        Step testStep1 = new Step();</span>
+<span class="fc" id="L164">        testStep1.setAdminVerify(false);</span>
+<span class="fc" id="L165">        testStep1.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L166">        testStep1.setIsGeolocation(false);</span>
+<span class="fc" id="L167">        testStep1.setIsPhoto(false);</span>
+<span class="fc" id="L168">        testStep1.setIsText(false);</span>
+<span class="fc" id="L169">        testStep1.setLevel(1);</span>
+<span class="fc" id="L170">        testStep1.setIdProcess(testProcess);</span>
+<span class="fc" id="L171">        testStep1.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L172">        HibernateUtil.getSession().saveOrUpdate(testStep1);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L175">        Step testStep2 = new Step();</span>
+<span class="fc" id="L176">        testStep2.setAdminVerify(false);</span>
+<span class="fc" id="L177">        testStep2.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L178">        testStep2.setIsGeolocation(false);</span>
+<span class="fc" id="L179">        testStep2.setIsPhoto(false);</span>
+<span class="fc" id="L180">        testStep2.setIsText(false);</span>
+<span class="fc" id="L181">        testStep2.setLevel(1);</span>
+<span class="fc" id="L182">        testStep2.setIdProcess(testProcess);</span>
+<span class="fc" id="L183">        testStep2.setParallelism(EnumParallelism.AND);</span>
+<span class="fc" id="L184">        HibernateUtil.getSession().saveOrUpdate(testStep2);</span>
+    	
+        //inserimento del passo nel processo
+<span class="fc" id="L187">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L188">        testStepList.add(testStep1);</span>
+<span class="fc" id="L189">        testStepList.add(testStep2);</span>
+<span class="fc" id="L190">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L191">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L194">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L195">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L196">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L197">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L198">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+    	
+    	//creazione di una data collection
+<span class="fc" id="L201">        DataCollection testCollection1 = new DataCollection();</span>
+<span class="fc" id="L202">        testCollection1.setText(&quot;test&quot;);</span>
+<span class="fc" id="L203">        testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L204">        testCollection1.setIdStep(testStep1);</span>
+<span class="fc" id="L205">        testCollection1.setIdUser(testUser);</span>
+<span class="fc" id="L206">        testCollection1.setWrongText(true);</span>
+<span class="fc" id="L207">        testCollection1.setWrongPhoto(true);</span>
+<span class="fc" id="L208">        testCollection1.setWrongGeolocation(true);</span>
+<span class="fc" id="L209">        HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L212">        DataCollection testCollection2 = new DataCollection();</span>
+<span class="fc" id="L213">        testCollection2.setText(&quot;test&quot;);</span>
+<span class="fc" id="L214">        testCollection2.setState(EnumState.FAILED);</span>
+<span class="fc" id="L215">        testCollection2.setIdStep(testStep2);</span>
+<span class="fc" id="L216">        testCollection2.setIdUser(testUser);</span>
+<span class="fc" id="L217">        testCollection2.setWrongText(true);</span>
+<span class="fc" id="L218">        testCollection2.setWrongPhoto(true);</span>
+<span class="fc" id="L219">        testCollection2.setWrongGeolocation(true);</span>
+<span class="fc" id="L220">        HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+<span class="fc" id="L221">        HibernateUtil.commitTransaction();</span>
+        
+        //creazione della lista di entità
+<span class="fc" id="L224">	    List&lt;IEntity&gt; iEntityList = new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L225">	    iEntityList.add(testCollection1);</span>
+	    
+<span class="fc" id="L227">	    JSONObject jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+	    
+<span class="fc" id="L229">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+	    
+<span class="fc" id="L231">	    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L232">	    testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L233">	    HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+	    
+<span class="fc" id="L235">	    testCollection2.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L236">	    HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+	    
+<span class="fc" id="L238">	    testSubscription.setComplete(false);</span>
+<span class="fc" id="L239">	    HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L240">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L242">	    jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L244">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+	    
+<span class="fc" id="L246">	    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L247">	    testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L248">	    HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+	    
+<span class="fc" id="L250">	    testCollection2.setState(EnumState.VERIFIED);</span>
+<span class="fc" id="L251">	    HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+	    
+<span class="fc" id="L253">	    testSubscription.setComplete(false);</span>
+<span class="fc" id="L254">	    HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L255">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L257">	    jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L259">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+	    
+<span class="fc" id="L261">	    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L262">	    testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L263">	    testCollection1.setWrongText(false);</span>
+<span class="fc" id="L264">        testCollection1.setWrongPhoto(true);</span>
+<span class="fc" id="L265">        testCollection1.setWrongGeolocation(true);</span>
+<span class="fc" id="L266">	    HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+	    
+<span class="fc" id="L268">	    testCollection2.setState(EnumState.VERIFIED);</span>
+<span class="fc" id="L269">	    testCollection2.setWrongText(false);</span>
+<span class="fc" id="L270">        testCollection2.setWrongPhoto(true);</span>
+<span class="fc" id="L271">        testCollection2.setWrongGeolocation(true);</span>
+<span class="fc" id="L272">	    HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+	    
+<span class="fc" id="L274">	    testSubscription.setComplete(false);</span>
+<span class="fc" id="L275">	    HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L276">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L278">	    jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L280">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+<span class="fc" id="L281">    }</span>
+    
+    /**
+	 *	Test del metodo serviceOperation() che permette la validazione di una raccolta dati con passi in OR.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testserviceOperation_OR() throws Exception {
+<span class="fc" id="L289">    	ServiceStepValidation serviceStepValidationObject = new ServiceStepValidation();</span>
+    	
+    	//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L292">    	HibernateUtil.getSession().beginTransaction();</span>
+    	
+    	//creazione amministratore
+<span class="fc" id="L295">        User testAdmin = new User();</span>
+<span class="fc" id="L296">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L297">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L298">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L299">        testAdmin.setUsername(&quot;testAdmin&quot;);</span>
+<span class="fc" id="L300">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+    	
+    	//creazione utente
+<span class="fc" id="L303">        User testUser = new User();</span>
+<span class="fc" id="L304">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L305">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L306">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L307">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L308">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L311">        Process testProcess = new Process();</span>
+<span class="fc" id="L312">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L313">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L314">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L315">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L316">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L317">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L318">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L319">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L320">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L323">        Step testStep1 = new Step();</span>
+<span class="fc" id="L324">        testStep1.setAdminVerify(true);</span>
+<span class="fc" id="L325">        testStep1.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L326">        testStep1.setCheckText(&quot;null&quot;);</span>
+<span class="fc" id="L327">        testStep1.setIsGeolocation(false);</span>
+<span class="fc" id="L328">        testStep1.setIsPhoto(false);</span>
+<span class="fc" id="L329">        testStep1.setIsText(false);</span>
+<span class="fc" id="L330">        testStep1.setLevel(1);</span>
+<span class="fc" id="L331">        testStep1.setParallelism(EnumParallelism.OR);</span>
+<span class="fc" id="L332">        testStep1.setIdProcess(testProcess);</span>
+<span class="fc" id="L333">        HibernateUtil.getSession().saveOrUpdate(testStep1);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L336">        Step testStep2 = new Step();</span>
+<span class="fc" id="L337">        testStep2.setAdminVerify(true);</span>
+<span class="fc" id="L338">        testStep2.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L339">        testStep2.setCheckText(&quot;null&quot;);</span>
+<span class="fc" id="L340">        testStep2.setIsGeolocation(false);</span>
+<span class="fc" id="L341">        testStep2.setIsPhoto(false);</span>
+<span class="fc" id="L342">        testStep2.setIsText(false);</span>
+<span class="fc" id="L343">        testStep2.setLevel(1);</span>
+<span class="fc" id="L344">        testStep2.setParallelism(EnumParallelism.OR);</span>
+<span class="fc" id="L345">        testStep2.setIdProcess(testProcess);</span>
+<span class="fc" id="L346">        HibernateUtil.getSession().saveOrUpdate(testStep2);</span>
+        
+        //inserimento dei passi nel processo
+<span class="fc" id="L349">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L350">        testStepList.add(testStep1);</span>
+<span class="fc" id="L351">        testStepList.add(testStep2);</span>
+<span class="fc" id="L352">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L353">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L356">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L357">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L358">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L359">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L360">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L363">        DataCollection testCollection1 = new DataCollection();</span>
+<span class="fc" id="L364">        testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L365">        testCollection1.setIdStep(testStep1);</span>
+<span class="fc" id="L366">        testCollection1.setIdUser(testUser);</span>
+<span class="fc" id="L367">        testCollection1.setPhoto(&quot;null&quot;);</span>
+<span class="fc" id="L368">        testCollection1.setText(&quot;null&quot;);</span>
+<span class="fc" id="L369">        testCollection1.setLongitude(&quot;null&quot;);</span>
+<span class="fc" id="L370">        testCollection1.setLatitude(&quot;null&quot;);</span>
+<span class="fc" id="L371">	    testCollection1.setWrongText(true);</span>
+<span class="fc" id="L372">        testCollection1.setWrongPhoto(true);</span>
+<span class="fc" id="L373">        testCollection1.setWrongGeolocation(true);</span>
+<span class="fc" id="L374">        HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L377">        DataCollection testCollection2 = new DataCollection();</span>
+<span class="fc" id="L378">        testCollection2.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L379">        testCollection2.setIdStep(testStep1);</span>
+<span class="fc" id="L380">        testCollection2.setIdUser(testUser);</span>
+<span class="fc" id="L381">        testCollection2.setPhoto(&quot;null&quot;);</span>
+<span class="fc" id="L382">        testCollection2.setText(&quot;null&quot;);</span>
+<span class="fc" id="L383">        testCollection2.setLongitude(&quot;null&quot;);</span>
+<span class="fc" id="L384">        testCollection2.setLatitude(&quot;null&quot;);</span>
+<span class="fc" id="L385">        testCollection2.setWrongText(true);</span>
+<span class="fc" id="L386">        testCollection2.setWrongPhoto(true);</span>
+<span class="fc" id="L387">        testCollection2.setWrongGeolocation(true);</span>
+<span class="fc" id="L388">        HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+<span class="fc" id="L389">	    HibernateUtil.commitTransaction();</span>
+        
+	    //creazione della lista di entità
+<span class="fc" id="L392">	    List&lt;IEntity&gt; iEntityList = new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L393">	    iEntityList.add(testCollection1);</span>
+        
+<span class="fc" id="L395">        JSONObject jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L397">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+	    
+<span class="fc" id="L399">	    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L400">	    testCollection1.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L401">	    testCollection1.setWrongText(false);</span>
+<span class="fc" id="L402">        testCollection1.setWrongPhoto(true);</span>
+<span class="fc" id="L403">        testCollection1.setWrongGeolocation(true);</span>
+<span class="fc" id="L404">	    HibernateUtil.getSession().saveOrUpdate(testCollection1);</span>
+	    
+<span class="fc" id="L406">	    testCollection2.setState(EnumState.VERIFIED);</span>
+<span class="fc" id="L407">	    testCollection2.setWrongText(false);</span>
+<span class="fc" id="L408">        testCollection2.setWrongPhoto(true);</span>
+<span class="fc" id="L409">        testCollection2.setWrongGeolocation(true);</span>
+<span class="fc" id="L410">	    HibernateUtil.getSession().saveOrUpdate(testCollection2);</span>
+	    
+<span class="fc" id="L412">	    testSubscription.setComplete(false);</span>
+<span class="fc" id="L413">	    HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L414">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L416">	    jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L418">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+<span class="fc" id="L419">    }</span>
+    
+    /**
+	 *	Test del metodo serviceOperation() che permette la validazione di una raccolta dati con passi in NOT.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testServiceOperation_NOT() throws Exception {
+<span class="fc" id="L427">    	ServiceStepValidation serviceStepValidationObject = new ServiceStepValidation();</span>
+    	
+    	//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L430">    	HibernateUtil.getSession().beginTransaction();</span>
+    	
+    	//creazione amministratore
+<span class="fc" id="L433">        User testAdmin = new User();</span>
+<span class="fc" id="L434">        testAdmin.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L435">        testAdmin.setIsAdmin(true);</span>
+<span class="fc" id="L436">        testAdmin.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L437">        testAdmin.setUsername(&quot;testAdmin&quot;);</span>
+<span class="fc" id="L438">        HibernateUtil.getSession().saveOrUpdate(testAdmin);</span>
+    	
+    	//creazione utente
+<span class="fc" id="L441">        User testUser = new User();</span>
+<span class="fc" id="L442">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L443">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L444">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L445">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L446">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+        
+        //creazione processo
+<span class="fc" id="L449">        Process testProcess = new Process();</span>
+<span class="fc" id="L450">        testProcess.setAdmin(testAdmin);</span>
+<span class="fc" id="L451">        testProcess.setAvailable(true);</span>
+<span class="fc" id="L452">        testProcess.setDescription(&quot;Processo di test&quot;);</span>
+<span class="fc" id="L453">        testProcess.setEndSubscriptionDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L454">        testProcess.setClosingDate(new GregorianCalendar(2020,12,31,23,59,59));</span>
+<span class="fc" id="L455">        testProcess.setName(&quot;test&quot;);</span>
+<span class="fc" id="L456">        testProcess.setPublicationDate(new GregorianCalendar(2012,12,31,23,59,59));</span>
+<span class="fc" id="L457">        testProcess.setTotalLevel(1);</span>
+<span class="fc" id="L458">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //creazione di un passo per il processo
+<span class="fc" id="L461">        Step testStep = new Step();</span>
+<span class="fc" id="L462">        testStep.setAdminVerify(true);</span>
+<span class="fc" id="L463">        testStep.setDescription(&quot;test&quot;);</span>
+<span class="fc" id="L464">        testStep.setCheckText(&quot;null&quot;);</span>
+<span class="fc" id="L465">        testStep.setIsGeolocation(false);</span>
+<span class="fc" id="L466">        testStep.setIsPhoto(false);</span>
+<span class="fc" id="L467">        testStep.setIsText(false);</span>
+<span class="fc" id="L468">        testStep.setLevel(1);</span>
+<span class="fc" id="L469">        testStep.setParallelism(EnumParallelism.NOT);</span>
+<span class="fc" id="L470">        testStep.setIdProcess(testProcess);</span>
+<span class="fc" id="L471">        HibernateUtil.getSession().saveOrUpdate(testStep);</span>
+        
+        //inserimento del passo nel processo
+<span class="fc" id="L474">        List&lt;Step&gt; testStepList = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L475">        testStepList.add(testStep);</span>
+<span class="fc" id="L476">        testProcess.setSteps(testStepList);</span>
+<span class="fc" id="L477">        HibernateUtil.getSession().saveOrUpdate(testProcess);</span>
+        
+        //iscrizione dell'utente al processo 
+<span class="fc" id="L480">        Subscription testSubscription = new Subscription();</span>
+<span class="fc" id="L481">        testSubscription.setComplete(false);</span>
+<span class="fc" id="L482">        testSubscription.setIdUser(testUser);</span>
+<span class="fc" id="L483">        testSubscription.setIdProcess(testProcess);</span>
+<span class="fc" id="L484">        HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+        
+        //creazione di una data collection
+<span class="fc" id="L487">        DataCollection testCollection = new DataCollection();</span>
+<span class="fc" id="L488">        testCollection.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L489">        testCollection.setIdStep(testStep);</span>
+<span class="fc" id="L490">        testCollection.setIdUser(testUser);</span>
+<span class="fc" id="L491">        testCollection.setPhoto(&quot;null&quot;);</span>
+<span class="fc" id="L492">        testCollection.setText(&quot;null&quot;);</span>
+<span class="fc" id="L493">        testCollection.setLongitude(&quot;null&quot;);</span>
+<span class="fc" id="L494">        testCollection.setLatitude(&quot;null&quot;);</span>
+<span class="fc" id="L495">	    testCollection.setWrongText(true);</span>
+<span class="fc" id="L496">        testCollection.setWrongPhoto(true);</span>
+<span class="fc" id="L497">        testCollection.setWrongGeolocation(true);</span>
+<span class="fc" id="L498">        HibernateUtil.getSession().saveOrUpdate(testCollection);        </span>
+<span class="fc" id="L499">	    HibernateUtil.commitTransaction();</span>
+        
+	    //creazione della lista di entità
+<span class="fc" id="L502">	    List&lt;IEntity&gt; iEntityList = new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L503">	    iEntityList.add(testCollection);</span>
+        
+<span class="fc" id="L505">	    JSONObject jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L507">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+	    
+<span class="fc" id="L509">	    HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L510">	    testCollection.setState(EnumState.TOVERIFY);</span>
+<span class="fc" id="L511">	    testCollection.setWrongText(false);</span>
+<span class="fc" id="L512">        testCollection.setWrongPhoto(true);</span>
+<span class="fc" id="L513">        testCollection.setWrongGeolocation(true);</span>
+<span class="fc" id="L514">	    HibernateUtil.getSession().saveOrUpdate(testCollection);</span>
+	    
+<span class="fc" id="L516">	    testSubscription.setComplete(false);</span>
+<span class="fc" id="L517">	    HibernateUtil.getSession().saveOrUpdate(testSubscription);</span>
+<span class="fc" id="L518">	    HibernateUtil.commitTransaction();</span>
+	    
+<span class="fc" id="L520">	    jsonReturnedObject = serviceStepValidationObject.serviceOperation(iEntityList);</span>
+        
+<span class="fc" id="L522">	    assertEquals(&quot;successValidation&quot;, jsonReturnedObject.get(&quot;Confirmation&quot;));</span>
+<span class="fc" id="L523">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

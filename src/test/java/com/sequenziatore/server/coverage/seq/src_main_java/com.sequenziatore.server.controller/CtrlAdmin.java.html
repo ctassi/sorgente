@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CtrlAdmin.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.controller</a> &gt; <span class="el_source">CtrlAdmin.java</span></div><h1>CtrlAdmin.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe CtrlAdmin
+ * 
+ *	@file		CtrlAdmin.java
+ *	@author		DeSQ
+ *	@date		2014-05-12
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.sequenziatore.server.entity.DataCollection;
+import com.sequenziatore.server.entity.IEntity;
+import com.sequenziatore.server.entity.Step;
+import com.sequenziatore.server.entity.User;
+import com.sequenziatore.server.entity.Process;
+import com.sequenziatore.server.service.admin.*;
+import com.sequenziatore.server.service.interfaceservice.IService;
+
+/**
+ *	La classe CtrlAdmin svolge il ruolo di controller per le operazioni disponibili agli amministratori.
+ *
+ *	@author 	DeSQ
+ */
+@Controller
+@RequestMapping(&quot;/admin&quot;)
+<span class="fc" id="L58">public class CtrlAdmin {</span>
+	
+	/** Rappresenta il tipo di parser utilizzato in base all'operazione da svolgere. */
+	private IParser iParser;
+	
+	/** Rappresenta il tipo di service utilizzata in base all'operazione da svolgere. */ 
+	private IService iService;
+	
+	/**
+	 * Permette di visualizzare i dati di un processo.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/viewprocess&quot;, method = RequestMethod.POST)
+	public void ctrlViewProcess(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L75">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L76">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L77">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L79">		PrintWriter out = null;</span>
+<span class="fc" id="L80">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L81">		iParser=new ParseJSON();</span>
+<span class="fc" id="L82">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L83">		Process process = new Process(json);</span>
+<span class="fc" id="L84">		entities.add(process);</span>
+		try {
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L88">					iService = new ServiceViewProcess();</span>
+<span class="fc" id="L89">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L90">					out = response.getWriter();</span>
+<span class="fc" id="L91">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L92">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L93">					out.close();</span>
+				}
+			}
+<span class="fc" id="L96">		}</span>
+<span class="nc" id="L97">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L98">		catch (IOException e) {}</span>
+<span class="fc" id="L99">	}</span>
+	
+	/**
+	 * Permette la modifica di un processo.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/modifyprocess&quot;, method = RequestMethod.POST)
+	public void ctrlModifyProcess(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L110">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L111">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L112">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L114">		PrintWriter out = null;</span>
+<span class="fc" id="L115">		JSONArray array=null;</span>
+<span class="fc" id="L116">		List&lt;Step&gt; steps = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L117">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L118">		iParser=new ParseJSON();</span>
+<span class="fc" id="L119">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L120">		Process process = new Process(json);</span>
+<span class="fc" id="L121">		entities.add(process);</span>
+<span class="fc" id="L122">		array=(JSONArray)json.get(&quot;StepList&quot;);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">		for(int i=0;i&lt;array.length();i++){</span>
+<span class="fc" id="L124">			Step step=new Step((JSONObject)array.get(i));</span>
+<span class="fc" id="L125">			step.setIdProcess(process);</span>
+<span class="fc" id="L126">			steps.add(step);</span>
+		}
+<span class="fc" id="L128">		process.setSteps(steps);</span>
+		try {
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L132">					iService=new ServiceModifyProcess();</span>
+<span class="fc" id="L133">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L134">					out = response.getWriter();</span>
+<span class="fc" id="L135">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L136">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L137">					out.close();</span>
+				}
+			}
+<span class="fc" id="L140">		} </span>
+<span class="nc" id="L141">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L142">		catch (IOException e) {}</span>
+<span class="fc" id="L143">	}</span>
+	
+	/**
+	 * Permette la visualizzazione della lista degli utenti che partecipano ai processi creati dall'amministratore che fa la richiesta.
+	 *  
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/listuserprocess&quot;, method = RequestMethod.POST)
+	public void ctrlListUserProcess(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L154">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L155">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L156">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L158">		PrintWriter out = null;</span>
+<span class="fc" id="L159">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L160">		iParser=new ParseJSON();</span>
+<span class="fc" id="L161">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L162">		Process process = new Process(json);</span>
+<span class="fc" id="L163">		entities.add(process);</span>
+		try {
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L167">					iService=new ServiceListUserProcess();</span>
+<span class="fc" id="L168">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L169">					out = response.getWriter();</span>
+<span class="fc" id="L170">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L171">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L172">					out.close();</span>
+				}
+			}
+<span class="fc" id="L175">		}</span>
+<span class="nc" id="L176">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L177">		catch (IOException e) {}</span>
+<span class="fc" id="L178">	}</span>
+	
+	/**
+	 * Permette la visualizzazione di tutti i processi attivi dell'amministratore che fa la richiesta.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/viewadminprocessactive&quot;, method = RequestMethod.POST)
+	public void ctrlViewAdminProcessActive(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L189">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L190">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L191">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L193">		PrintWriter out = null;</span>
+<span class="fc" id="L194">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L195">		iParser=new ParseJSON();</span>
+<span class="fc" id="L196">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L197">		User user = new User(json);</span>
+<span class="fc" id="L198">		entities.add(user);</span>
+		try {
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L202">					iService=new ServiceViewAdminProcessActive();</span>
+<span class="fc" id="L203">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L204">					out = response.getWriter();</span>
+<span class="fc" id="L205">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L206">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L207">					out.close();</span>
+				}
+			}
+<span class="fc" id="L210">		}</span>
+<span class="nc" id="L211">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L212">		catch (IOException e) {}</span>
+<span class="fc" id="L213">	}</span>
+	
+	/**
+	 * Permette di visualizzare la lista di tutte le raccolte dati ancora da convalidare.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/steplistvalidation&quot;, method = RequestMethod.POST)
+	public void ctrlStepListValidation(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L224">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L225">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L226">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L228">		PrintWriter out = null;</span>
+<span class="fc" id="L229">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L230">		iParser=new ParseJSON();</span>
+<span class="fc" id="L231">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L232">		User user = new User(json);</span>
+<span class="fc" id="L233">		entities.add(user);</span>
+		try {
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L237">					iService=new ServiceStepListValidation();</span>
+<span class="fc" id="L238">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L239">					out = response.getWriter();</span>
+<span class="fc" id="L240">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L241">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L242">					out.close();</span>
+				}
+			}
+<span class="fc" id="L245">		}</span>
+<span class="nc" id="L246">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L247">		catch (IOException e) {}</span>
+<span class="fc" id="L248">	}</span>
+	
+	
+	/**
+	 * Premette la convalida o l'annullamento di una raccolta dati.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/stepvalidation&quot;, method = RequestMethod.POST)
+	public void ctrlStepValidation(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L260">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L261">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L262">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L264">		PrintWriter out = null;</span>
+<span class="fc" id="L265">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L266">		iParser=new ParseJSON();</span>
+<span class="fc" id="L267">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L268">		DataCollection data = new DataCollection(json);</span>
+<span class="fc" id="L269">		entities.add(data);</span>
+		try {
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L273">					iService=new ServiceStepValidation();</span>
+<span class="fc" id="L274">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L275">					out = response.getWriter();</span>
+<span class="fc" id="L276">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L277">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L278">					out.close();</span>
+				}
+			}
+<span class="fc" id="L281">		}</span>
+<span class="nc" id="L282">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L283">		catch (IOException e) {}</span>
+<span class="fc" id="L284">	}</span>
+	
+	/**
+	 * Permette la visualizzazione di tutti i processi presenti nel sistema.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/viewallprocesses&quot;, method = RequestMethod.POST)
+	public void ctrlViewAllProcesses(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L295">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L296">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L297">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L299">		PrintWriter out = null;</span>
+<span class="fc" id="L300">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L301">		iParser=new ParseJSON();</span>
+<span class="fc" id="L302">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L303">		User user = new User(json);</span>
+<span class="fc" id="L304">		entities.add(user);</span>
+		try {
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L308">					iService=new ServiceViewAllProcesses();</span>
+<span class="fc" id="L309">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L310">					out = response.getWriter();</span>
+<span class="fc" id="L311">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L312">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L313">					out.close();</span>
+				}
+			}
+<span class="fc" id="L316">		}</span>
+<span class="nc" id="L317">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L318">		catch (IOException e) {}</span>
+		
+<span class="fc" id="L320">	}</span>
+	
+	/**
+	 * Permette la creazione di un processo con i relativi passi.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/createprocess&quot;, method = RequestMethod.POST)
+
+	public Notification ctrlCreateProcess(HttpServletRequest request, HttpServletResponse response, Notification message) {
+		try {
+<span class="fc" id="L332">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L333">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L334">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L336">		PrintWriter out = null;</span>
+<span class="fc" id="L337">		JSONArray array=null;</span>
+<span class="fc" id="L338">		List&lt;Step&gt; steps = new ArrayList&lt;Step&gt;();</span>
+<span class="fc" id="L339">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L340">		iParser=new ParseJSON();</span>
+<span class="fc" id="L341">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L342">		Process process = new Process(json);</span>
+<span class="fc" id="L343">		entities.add(process);</span>
+<span class="fc" id="L344">		array=(JSONArray)json.get(&quot;Steps&quot;);</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">		for(int i=0;i&lt;array.length();i++){</span>
+<span class="fc" id="L346">			Step step=new Step((JSONObject)array.get(i));</span>
+<span class="fc" id="L347">			step.setIdProcess(process);</span>
+<span class="fc" id="L348">			steps.add(step);</span>
+		}
+<span class="fc" id="L350">		process.setSteps(steps);</span>
+		try {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L354">					iService=new ServiceCreateProcess();</span>
+<span class="fc" id="L355">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L356">					out = response.getWriter();</span>
+<span class="fc" id="L357">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L358">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L359">					out.close();</span>
+				}
+			}
+<span class="fc" id="L362">		}</span>
+<span class="nc" id="L363">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L364">		catch (IOException e) {}</span>
+
+<span class="fc" id="L366">		return message;</span>
+	}
+	
+	
+	/**
+	 * Permette la visualizzazione di un report di un processo.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/report&quot;, method = RequestMethod.POST)
+	public void ctrlReport(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L379">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L380">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L381">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L383">		PrintWriter out = null;</span>
+<span class="fc" id="L384">		iParser=new ParseJSON();</span>
+<span class="fc" id="L385">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L386">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L387">		Process process = new Process(json);</span>
+<span class="fc" id="L388">		entities.add(process);</span>
+		try {
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L392">					iService=new ServiceReport();</span>
+<span class="fc" id="L393">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L394">					out = response.getWriter();</span>
+<span class="fc" id="L395">					response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L396">					out.write(jsonResponse.toString());</span>
+<span class="fc" id="L397">					out.close();</span>
+				}
+			}
+<span class="fc" id="L400">		}</span>
+<span class="nc" id="L401">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L402">		catch (IOException e) {}</span>
+<span class="fc" id="L403">	}</span>
+	
+	/**
+	 * Permette la visualizzazione delle statistiche riguardanti l'admin che ne fa richiesta.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/statisticsadmin&quot;, method = RequestMethod.POST)
+	public void ctrlStatisticsAdmin(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L414">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L415">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L416">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L418">		PrintWriter out = null;</span>
+<span class="fc" id="L419">		iParser=new ParseJSON();</span>
+<span class="fc" id="L420">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L421">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L422">		User user = new User(json);</span>
+<span class="fc" id="L423">		entities.add(user);</span>
+		try {
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L426" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L427">					iService=new ServiceStatisticsAdmin();</span>
+<span class="fc" id="L428">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L429">					out = response.getWriter();</span>
+<span class="fc" id="L430">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L431">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L432">					out.close();</span>
+				}
+			}
+<span class="fc" id="L435">		}</span>
+<span class="nc" id="L436">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L437">		catch (IOException e) {}</span>
+<span class="fc" id="L438">	}</span>
+	
+	/**
+	 * Permette la visualizzazione di tutti i processi non attivi dell'amministratore che fa la richiesta.
+	 * 
+	 * @param request la richiesta di informazioni che arriva dal front-end
+	 * @param response la risposta che verrà inviata al front-end con le informazioni richieste
+	 */
+	@RequestMapping(value= &quot;/viewadminprocessnotactive&quot;, method = RequestMethod.POST)
+	public void ctrlViewAdminProcessNotActive(HttpServletRequest request, HttpServletResponse response) {
+		try {
+<span class="fc" id="L449">			request.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="pc" id="L450">		} catch (UnsupportedEncodingException e1) {</span>
+<span class="nc" id="L451">			e1.printStackTrace();</span>
+		}
+<span class="fc" id="L453">		PrintWriter out = null;</span>
+<span class="fc" id="L454">		List&lt;IEntity&gt; entities=new ArrayList&lt;IEntity&gt;();</span>
+<span class="fc" id="L455">		iParser=new ParseJSON();</span>
+<span class="fc" id="L456">		JSONObject json=iParser.parse(request);</span>
+<span class="fc" id="L457">		User user = new User(json);</span>
+<span class="fc" id="L458">		entities.add(user);</span>
+		try {
+<span class="pc bpc" id="L460" title="1 of 2 branches missed.">			if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()).equals(true)){</span>
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">				if(request.getSession().getAttribute(json.get(&quot;IdUser&quot;).toString()+&quot;Admin&quot;).equals(true)){</span>
+<span class="fc" id="L462">					iService=new ServiceViewAdminProcessNotActive();</span>
+<span class="fc" id="L463">					JSONObject jsonResponse = iService.serviceOperation(entities);</span>
+<span class="fc" id="L464">					out = response.getWriter();</span>
+<span class="fc" id="L465">				    response.setContentType(&quot;text/html&quot;);</span>
+<span class="fc" id="L466">				    out.write(jsonResponse.toString());</span>
+<span class="fc" id="L467">					out.close();</span>
+				}
+			}
+<span class="fc" id="L470">		}</span>
+<span class="nc" id="L471">		catch (NullPointerException e) {}</span>
+<span class="nc" id="L472">		catch (IOException e) {}</span>
+<span class="fc" id="L473">	}</span>
+	
+	
+};
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

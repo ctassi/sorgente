@@ -1,0 +1,54 @@
+<!--
+* Copyright [2014] [DeSQ]
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+*
+*
+* Name : welcome.html
+* Location : /applicationContent/com/sequenziatore/client/view/shared
+*
+* History :
+*
+* Version         Date           Programmer
+* ======================================================
+* 0.0.1           2014-03-27     Sartoretto Massimiliano
+* ------------------------------------------------------
+* Codifica view
+* ======================================================
+-->
+
+<div class="myhome" ng-controller="CtrlWelcome" >
+<alert ng-show="messageVisible == true" close="closeAlert()" type="success"> {{messageData}} </alert>
+	<div class="panel panel-info">
+  		<div class="panel-heading">Benvenuto {{user}}</div>
+        <div class="listWelcome" ng-show="userIsAdmin === 'false'">
+            <ul class="list-group">
+            	<li class="list-group-item">Processi terminati con successo: {{processesCompleted}}</li>
+                <li class="list-group-item">Processi chiusi: {{processesClosedNotCompletedAndCompleted}}</li>
+                <li class="list-group-item">Processi chiusi non terminati: {{processesClosedNotCompleted}}</li>
+                <li class="list-group-item">Processi a cui stai partecipando: {{processesActive}}</li>
+                <li class="list-group-item">Processi disponibili: {{processesAvailable}}</li>
+            </ul>
+        </div>
+		<div class="listWelcome" ng-show="userIsAdmin === 'true'">
+			<ul class="list-group">
+	  			<li class="list-group-item">Processi totali: {{processesTotal}}</li>
+			  	<li class="list-group-item">Processi chiusi: {{processesClosed}}</li>
+			  	<li class="list-group-item">Passi da verificare: {{stepsToVerify}}</li>
+			  	<li class="list-group-item">Processi creati attivi: {{processesActive}}</li>
+				<li class="list-group-item">Totale utenti iscritti: {{usersTotal}}</li>
+			</ul>
+		</div>
+	</div>
+</div>

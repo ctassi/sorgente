@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DAOUserDataTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">seq (1) (2-lug-2014 22.31.08)</a> &gt; <a href="../../index.html" class="el_group">seq</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.sequenziatore.server.databaseutil.dao</a> &gt; <span class="el_source">DAOUserDataTest.java</span></div><h1>DAOUserDataTest.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Dainese Matteo, De Nadai Andrea, Girotto Giacomo, Pavanello Mirko, Romagnosi Nicolò, Sartoretto Massimiliano, Visentin Luca
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 	File contentente la classe DAOUserDataTest
+ * 
+ *	@file		DAOUserDataTest.java
+ *	@author		DeSQ
+ *	@date		2014-05-14
+ *	@version	1.0
+ */
+
+package com.sequenziatore.server.databaseutil.dao;
+
+import static org.junit.Assert.*;
+
+import org.hibernate.Query;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sequenziatore.server.databaseutil.util.HibernateUtil;
+import com.sequenziatore.server.entity.User;
+
+/**
+ *	Classe contenente tutti i test di unità dei metodi della classe DAOUserData.
+ *
+ *	@author 	DeSQ
+ */
+<span class="fc" id="L43">public class DAOUserDataTest {</span>
+	
+	/**
+	 * Pulisce il database prima di iniziare ad eseguire i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@Before
+	public void clean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L53">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L56">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L57">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L60">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L61">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L64">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L65">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L68">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L69">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L72">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L73">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L75">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L76">	}</span>
+	
+	/**
+	 *	Pulisce il database quando sono terminati tutti i test.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+	@AfterClass
+	public static void finalClean() throws Exception
+	{
+		//pulizia database
+<span class="fc" id="L86">	    HibernateUtil.getSession().beginTransaction();</span>
+	    
+	    //elimina le data collection
+<span class="fc" id="L89">	    Query deleteDataCollection = HibernateUtil.getSession().createQuery(&quot;delete DataCollection&quot;);</span>
+<span class="fc" id="L90">	    deleteDataCollection.executeUpdate();</span>
+	    
+	    //elimina le iscrizioni ai processi
+<span class="fc" id="L93">	    Query unsubscribeToProcess = HibernateUtil.getSession().createQuery(&quot;delete Subscription&quot;);</span>
+<span class="fc" id="L94">	    unsubscribeToProcess.executeUpdate();</span>
+	    
+	    //elimina i passi di tutti i processi
+<span class="fc" id="L97">	    Query deleteTestStep = HibernateUtil.getSession().createQuery(&quot;delete Step&quot;);</span>
+<span class="fc" id="L98">	    deleteTestStep.executeUpdate();</span>
+	    
+	    //elimina i processi
+<span class="fc" id="L101">	    Query deleteTestProcess = HibernateUtil.getSession().createQuery(&quot;delete Process&quot;);</span>
+<span class="fc" id="L102">	    deleteTestProcess.executeUpdate();</span>
+	    
+	    //elimina gli utenti registrati
+<span class="fc" id="L105">	    Query deleteTestUser = HibernateUtil.getSession().createQuery(&quot;delete User&quot;);</span>
+<span class="fc" id="L106">	    deleteTestUser.executeUpdate();</span>
+	    
+<span class="fc" id="L108">	    HibernateUtil.commitTransaction();</span>
+<span class="fc" id="L109">	}</span>
+
+	/**
+	 *	Test del metodo testFindUserByUsername() che permette di trovare un utente dal suo username.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testFindUserByUsername() throws Exception {
+<span class="fc" id="L117">		DAOUserData daoUserDataObject = new DAOUserData();</span>
+		        
+		//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L120">		HibernateUtil.getSession().beginTransaction();</span>
+
+        //creazione utente
+<span class="fc" id="L123">        User testUser = new User();</span>
+<span class="fc" id="L124">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L125">        testUser.setUsername(&quot;testUsername&quot;);</span>
+<span class="fc" id="L126">        testUser.setPassword(&quot;testPassword&quot;);</span>
+<span class="fc" id="L127">        testUser.setEmail(&quot;test@test.com&quot;);</span>
+<span class="fc" id="L128">        testUser.setName(&quot;testName&quot;);</span>
+<span class="fc" id="L129">        testUser.setSurname(&quot;testSurname&quot;);</span>
+<span class="fc" id="L130">        testUser.setCity(&quot;testCity&quot;);</span>
+<span class="fc" id="L131">        testUser.setDistrict(&quot;PD&quot;);</span>
+<span class="fc" id="L132">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L133">        HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L135">        User userObject = new User();</span>
+<span class="fc" id="L136">        userObject.setUsername(&quot;testUsername&quot;);</span>
+<span class="fc" id="L137">        userObject.setEmail(&quot;test@test.com&quot;);</span>
+        
+        //invocazione metodo da testare
+<span class="fc" id="L140">        HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L141">        User userData = daoUserDataObject.findUserByUsername(userObject);</span>
+<span class="fc" id="L142">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L144">	    assertEquals(userData.getName(), testUser.getName());</span>
+<span class="fc" id="L145">    }</span>
+	
+	/**
+	 *	Test del metodo insertUser() che permette di registrare un nuovo utente.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testInsertUser() throws Exception {
+<span class="fc" id="L153">        DAOUserData daoUserDataObject = new DAOUserData();</span>
+        
+        //creazione utente
+<span class="fc" id="L156">        User testUser = new User();</span>
+<span class="fc" id="L157">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L158">        testUser.setUsername(&quot;testUsername&quot;);</span>
+<span class="fc" id="L159">        testUser.setPassword(&quot;testPassword&quot;);</span>
+<span class="fc" id="L160">        testUser.setEmail(&quot;test@test.com&quot;);</span>
+<span class="fc" id="L161">        testUser.setName(&quot;testName&quot;);</span>
+<span class="fc" id="L162">        testUser.setSurname(&quot;testSurname&quot;);</span>
+<span class="fc" id="L163">        testUser.setCity(&quot;testCity&quot;);</span>
+<span class="fc" id="L164">        testUser.setDistrict(&quot;PD&quot;);</span>
+        
+        //invocazione metodo da testare
+<span class="fc" id="L167">        HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L168">        daoUserDataObject.insertUser(testUser);</span>
+<span class="fc" id="L169">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L171">	    assertNotNull(testUser);</span>
+<span class="fc" id="L172">    }</span>
+    
+	/**
+	 *	Test del metodo findUser() che permette di controllare le informazioni di login di un utente.
+	 * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testFindUser() throws Exception {
+<span class="fc" id="L180">        DAOUserData daoUserDataObject = new DAOUserData();</span>
+        
+    	//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L183">    	HibernateUtil.getSession().beginTransaction();</span>
+    	
+    	//creazione utente
+<span class="fc" id="L186">        User testUser = new User();</span>
+<span class="fc" id="L187">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L188">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L189">        testUser.hashAndSetPassword(&quot;test&quot;);</span>
+<span class="fc" id="L190">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L191">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L192">        HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L194">        User userObject = new User();</span>
+<span class="fc" id="L195">        userObject.setUsername(testUser.getUsername());</span>
+<span class="fc" id="L196">        userObject.setPassword(testUser.getPassword());</span>
+        
+        //invocazione metodo da testare
+<span class="fc" id="L199">        HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L200">        User returnedUser = daoUserDataObject.findUser(userObject);</span>
+<span class="fc" id="L201">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L203">	    assertNotNull(returnedUser);</span>
+<span class="fc" id="L204">	    assertEquals(returnedUser.getName(), testUser.getName());</span>
+<span class="fc" id="L205">    }</span>
+    
+    /**
+	 *	Test del metodo findUserById() che permette di cercare un utente a partire dal suo id.
+     * @throws Exception segnala un problema di connessione al database
+	 */
+    @Test
+    public void testFindUserById() throws Exception {
+<span class="fc" id="L213">        DAOUserData daoUserDataObject = new DAOUserData();</span>
+    	
+    	//creazione ambiente per l'esecuzione della query
+<span class="fc" id="L216">    	HibernateUtil.getSession().beginTransaction();</span>
+    	
+    	//creazione utente
+<span class="fc" id="L219">        User testUser = new User();</span>
+<span class="fc" id="L220">        testUser.setEmail(&quot;asd@asd.com&quot;);</span>
+<span class="fc" id="L221">        testUser.setIsAdmin(false);</span>
+<span class="fc" id="L222">        testUser.setPassword(&quot;test&quot;);</span>
+<span class="fc" id="L223">        testUser.setUsername(&quot;testUser&quot;);</span>
+<span class="fc" id="L224">        HibernateUtil.getSession().saveOrUpdate(testUser);</span>
+<span class="fc" id="L225">        HibernateUtil.commitTransaction();</span>
+        
+        //invocazione metodo da testare
+<span class="fc" id="L228">        HibernateUtil.getSession().beginTransaction();</span>
+<span class="fc" id="L229">        User userObject = daoUserDataObject.findUserById(testUser);</span>
+<span class="fc" id="L230">	    HibernateUtil.commitTransaction();</span>
+        
+<span class="fc" id="L232">	    assertNotNull(userObject);</span>
+<span class="fc" id="L233">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span>seq (1) (2-lug-2014 22.31.08)</div></body></html>

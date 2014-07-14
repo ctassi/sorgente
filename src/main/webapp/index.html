@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html ng-app="SeqApp">
+	<head>
+		<title>Seq - Gestore di Processi</title>
+		<meta charset="UTF-8">
+        <noscript>
+            <meta http-equiv="refresh" content="0; url=nojavascript.html" />
+        </noscript>
+
+        <link rel="shortcut icon" href="img/favicon.ico">
+
+        <!-- LIBRERIE E CSS -->
+
+        <link href='http://fonts.googleapis.com/css?family=Pompiere' rel='stylesheet' type='text/css'>
+
+        <!-- Angular lib-->
+        <script src="applicationContent/lib/angular/angular.js"></script>
+
+		<!-- jQuery local -->
+		<script type="text/javascript" src="applicationContent/lib/jquery/jquery.min.js"></script> 
+
+		<!-- BootStrap local -->
+		<script src="applicationContent/lib/bootstrap/bootstrap.js"></script>
+
+		<!-- Google Maps -->
+		<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+
+		<!-- Bootstrap CSS -->
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" media="screen"/>
+						
+		<!-- Bootstrap CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen"/>
+
+		<!-- Angular pickdate CSS -->
+		<link rel="stylesheet" type="text/css" href="css/angular-pickadate.css" media="screen" />
+ 
+ 		<!-- Site CSS -->
+		<link rel="stylesheet" type="text/css" href="css/stile.css" />
+
+        <!-- Print CSS -->
+        <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
+
+		 <!-- Growl CSS -->
+		<link rel="stylesheet" type="text/css" href="css/angular-growl.min.css" />
+
+        <!-- Zocial -->
+        <link rel="stylesheet" type="text/css" href="css/zocial/zocial.css" />
+
+        <!-- Loading Bar -->
+        <link rel="stylesheet" type="text/css" href="css/loading-bar.css" />
+
+		<!-- Angular route -->
+		<script src="applicationContent/lib/angular/angular-route.js"></script>
+		
+		<!-- Angular cookies -->
+		<script src="applicationContent/lib/angular/angular-cookies.js"></script>
+		
+		<!-- Angular animate -->
+		<script src="applicationContent/lib/angular/angular-animate.js"></script>
+		
+		<!-- Angular fileupload -->
+		<script src="applicationContent/lib/angularFileUpload/angular-file-upload.js"></script>
+		
+		<!-- Angular localstorage -->
+		<script src="applicationContent/lib/angularLocalStorage/angular-local-storage.min.js"></script>
+		
+		<!-- Angular loading bar -->
+		<script src="applicationContent/lib/angularLoadingBar/loading-bar.js"></script>
+		
+		<!-- Angular pickdate -->
+		<script src="applicationContent/lib/datepicker/angular-pickadate.js"></script>
+		
+		<!-- Angular google maps -->
+		<script src="applicationContent/lib/angularMap/ng-map.min.js"></script>
+
+		<!-- Angular growl (notification) -->
+		<script src="applicationContent/lib/angularGrowl/angular-growl.js"></script>
+
+        <!-- Angular Facebook -->
+        <script src="applicationContent/lib/angularFacebook/angular-easyfb.js"></script>
+
+		<!-- Angular UI -->
+		<script src="applicationContent/lib/bootstrapUI/ui-bootstrap.min.js"></script>
+		
+
+        <!-- WebSocket -->
+		<!-- Stomp -->
+		<script src="applicationContent/lib/stomp/stomp.js"></script>
+		
+		<!-- SockJS -->
+		<script src="applicationContent/lib/sockJS/sockjs-0.3.js"></script>
+
+
+        <!-- APPLICATION CONFIGURATION -->
+		<script src="applicationContent/com/sequenziatore/client/ApplicationConfiguration.js"></script>
+		
+
+        <!-- CONTROLLER -->
+
+		<!-- CONTROLLER SHARED -->
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/login/CtrlLogin.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/login/LoginRouting.js"></script>
+	
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/logout/CtrlLogout.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/logout/LogoutRouting.js"></script> 
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/welcome/CtrlWelcome.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/welcome/WelcomeRouting.js"></script>
+ 
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/profile/CtrlProfile.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/profile/ProfileRouting.js"></script>
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/modifyaccount/CtrlModifyAccount.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/modifyaccount/ModifyAccountRouting.js"></script>
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/recoverypassword/CtrlRecoveryPassword.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/shared/recoverypassword/RecoveryPasswordRouting.js"></script>
+		
+		<!-- CONTROLLER ADMIN -->
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/createprocess/CtrlCreateProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/createprocess/CreateProcessRouting.js"></script> 
+
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/registrationnewadmin/CtrlRegistrationNewAdmin.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/registrationnewadmin/RegistrationNewAdminRouting.js"></script> 
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminprocess/CtrlAdminProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminprocess/AdminProcessRouting.js"></script> 		
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/stepvalidator/CtrlStepValidator.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/stepvalidator/StepValidatorRouting.js"></script>
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/listuserprocess/CtrlListUserProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/listuserprocess/ListUserProcessRouting.js"></script> 	
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/modifyprocess/CtrlModifyProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/modifyprocess/ModifyProcessRouting.js"></script>	
+	
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminreport/CtrlAdminReport.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminreport/AdminReportRouting.js"></script>
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminprocessnotactive/CtrlAdminProcessNotActive.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/admin/adminprocessnotactive/AdminProcessNotActiveRouting.js"></script>	
+		
+		<!-- CONTROLLER USER -->
+		<script src="applicationContent/com/sequenziatore/client/controller/user/registration/CtrlRegistration.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/user/registration/RegistrationRouting.js"></script>
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/user/activeprocess/CtrlActiveProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/user/activeprocess/ActiveProcessRouting.js"></script>	
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/user/availableprocess/CtrlAvailableProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/user/availableprocess/AvailableProcessRouting.js"></script>	
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/user/currentstep/CtrlCurrentStep.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/user/currentstep/CurrentStepRouting.js"></script>	
+		
+		<script src="applicationContent/com/sequenziatore/client/controller/user/closedprocess/CtrlClosedProcess.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/controller/user/closedprocess/ClosedProcessRouting.js"></script>
+		
+        <!-- MODEL -->
+
+		<!-- MODEL SHARED -->
+		<script src="applicationContent/com/sequenziatore/client/model/shared/PreAuthenticationRequestManager.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/shared/LocationManager.js"></script>
+		
+		
+		<!-- MODEL SHARED SUPERCLASSES -->
+		<script src="applicationContent/com/sequenziatore/client/model/shared/superclasses/GenericUser.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/shared/superclasses/GenericStep.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/shared/superclasses/RequestManager.js"></script>	
+		<script src="applicationContent/com/sequenziatore/client/model/shared/superclasses/GenericStep.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/shared/superclasses/GenericProcess.js"></script>	
+		
+		<!-- MODEL USER -->
+		<script src="applicationContent/com/sequenziatore/client/model/user/StandardUser.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/user/StandardUserStep.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/user/StandardUserRequestManager.js"></script>
+		
+		<!-- MODEL ADMIN -->
+		<script src="applicationContent/com/sequenziatore/client/model/admin/AdminUser.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/admin/AdminUserStep.js"></script>
+		<script src="applicationContent/com/sequenziatore/client/model/admin/AdminUserRequestManager.js"></script>		
+
+		
+        <!-- META-TAG -->
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    </head>
+
+    <body ng-controller="CtrlGlobal">
+		<div id="header" class="headerTop">
+			<nav class="navbar navbar-inverse">
+				<div class="navbar-header"> 
+				<li id="miniBrand" class="navbar-brand" href="#">Seq</li>
+					<button href="#" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				
+				<div class="collapse navbar-collapse">
+				
+					<ul class="nav navbar-nav">
+
+						<li ng-hide="logged === 'true'" ng-show="logged === undefined"><a href="#login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+
+						<li ng-hide="logged === undefined" ng-show="logged === 'true'"><a href="#welcome"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+
+                        <li ng-hide="logged === undefined" ng-show="logged === 'true'"><a href="#profile"><span class="glyphicon glyphicon-user"></span> Account</a></li>
+						
+						<li class="dropdown" ng-hide="logged === undefined || admin === 'true'" ng-show="logged === 'true' && admin === undefined">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target=".dropdown-menu"><span class="glyphicon glyphicon-tasks"></span> Processi<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+
+								<li><a href="#activeprocess"><span class="glyphicon glyphicon-tasks"></span> I miei processi</a></li>
+								
+								<li><a href="#availableprocess"><span class="glyphicon glyphicon-list"></span> Processi disponibili</a></li>
+								
+								<li><a href="#closedprocess"><span class="glyphicon glyphicon-lock"></span> Processi terminati</a></li>
+							</ul>
+						</li>
+						
+						<li class="dropdown" ng-hide="logged === undefined || admin === undefined" ng-show="logged === 'true' && admin === 'true'">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target=".dropdown-menu"><span class="glyphicon glyphicon-wrench"></span> Amministra <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+
+                                <li><a href="#createprocess"><span class="glyphicon glyphicon-plus"></span> Crea un nuovo processo</a></li>
+
+                                <li><a href="#adminprocess"><span class="glyphicon glyphicon-list"></span> Processi creati</a></li>
+								
+								<li><a href="#adminprocessnotactive"><span class="glyphicon glyphicon-lock"></span> Processi chiusi</a></li>
+
+                                <li><a href="#stepvalidator"><span class="glyphicon glyphicon-ok"></span> Validazione manuale passi</a></li>
+								
+								<li><a href="#registrationnewadmin"><span class="glyphicon glyphicon-pencil"></span> Registra nuovo amministratore</a></li>
+							</ul>
+						</li>
+						<li ng-hide="logged === undefined" ng-show="logged === 'true'" ><a href="#logout"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div growl></div>
+		<div id="content-middle" ng-view></div>
+		<div id="footer">
+      		<div class="container">
+        		<p class="text-muted credit"> <a href="http://www.desq.altervista.org">Team DeSQ</a> per Zucchetti S.p.A.</p>
+      		</div>
+    	</div>
+	</body>
+</html>
+
